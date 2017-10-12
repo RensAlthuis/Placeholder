@@ -12,14 +12,15 @@ using UnityEngine;
 */
 public class Event{
 
-    public Vector2 point;
+    public Point point;
     public bool isPlaceEvent;
     public float y;
     public Parabola arch;
 
-    public Event(Vector2 p, bool _isPlaceEvent) {
+    public Event(Point p, bool _isPlaceEvent) {
         point = p;
         isPlaceEvent = _isPlaceEvent;
         y = p.y;
+        arch = null;
     }
 }

@@ -4,35 +4,51 @@ using UnityEngine;
 
 public class Voronoi {
 
-    Parabola root = null;
-    float s;
+    List<Point> places;
+    List<Edge> edges;
+    List<Event> deleted;
+    List<Point> points;
     EventQueue events;
+
+    Parabola root;
+    float s;
     float width;
     float height;
-
-    List<Edge> edges;
+ 
 
     public Voronoi() {
         events = new EventQueue();
         edges = new List<Edge>();
+        places = new List<Point>();
+        points = new List<Point>();
+        deleted = new List<Event>();
     }
 
-    public List<Edge> GetEdges(List<Vector2> vecs, float w, float h) {
+    public List<Edge> GetEdges(List<Point> vecs, float w, float h) {
 
+        places = vecs;
         width = w;
         height = h;
+        root = null;
 
         edges.Clear();
-        //initialze an event queue with all site events
+        points.Clear();
 
-        foreach (Vector2 v in vecs) {
+        //initialze an event queue with all site events
+        foreach (Point v in vecs) {
             events.Add(new Event(v, true));
         }
 
 
         while (!events.isEmpty()) {
             Event e = events.Remove();
-            s = e.y;
+            s = e.point.y;
+
+            if (deleted.Contains(e)){
+                deleted.Remove(e);
+                continue;
+            }
+
             if (e.isPlaceEvent) {
                 handleSiteEvent(e);
             } else {
@@ -48,6 +64,8 @@ public class Voronoi {
             }
         }
 
+        //fixEdges();
+
         return edges;
     }
 
@@ -55,20 +73,20 @@ public class Voronoi {
 
         //No parabolas yet
         if (root == null) {
-            root = new Parabola(ref e.point);
+            root = new Parabola(e.point);
             return;
         }
 
         if (root.isLeaf && root.site.y - e.point.y < 1) // edge case, both lowest position are at the same height
 {
-            Vector2 fp = root.site;
+            Point fp = root.site;
             root.isLeaf = false;
-            root.SetLeft(new Parabola(ref fp));
-            root.SetRight(new Parabola(ref e.point));
-            Vector2 s = new Vector2((e.point.x + fp.x) / 2, height); // new edge is in center of 2 sites starting at screen height.
-            //points.push_back(s);
-            if (e.point.x > fp.x) root.edge = new Edge(ref s, ref fp, ref e.point); // decide which parabola is left or right
-            else root.edge = new Edge(ref s, ref e.point, ref fp);
+            root.SetLeft(new Parabola(fp));
+            root.SetRight(new Parabola(e.point));
+            Point s = new Point((e.point.x + fp.x) / 2, height); // new edge is in center of 2 sites starting at screen height.
+            points.Add(s);
+            if (e.point.x > fp.x) root.edge = new Edge(s, fp, e.point); // decide which parabola is left or right
+            else root.edge = new Edge(s, e.point, fp);
             edges.Add(root.edge);
             return;
         }
@@ -77,14 +95,15 @@ public class Voronoi {
 
         //If par has a circle event, it will never fire and we can delete it.
         if (par.cEvent != null) {
+            deleted.Add(par.cEvent);
             par.cEvent = null;
         }
 
-        Vector2 start = new Vector2(e.point.x, getY(ref par.site, e.point.x));
-        //points.push_back(start);
+        Point start = new Point(e.point.x, getY(par.site, e.point.x));
+        points.Add(start);
 
-        Edge el = new Edge(ref start, ref par.site, ref e.point); // edge going from e.point.x left
-        Edge er = new Edge(ref start, ref e.point, ref par.site); // edge going from e.point.x right
+        Edge el = new Edge(start, par.site, e.point); // edge going from e.point.x left
+        Edge er = new Edge(start, e.point, par.site); // edge going from e.point.x right
 
         el.neighbour = er;
         edges.Add(el);
@@ -93,9 +112,9 @@ public class Voronoi {
         par.isLeaf = false;
 
 
-        Parabola p0 = new Parabola(ref par.site); // left sub-parabola
-        Parabola p1 = new Parabola(ref e.point); // newly created parabola
-        Parabola p2 = new Parabola(ref par.site); // right sub-parabola
+        Parabola p0 = new Parabola(par.site); // left sub-parabola
+        Parabola p1 = new Parabola(e.point); // newly created parabola
+        Parabola p2 = new Parabola(par.site); // right sub-parabola
 
         //left is the edge going left
         par.SetLeft(new Parabola());
@@ -124,17 +143,23 @@ public class Voronoi {
         Parabola p2 = xr.GetRightChild();
 
         // we are handling the circle events in p0 and p2 right now and can remove them.
-        if (p0.cEvent != null) p0.cEvent = null;
-        if (p2.cEvent != null) p2.cEvent = null;
+        if (p0.cEvent != null) {
+            deleted.Add(p0.cEvent);
+            p0.cEvent = null;
+        }
+        if (p2.cEvent != null) {
+            deleted.Add(p2.cEvent);
+            p2.cEvent = null;
+        }
 
-        Vector2 p = new Vector2(e.point.x, getY(ref p1.site, e.point.x));
-        //points.push_back(p);
+        Point p = new Point(e.point.x, getY(p1.site, e.point.x));
+        points.Add(p);
 
         // finish the edges
         xl.edge.end = p;
         xr.edge.end = p;
 
-        Parabola higher = xl;
+        Parabola higher = null;
         Parabola par = p1;
         while(par != root) {
             par = par.parent;
@@ -142,7 +167,7 @@ public class Voronoi {
             if (par == xr) higher = xr;
         }
 
-        higher.edge = new Edge(ref p, ref p0.site, ref p2.site);
+        higher.edge = new Edge(p, p0.site, p2.site);
         edges.Add(higher.edge);
 
         Parabola gparent = p1.parent.parent;
@@ -159,18 +184,17 @@ public class Voronoi {
     }
 
     private void FinishEdge(Parabola n) {
-        if (n.isLeaf) { n = null;  return; }
+        if (n.isLeaf) { return; }
         float mx;
         if (n.edge.direction.x > 0.0f) mx = Mathf.Max(width, n.edge.start.x + 10);
         else mx = Mathf.Min(0.0f, n.edge.start.x - 10);
 
-        Vector2 end = new Vector2(mx, mx * n.edge.f + n.edge.g);
+        Point end = new Point(mx, mx * n.edge.f + n.edge.g);
         n.edge.end = end;
-        //points.push_back(end);
+        points.Add(end);
 
         FinishEdge(n.Left());
         FinishEdge(n.Right());
-        n = null;
     }
 
     private float getXOfEdge(Parabola par, float y) {
@@ -178,8 +202,8 @@ public class Voronoi {
         Parabola right = par.GetRightChild();
 
 
-        Vector2 p = left.site;
-        Vector2 r = right.site;
+        Point p = left.site;
+        Point r = right.site;
 
         float dp = 2.0f * (p.y - y);
         float a1 = 1.0f / dp;
@@ -197,8 +221,8 @@ public class Voronoi {
 
         // Quadratic formula
         float disc = b * b - 4 * a * c;
-        float x1 = (-b + Mathf.Sqrt((float)disc)) / (2.0f * a);
-        float x2 = (-b - Mathf.Sqrt((float)disc)) / (2.0f * a);
+        float x1 = (-b + Mathf.Sqrt(disc)) / (2.0f * a);
+        float x2 = (-b - Mathf.Sqrt(disc)) / (2.0f * a);
 
         float ry;
         if (p.y < r.y) ry = Mathf.Max(x1, x2);
@@ -220,7 +244,7 @@ public class Voronoi {
         return par;
     }
 
-    private float getY(ref Vector2 p, float x)
+    private float getY(Point p, float x)
     {
         float dp = 2 * (p.y - s);
         float a1 = 1 / dp;
@@ -241,25 +265,25 @@ public class Voronoi {
 
         if (a == null || c == null || a.site == c.site) return;
 
-        Vector2? v = null;
+        Point v = null;
         v = GetEdgeIntersection(lp.edge, rp.edge);
         if (v == null) return;
 
-        float dx = a.site.x - v.GetValueOrDefault().x;
-        float dy = a.site.y - v.GetValueOrDefault().y;
+        float dx = a.site.x - v.x;
+        float dy = a.site.y - v.y;
 
         float d = Mathf.Sqrt((dx * dx) + (dy * dy));
 
-        if (v.GetValueOrDefault().y - d >= s) { return; }
+        if (v.y - d >= s) { return; }
 
-        Event e = new Event(new Vector2(v.GetValueOrDefault().x, v.GetValueOrDefault().y - d), false);
-        //points.push_back(e.point);
+        Event e = new Event(new Point(v.x, v.y - d), false);
+        points.Add(e.point);
         b.cEvent = e;
         e.arch = b;
         events.Add(e);
     }
 
-    Vector2? GetEdgeIntersection(Edge a, Edge b) {
+    Point GetEdgeIntersection(Edge a, Edge b) {
         float x = (b.g - a.g) / (a.f - b.f);
         float y = a.f * x + a.g;
 
@@ -269,8 +293,56 @@ public class Voronoi {
         if ((x - b.start.x) / b.direction.x < 0) return null;
         if ((y - b.start.y) / b.direction.y < 0) return null;
 
-        Vector2? p = new Vector2(x, y);
-        //points.push_back(p);
+        Point p = new Point(x, y);
+        points.Add(p);
         return p;
+    }
+
+
+    private void fixEdges() {
+        foreach (Edge edge in edges) {
+            if (edge.end.x < 0) {
+                Point p = new Point(0, edge.g);
+                edge.end = p;
+            }
+
+            if (edge.end.x > width) { 
+                Point p = new Point(width, width * edge.f + edge.g);
+                edge.end = p;
+            }
+
+            if(edge.start.x < 0) {
+                Point p = new Point(0, edge.g);
+                edge.start = p;
+            }
+
+            if(edge.start.x > width) {
+                Point p = new Point(width, width * edge.f + edge.g);
+                edge.start = p;
+            }
+
+            if(edge.start.y < 0) {
+                Point p = new Point(-edge.g / edge.f, 0);
+                edge.start = p;
+            }
+
+            if (edge.end.y < 0) {
+                Point p = new Point(-edge.g / edge.f, 0);
+                edge.end = p;
+            }
+
+
+            if (edge.start.y > height) {
+                Point p = new Point((height-edge.g)/edge.f, height);
+                edge.start = p;
+            }
+
+
+            if (edge.end.y > height) {
+                Point p = new Point((height-edge.g)/edge.f, height);
+                edge.end = p;
+            }
+
+        }
     }
 }

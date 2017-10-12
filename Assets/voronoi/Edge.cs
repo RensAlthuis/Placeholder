@@ -5,11 +5,11 @@ using UnityEngine;
 
 
 public class Edge {
-    public Vector2 end;
-    public Vector2 start;
-    public Vector2 direction;
-    public Vector2 left;
-    public Vector2 right;
+    public Point end;
+    public Point start;
+    public Point direction;
+    public Point left;
+    public Point right;
     public Edge neighbour;
     public float f;
     public float g;
@@ -22,13 +22,14 @@ public class Edge {
 		b		: pointer to right place
 	*/
 
-    public Edge(ref Vector2 s, ref Vector2 a, ref Vector2 b) {
+    public Edge(Point s, Point a, Point b) {
         start = s;
         left = a;
-        right = b;
+        right = b;                               
 
         f = (b.x - a.x) / (a.y - b.y);
         g = s.y - f * s.x;
-        direction = new Vector2(b.y - a.y, -(b.x - a.x));
+        direction = new Point(b.y - a.y, -(b.x - a.x));
+    
     }
 }

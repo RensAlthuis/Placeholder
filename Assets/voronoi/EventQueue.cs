@@ -9,7 +9,7 @@ public class EventQueue {
     public EventQueue() {
         queue = new List<Event>();
     }
-
+         
     public void Add(Event e) {
         queue.Add(e);
 
@@ -30,9 +30,11 @@ public class EventQueue {
 
     public Event Remove() {
 
-        int lastItem = queue.Count - 1;
-        if (lastItem < 0)
+        if (isEmpty()) {
             return null;
+        }
+
+        int lastItem = queue.Count - 1;
 
         Event e = queue[0];
         queue[0] = queue[lastItem];
@@ -51,7 +53,7 @@ public class EventQueue {
             if (r <= lastItem && queue[r].y > queue[cur].y)
                 cur = r;
 
-            if (queue[par].y < queue[cur].y)
+            if (queue[par].y > queue[cur].y)
                 break;
 
             Event tmp = queue[cur];
@@ -66,6 +68,16 @@ public class EventQueue {
 
     public bool isEmpty() {
         return queue.Count == 0;
+    }
+
+    public void print() {
+        string str = "";
+        foreach (Event e in queue) {
+            str += e.y.ToString();
+            str += ", ";
+        }
+
+        Debug.Log("queue = " + str);
     }
 
 }

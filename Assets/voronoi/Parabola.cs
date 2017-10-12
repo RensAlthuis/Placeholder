@@ -12,7 +12,7 @@ public class Parabola {
 	*/
 
     public bool isLeaf;
-    public Vector2 site;
+    public Point site;
     public Edge edge;
     public Event cEvent;
     public Parabola parent;
@@ -22,11 +22,18 @@ public class Parabola {
 	*/
 
     public Parabola() {
+        //site = null;
+        cEvent = null;
+        edge = null;
+        parent = null;
         isLeaf = false;
     }
 
-    public Parabola(ref Vector2 s) {
+    public Parabola(Point s) {
         site = s;
+        edge = null;
+        cEvent = null;
+        parent = null;
         isLeaf = true;
     }
 
