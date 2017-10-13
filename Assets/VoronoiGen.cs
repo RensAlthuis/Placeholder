@@ -16,12 +16,13 @@ public class VoronoiGen : MonoBehaviour {
         Random.InitState(1);
         List<Tile> tiles = new List<Tile>();
         int w = 100;
-        for (int i = 0; i < 15; i++) {
+        for (int i = 0; i < 20; i++) {
             vecs.Add(new Point(Random.Range(0, w), Random.Range(0, w)));
             tiles.Add(new Tile(vecs[i]));
             GameObject p1 = Instantiate(point);
             p1.transform.position = new Vector3(vecs[i].x, 0, vecs[i].y);
             p1.name = "center(" + vecs[i].x.ToString() + ", " + vecs[i].y.ToString() + ")";
+            
         }
 
         EventQueue events = new EventQueue();
@@ -52,6 +53,7 @@ public class VoronoiGen : MonoBehaviour {
                 if (t.center == e.left || t.center == e.right) {
                     Vector2 v1 = new Vector2(e.start.x, e.start.y);
                     Vector2 v2 = new Vector2(e.end.x, e.end.y);
+                    
                     if (!t.verts.Contains(v1))
                         t.verts.Add(v1);
                     if(!t.verts.Contains(v2))
@@ -71,9 +73,8 @@ public class VoronoiGen : MonoBehaviour {
 
             for (int i = 0; i < meshVecs.Length; ++i) {
                 
-                float y = Mathf.PerlinNoise(Mathf.Floor(t.center.x + meshVecs[i].x)/ w * 20, Mathf.Floor(t.center.y + meshVecs[i].z)/ w * 20) * 100;
+                float y = Mathf.PerlinNoise(Mathf.Floor(t.center.x + meshVecs[i].x)/ w * 20, Mathf.Floor(t.center.y + meshVecs[i].z)/ w * 20)*100;
                 meshVecs[i] += new Vector3(0, y, 0);
-                Debug.Log("x = " + Mathf.Floor(meshVecs[i].x) + " z = " + Mathf.Floor(meshVecs[i].z) + " -> " + y);
             }
 
             //place spheres at verts
@@ -81,7 +82,7 @@ public class VoronoiGen : MonoBehaviour {
             foreach (Vector3 vec in meshVecs) {
                 GameObject p1 = Instantiate(point2);
                 p1.transform.position = t.center.toVector3() + vec;
-                p1.name = "voronoi (" + vec.x + ", " + vec.z + ")";
+                p1.name = "voronoi (" + p1.transform.position.x + ", " + p1.transform.position.z + ")";
             }
 
             //calculate traingulations

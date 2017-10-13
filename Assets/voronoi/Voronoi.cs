@@ -51,8 +51,10 @@ public class Voronoi {
 
             if (e.isPlaceEvent) {
                 handleSiteEvent(e);
+                Debug.Log("site: " + e.point.x + ", " + e.point.y);
             } else {
                 handleCircleEvent(e);
+                Debug.Log("circle: " + e.point.x + ", " + e.point.y);
             }
         }
 
@@ -77,7 +79,7 @@ public class Voronoi {
             return;
         }
 
-        if (root.isLeaf && root.site.y - e.point.y < 1) // edge case, both lowest position are at the same height
+        if (root.isLeaf && root.site.y - e.point.y <= 0) // edge case, both lowest position are at the same height
 {
             Point fp = root.site;
             root.isLeaf = false;
@@ -107,6 +109,7 @@ public class Voronoi {
 
         el.neighbour = er;
         edges.Add(el);
+
         //current parabola becomes an edge
         par.edge = er;
         par.isLeaf = false;
@@ -155,7 +158,7 @@ public class Voronoi {
         Point p = new Point(e.point.x, getY(p1.site, e.point.x));
         points.Add(p);
 
-        // finish the edges
+        //// finish the edges
         xl.edge.end = p;
         xr.edge.end = p;
 
@@ -186,11 +189,17 @@ public class Voronoi {
     private void FinishEdge(Parabola n) {
         if (n.isLeaf) { return; }
         float mx;
-        if (n.edge.direction.x > 0.0f) mx = Mathf.Max(width, n.edge.start.x + 10);
-        else mx = Mathf.Min(0.0f, n.edge.start.x - 10);
+        if (n.edge.direction.x > 0.0f) {
+            mx = width;
+            Debug.Log(n.edge.start.x + ", " + n.edge.start.y);
+        } else {
+            mx = 0.0f;
+            Debug.Log(n.edge.start.x + ", " + n.edge.start.y);
+        }
 
         Point end = new Point(mx, mx * n.edge.f + n.edge.g);
         n.edge.end = end;
+
         points.Add(end);
 
         FinishEdge(n.Left());
@@ -299,50 +308,50 @@ public class Voronoi {
     }
 
 
-    private void fixEdges() {
-        foreach (Edge edge in edges) {
-            if (edge.end.x < 0) {
-                Point p = new Point(0, edge.g);
-                edge.end = p;
-            }
+    //private void fixEdges() {
+    //    foreach (Edge edge in edges) {
+    //        if (edge.end.x < 0) {
+    //            Point p = new Point(0, edge.g);
+    //            edge.end = p;
+    //        }
 
-            if (edge.end.x > width) { 
-                Point p = new Point(width, width * edge.f + edge.g);
-                edge.end = p;
-            }
+    //        if (edge.end.x > width) { 
+    //            Point p = new Point(width, width * edge.f + edge.g);
+    //            edge.end = p;
+    //        }
 
-            if(edge.start.x < 0) {
-                Point p = new Point(0, edge.g);
-                edge.start = p;
-            }
+    //        if(edge.start.x < 0) {
+    //            Point p = new Point(0, edge.g);
+    //            edge.start = p;
+    //        }
 
-            if(edge.start.x > width) {
-                Point p = new Point(width, width * edge.f + edge.g);
-                edge.start = p;
-            }
+    //        if(edge.start.x > width) {
+    //            Point p = new Point(width, width * edge.f + edge.g);
+    //            edge.start = p;
+    //        }
 
-            if(edge.start.y < 0) {
-                Point p = new Point(-edge.g / edge.f, 0);
-                edge.start = p;
-            }
+    //        if(edge.start.y < 0) {
+    //            Point p = new Point(-edge.g / edge.f, 0);
+    //            edge.start = p;
+    //        }
 
-            if (edge.end.y < 0) {
-                Point p = new Point(-edge.g / edge.f, 0);
-                edge.end = p;
-            }
-
-
-            if (edge.start.y > height) {
-                Point p = new Point((height-edge.g)/edge.f, height);
-                edge.start = p;
-            }
+    //        if (edge.end.y < 0) {
+    //            Point p = new Point(-edge.g / edge.f, 0);
+    //            edge.end = p;
+    //        }
 
 
-            if (edge.end.y > height) {
-                Point p = new Point((height-edge.g)/edge.f, height);
-                edge.end = p;
-            }
+    //        if (edge.start.y > height) {
+    //            Point p = new Point((height-edge.g)/edge.f, height);
+    //            edge.start = p;
+    //        }
 
-        }
-    }
+
+    //        if (edge.end.y > height) {
+    //            Point p = new Point((height-edge.g)/edge.f, height);
+    //            edge.end = p;
+    //        }
+
+    //    }
+    //}
 }
