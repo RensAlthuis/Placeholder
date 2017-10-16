@@ -70,14 +70,14 @@ public class EventQueue {
         return queue.Count == 0;
     }
 
-    public void print() {
+	public override string ToString() {
         string str = "";
         foreach (Event e in queue) {
-            str += e.y.ToString();
+			str += e.point;
             str += ", ";
         }
 
-        Debug.Log("queue = " + str);
+		return str;
     }
 
 }

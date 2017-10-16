@@ -1,10 +1,11 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using System.Collections.Generic;
 
 public class Voronoi {
 
-    List<Point> places;
+	
+    //List<Point> places;
     List<Edge> edges;
     List<Event> deleted;
     List<Point> points;
@@ -19,14 +20,14 @@ public class Voronoi {
     public Voronoi() {
         events = new EventQueue();
         edges = new List<Edge>();
-        places = new List<Point>();
+        //places = new List<Point>();
         points = new List<Point>();
         deleted = new List<Event>();
     }
 
     public List<Edge> GetEdges(List<Point> vecs, float w, float h) {
 
-        places = vecs;
+        //places = vecs;
         width = w;
         height = h;
         root = null;
@@ -34,7 +35,7 @@ public class Voronoi {
         edges.Clear();
         points.Clear();
 
-        //initialze an event queue with all site events
+        //initialize an event queue with all site events
         foreach (Point v in vecs) {
             events.Add(new Event(v, true));
         }
@@ -50,19 +51,19 @@ public class Voronoi {
             }
 
             if (e.isPlaceEvent) {
+				//Debug.Log("site: " + e.point.x + ", " + e.point.y);
                 handleSiteEvent(e);
-                Debug.Log("site: " + e.point.x + ", " + e.point.y);
             } else {
+				//Debug.Log("circle: " + e.point.x + ", " + e.point.y);
                 handleCircleEvent(e);
-                Debug.Log("circle: " + e.point.x + ", " + e.point.y);
             }
         }
 
         FinishEdge(root);
+		foreach (Edge e in edges) {
 
-        foreach (Edge e in edges) {
             if(e.neighbour != null) {
-                e.start = e.neighbour.end;
+				e.start = e.neighbour.end;
             }
         }
 
@@ -75,7 +76,7 @@ public class Voronoi {
 
         //No parabolas yet
         if (root == null) {
-            root = new Parabola(e.point);
+			root = new Parabola(e.point);
             return;
         }
 
@@ -98,7 +99,9 @@ public class Voronoi {
         //If par has a circle event, it will never fire and we can delete it.
         if (par.cEvent != null) {
             deleted.Add(par.cEvent);
+			//Debug.Log ("remove cEvent at: " + par.cEvent.point.x + ", " + par.cEvent.point.y);
             par.cEvent = null;
+
         }
 
         Point start = new Point(e.point.x, getY(par.site, e.point.x));
@@ -156,11 +159,14 @@ public class Voronoi {
         }
 
         Point p = new Point(e.point.x, getY(p1.site, e.point.x));
+		Debug.Log ("new cpoint at: " + p + " from points: " + p0.site + " and " + p2.site);
         points.Add(p);
 
         //// finish the edges
-        xl.edge.end = p;
-        xr.edge.end = p;
+
+			xl.edge.end = p;
+			xr.edge.end = p;
+
 
         Parabola higher = null;
         Parabola par = p1;
@@ -188,16 +194,16 @@ public class Voronoi {
 
     private void FinishEdge(Parabola n) {
         if (n.isLeaf) { return; }
-        float mx;
+
+		float mx;
         if (n.edge.direction.x > 0.0f) {
             mx = width;
-            Debug.Log(n.edge.start.x + ", " + n.edge.start.y);
         } else {
-            mx = 0.0f;
-            Debug.Log(n.edge.start.x + ", " + n.edge.start.y);
+			mx = 0.0f;
         }
 
         Point end = new Point(mx, mx * n.edge.f + n.edge.g);
+		Debug.Log("start = " + n.edge.start + " dir = " + n.edge.direction.x + " end = " + end);
         n.edge.end = end;
 
         points.Add(end);
@@ -290,6 +296,7 @@ public class Voronoi {
         b.cEvent = e;
         e.arch = b;
         events.Add(e);
+		//Debug.Log ("new cEvent at: " + e.point.x + ", " + e.point.y);
     }
 
     Point GetEdgeIntersection(Edge a, Edge b) {
@@ -306,52 +313,4 @@ public class Voronoi {
         points.Add(p);
         return p;
     }
-
-
-    //private void fixEdges() {
-    //    foreach (Edge edge in edges) {
-    //        if (edge.end.x < 0) {
-    //            Point p = new Point(0, edge.g);
-    //            edge.end = p;
-    //        }
-
-    //        if (edge.end.x > width) { 
-    //            Point p = new Point(width, width * edge.f + edge.g);
-    //            edge.end = p;
-    //        }
-
-    //        if(edge.start.x < 0) {
-    //            Point p = new Point(0, edge.g);
-    //            edge.start = p;
-    //        }
-
-    //        if(edge.start.x > width) {
-    //            Point p = new Point(width, width * edge.f + edge.g);
-    //            edge.start = p;
-    //        }
-
-    //        if(edge.start.y < 0) {
-    //            Point p = new Point(-edge.g / edge.f, 0);
-    //            edge.start = p;
-    //        }
-
-    //        if (edge.end.y < 0) {
-    //            Point p = new Point(-edge.g / edge.f, 0);
-    //            edge.end = p;
-    //        }
-
-
-    //        if (edge.start.y > height) {
-    //            Point p = new Point((height-edge.g)/edge.f, height);
-    //            edge.start = p;
-    //        }
-
-
-    //        if (edge.end.y > height) {
-    //            Point p = new Point((height-edge.g)/edge.f, height);
-    //            edge.end = p;
-    //        }
-
-    //    }
-    //}
 }

@@ -21,7 +21,7 @@ public class VoronoiGen : MonoBehaviour {
             tiles.Add(new Tile(vecs[i]));
             GameObject p1 = Instantiate(point);
             p1.transform.position = new Vector3(vecs[i].x, 0, vecs[i].y);
-            p1.name = "center(" + vecs[i].x.ToString() + ", " + vecs[i].y.ToString() + ")";
+			p1.name = "center" + vecs[i];
             
         }
 
@@ -51,14 +51,17 @@ public class VoronoiGen : MonoBehaviour {
             //collect all vertices for tile t
             foreach(Edge e in edges) { 
                 if (t.center == e.left || t.center == e.right) {
-                    Vector2 v1 = new Vector2(e.start.x, e.start.y);
-                    Vector2 v2 = new Vector2(e.end.x, e.end.y);
-                    
-                    if (!t.verts.Contains(v1))
-                        t.verts.Add(v1);
-                    if(!t.verts.Contains(v2))
-                        t.verts.Add(v2);
-                }
+					if (e.start != null) {
+						Vector2 v1 = new Vector2(e.start.x, e.start.y);
+						if (!t.verts.Contains(v1))
+							t.verts.Add(v1);
+					}
+					if (e.end != null) {
+						Vector2 v2 = new Vector2 (e.end.x, e.end.y);
+						if(!t.verts.Contains(v2))
+							t.verts.Add(v2);
+					}
+                 }
             }
 
             //sort by x then y
@@ -71,14 +74,13 @@ public class VoronoiGen : MonoBehaviour {
             t.normalize();
             Vector3[] meshVecs = t.asVector3Array();
 
-            for (int i = 0; i < meshVecs.Length; ++i) {
-                
-                float y = Mathf.PerlinNoise(Mathf.Floor(t.center.x + meshVecs[i].x)/ w * 20, Mathf.Floor(t.center.y + meshVecs[i].z)/ w * 20)*100;
-                meshVecs[i] += new Vector3(0, y, 0);
-            }
+//            for (int i = 0; i < meshVecs.Length; ++i) {
+//                
+//                float y = Mathf.PerlinNoise(Mathf.Floor(t.center.x + meshVecs[i].x)/ w * 20, Mathf.Floor(t.center.y + meshVecs[i].z)/ w * 20)*100;
+//                meshVecs[i] += new Vector3(0, y, 0);
+//            }
 
             //place spheres at verts
-            string str = "(" + t.center.x + ", " + t.center.y + ") = ";
             foreach (Vector3 vec in meshVecs) {
                 GameObject p1 = Instantiate(point2);
                 p1.transform.position = t.center.toVector3() + vec;

@@ -105,8 +105,8 @@ public class Parabola {
         Parabola par = Right();
         while (!par.isLeaf) par = par.Left();
         return par;
-    }
 
+    }
 
     private Parabola _left;
     private Parabola _right;

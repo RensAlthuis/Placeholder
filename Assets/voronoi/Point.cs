@@ -18,4 +18,8 @@ public class Point {
     public Vector3 toVector3() {
         return new Vector3(x, 0, y);
     }
+
+	public override string ToString(){
+		return "(" + x + ", " + y + ")";
+	}
 }
