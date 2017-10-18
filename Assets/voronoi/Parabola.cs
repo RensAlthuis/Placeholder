@@ -22,7 +22,7 @@ public class Parabola {
 	*/
 
     public Parabola() {
-        //site = null;
+        site = null;
         cEvent = null;
         edge = null;
         parent = null;

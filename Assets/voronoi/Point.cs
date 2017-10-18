@@ -22,4 +22,9 @@ public class Point {
 	public override string ToString(){
 		return "(" + x + ", " + y + ")";
 	}
+
+    public bool within(Vector2 low, Vector2 high) {
+        if (x < low.x || x > high.x || y < low.y || y > high.y) return false;
+        return true;
+    }
 }
