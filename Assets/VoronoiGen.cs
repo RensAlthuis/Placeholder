@@ -50,13 +50,16 @@ public class VoronoiGen : MonoBehaviour {
         foreach(Tile t in tiles) {
             //collect all vertices for tile t
             foreach(Edge e in edges) { 
+
                 if (t.center == e.left || t.center == e.right) {
-					if (e.start != null) {
+                    if (e.start != null /*&& 
+                        e.start.within( new Vector2(0,0) , new Vector2(w,w))*/) {
 						Vector2 v1 = new Vector2(e.start.x, e.start.y);
 						if (!t.verts.Contains(v1))
 							t.verts.Add(v1);
 					}
-					if (e.end != null) {
+					if (e.end != null /*&&
+                        e.end.within(new Vector2(0, 0), new Vector2(w, w))*/) {
 						Vector2 v2 = new Vector2 (e.end.x, e.end.y);
 						if(!t.verts.Contains(v2))
 							t.verts.Add(v2);
