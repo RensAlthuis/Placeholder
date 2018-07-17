@@ -1,26 +1,51 @@
-﻿using System.Collections;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-/*
-	The class for storing place / circle event in event queue.
-
-	point		: the point at which current event occurs (top circle point for circle event, focus point for place event)
-	pe			: whether it is a place event or not
-	y			: y coordinate of "point", events are sorted by this "y"
-	arch		: if "pe", it is an arch above which the event occurs
-*/
-public class Event{
+public class Event
+{
 
     public Point point;
-    public bool isPlaceEvent;
     public float y;
-    public Parabola arch;
+    public bool isPointEvent;
+    public Parabola par;
 
-    public Event(Point p, bool _isPlaceEvent) {
-        point = p;
-        isPlaceEvent = _isPlaceEvent;
-        y = p.y;
-        arch = null;
+    public Event(float y, Point v, bool isPointEvent)
+    {
+        this.y = y;
+        this.point = v;
+        this.isPointEvent = isPointEvent;
     }
+
+    public static bool operator <(Event a, Event b)
+    {
+        if (a == null || b == null)
+        {
+            throw new ArgumentNullException();
+        }
+
+        if (Mathf.Approximately(a.y, b.y))
+        {
+            if (a.point.x < b.point.x && !Mathf.Approximately(a.point.x, b.point.x))
+            {
+                return true;
+            }
+            return false;
+        } else if (a.y < b.y)
+        {
+            return true;
+        }
+        return false;
+    }
+
+    public static bool operator >(Event a, Event b)
+    {
+        return !(a < b);
+    }
+
+    override public string ToString()
+    {
+        return point.ToString();
+    }
+
 }

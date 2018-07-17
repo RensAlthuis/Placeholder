@@ -1,113 +1,150 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+using System;
 using UnityEngine;
 
-public class Parabola {
-    /*
-		isLeaf		: flag whether the node is Leaf or internal node
-		site		: pointer to the focus point of parabola (when it is parabola)
-		edge		: pointer to the edge (when it is an edge)
-		cEvent		: pointer to the event, when the arch disappears (circle event)
-		parent		: pointer to the parent node in tree
-	*/
+public class Parabola : BeachLineNode
+{
 
-    public bool isLeaf;
-    public Point site;
-    public Edge edge;
-    public Event cEvent;
-    public Parabola parent;
+    public Point focus;
+    public Event circleEvent;
 
-    /*
-		Constructors of the class (empty for edge, with focus parameter for an arch).
-	*/
-
-    public Parabola() {
-        site = null;
-        cEvent = null;
-        edge = null;
-        parent = null;
-        isLeaf = false;
+    public Parabola(string name, Point focus) : base(name)
+    {
+        this.focus = focus;
+        this.isParabola = true;
     }
 
-    public Parabola(Point s) {
-        site = s;
-        edge = null;
-        cEvent = null;
-        parent = null;
-        isLeaf = true;
-    }
+    //step up till we go to the left, then step down and go right till we hit a leaf
+    public Parabola LeftNeighbour()
+    {
+        BeachLineNode cur = this;
 
-    /*
-		Access to the children (in tree).
-	*/
+        if (cur.parent == null)
+            return null;
 
-    public void SetLeft(Parabola p) { _left = p; p.parent = this; }
-    public void SetRight(Parabola p) { _right = p; p.parent = this; }
-
-    public Parabola Left() { return _left; }
-    public Parabola Right() { return _right; }
-
-    /*
-		Some useful tree operations
-
-		GetLeft			: returns the closest left leave of the tree
-		GetRight		: returns the closest right leafe of the tree
-		GetLeftParent	: returns the closest parent which is on the left
-		GetLeftParent	: returns the closest parent which is on the right
-		GetLeftChild	: returns the closest leave which is on the left of current node
-		GetRightChild	: returns the closest leave which is on the right of current node
-	*/
-
-    public Parabola GetLeft() {
-        return GetLeftParent().GetLeftChild();
-    }
-
-
-    public Parabola GetRight() {
-        return GetRightParent().GetRightChild();
-    }
-
-    public Parabola GetLeftParent() {
-        Parabola par = parent;
-        Parabola pLast = this;
-        while (par.Left() == pLast) {
-            if (par.parent == null) { 
+        while (cur.parent.LeftChild == cur)
+        {
+            cur = cur.parent;
+            if (cur.parent == null)
                 return null;
-            }
-            pLast = par;
-            par = par.parent;
         }
-        return par;
-    }
 
-    public Parabola GetRightParent() {
-        Parabola par = parent;
-        Parabola pLast = this;
-        while (par.Right() == pLast) {
-            if (par.parent == null) {
-                return null;
-            }
-            pLast = par;
-            par = par.parent;
+        cur = cur.parent.LeftChild;
+        while (cur.RightChild != null)
+        {
+            cur = cur.RightChild;
         }
-        return par;
+
+        return (Parabola)cur;
     }
 
-    public Parabola GetLeftChild() {
+    //step up till we go to the right, then step down and go left till we hit a leaf
+    public Parabola RightNeighbour()
+    {
+        BeachLineNode cur = this;
+        if (cur.parent == null) { return null; }
 
-        Parabola par = Left();
-        while (!par.isLeaf) par = par.Right();
-        return par;
+        while (cur.parent.RightChild == cur)
+        {
+            cur = cur.parent;
+            if (cur.parent == null) { return null; }
+        }
+
+        cur = cur.parent.RightChild;
+        while (cur.LeftChild != null)
+        {
+            cur = cur.LeftChild;
+        }
+
+        return (Parabola)cur;
     }
 
-    public Parabola GetRightChild() {
-
-        Parabola par = Right();
-        while (!par.isLeaf) par = par.Left();
-        return par;
-
+    override public string ToString()
+    {
+        return " " + name + " ";
     }
 
-    private Parabola _left;
-    private Parabola _right;
+    public float Solve(float x, float d)
+    {
+        if (Mathf.Approximately(focus.y, d)){
+            return focus.y;
+        }
+        float k = (2 * (focus.y - d));
+        float a = 1 / k;
+        float b = -(2 * focus.x) / k;
+        float c = (focus.y * focus.y - d * d + focus.x * focus.x) / k;
+
+        return (a * (x * x) + b * x + c);
+    }
+
+    public Point Intersect(Parabola par, float d)
+    {
+        //                          1               2x            y^2 - x^2 - d^2
+        //Formula for parabala: --------- n^2 - ----------- n +  ------------------
+        //                       2(y - d)        2(y - d)            2(y - d)
+
+        if(Mathf.Approximately(focus.y, d))
+        {
+            return new Point(focus.x, par.Solve(focus.x, d));
+        }
+
+        if(Mathf.Approximately(par.focus.y, d))
+        {
+            return new Point(par.focus.x, Solve(par.focus.x, d));
+        }
+
+        float k = (2 * (focus.y - d));
+        float a1 = 1 / k;
+        float b1 = -(2 * focus.x) / k;
+        float c1 = (focus.y * focus.y - d * d + focus.x * focus.x) / k;
+
+        k = (2 * (par.focus.y - d));
+        float a2 = 1 / k;
+        float b2 = -(2 * par.focus.x) / k;
+        float c2 = (par.focus.y * par.focus.y - d * d + par.focus.x * par.focus.x) / k;
+
+        //par1 = par2 -> par1 - par2 = 0
+        float a = a1 - a2;
+        float b = b1 - b2;
+        float c = c1 - c2;
+
+        if (Mathf.Approximately(a, 0))
+        {
+            if (Mathf.Approximately(b1, b2)) Debug.Log("nooooooooo");
+            float x = (c2 - c1) / (b1 - b2);
+            return new Point(x, x);
+        }
+
+        //Quadratic formula
+        float det = b * b - 4 * a * c;
+        if (det < 0 || a == 0) Debug.Log("nooooooo");
+        float x1 = (-b + (Mathf.Sqrt(det))) / (2 * a);
+        float x2 = (-b - (Mathf.Sqrt(det))) / (2 * a);
+
+        return new Point(x1, x2);
+    }
+
+    public Edge GetLeftEdge()
+    {
+        BeachLineNode cur = this;
+        if (cur.parent == null) return null;
+        while (cur.parent.LeftChild == cur)
+        {
+            cur = cur.parent;
+            if (cur.parent == null) return null;
+        }
+        return (Edge)cur.parent;
+    }
+
+    public Edge GetRightEdge()
+    {
+        BeachLineNode cur = this;
+        if (cur.parent == null) return null;
+        while (cur.parent.RightChild == cur)
+        {
+            cur = cur.parent;
+            if (cur.parent == null) return null;
+        }
+        return (Edge)cur.parent;
+    }
+
 }

@@ -1,30 +1,48 @@
-﻿using System.Collections;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Point {
+public class Point
+{
+
     public float x;
     public float y;
 
-    public Point(float _x, float _y) {
-        x = _x;
-        y = _y;
+    public Point(float x, float y)
+    {
+        this.x = x;
+        this.y = y;
     }
 
-    public Vector2 toVector2() {
-        return new Vector2(x, y);
+    public Boolean Equals(Point p)
+    {
+        return (Mathf.Approximately(x, p.x) && Mathf.Approximately(y, p.y));
     }
 
-    public Vector3 toVector3() {
-        return new Vector3(x, 0, y);
+    public static implicit operator Point(Vector2 p)
+    {
+        return new Point(p.x, p.y);
     }
 
-	public override string ToString(){
-		return "(" + x + ", " + y + ")";
-	}
+    public static implicit operator Point(Vector3 p)
+    {
+        return new Point(p.x, p.z);
+    }
 
-    public bool within(Vector2 low, Vector2 high) {
-        if (x < low.x || x > high.x || y < low.y || y > high.y) return false;
-        return true;
+    public static implicit operator Vector2(Point p)
+    {
+        if (p == null) { return new Vector2(0, 0); }
+        return new Vector2(p.x, p.y);
+    }
+
+    public static implicit operator Vector3(Point p)
+    {
+        if (p == null) { return new Vector3(0, 0, 0); }
+        return new Vector3(p.x, 0, p.y);
+    }
+
+    public override string ToString()
+    {
+        return "(" + x + ", " + y + ")";
     }
 }
