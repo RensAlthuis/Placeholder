@@ -9,9 +9,9 @@ public class Generator
     public List<Point> points;
     public bool isSite;
     public BeachLineNode root;
-    Queue queue;
-    float sweepLine;
-    Vector4 bound;
+    private Queue queue;
+    private float sweepLine;
+    private Vector4 bound;
     private List<Point> pointSet;
 
     public Generator(List<Point> pointSet, Vector4 bound)
@@ -22,6 +22,7 @@ public class Generator
     public void Reset(List<Point> pointSet, Vector4 bound)
     {
         this.pointSet = pointSet;
+        this.bound = bound;
         edges = new List<Edge>();
         points = new List<Point>();
         queue = new Queue();
@@ -68,7 +69,7 @@ public class Generator
     {
         //connect all the edges that are extensions of eachother.
         foreach (Edge e in edges) {
-            
+
             if (e.neighbour != null)
             {
                 e.start = e.neighbour.end;
@@ -80,62 +81,55 @@ public class Generator
     {
         //Absolutely HIDEOUS CODE that extends all exposed edges
         //to the edges of the bounding box
-        //if (r.isParabola == false)
-        //{
-        //    Edge eCur = (Edge)r;
+        if (r.isParabola == false)
+        {
+           Edge eCur = (Edge)r;
+           Debug.Log(eCur.start);
 
-        //    if (eCur.start.x > lx && 
-        //        eCur.start.x < rx && 
-        //        eCur.start.y < ty && 
-        //        eCur.start.y > by)
-        //    {
-        //        Point p = new Point(0, 0);
-        //        if (eCur.left.x >= eCur.right.x)
-        //        { //down
-        //            if (eCur.isVertical)
-        //            {
-        //                p = new Point(eCur.b, by);
-        //            } else
-        //            {
-        //                if (eCur.left.y > eCur.right.y)
-        //                {
-        //                    p = eCur.Solve(rx);
-        //                } else
-        //                {
-        //                    p = eCur.Solve(lx);
-        //                }
-        //                if (p.y < by)
-        //                {
-        //                    p = eCur.SolveY(by);
-        //                }
-        //            }
-        //        } else if (eCur.left.x < eCur.right.x)
-        //        {//up
-        //            if (eCur.isVertical)
-        //            {
-        //                p = new Point(eCur.b, ty);
-        //            } else
-        //            {
-        //                if (eCur.left.y > eCur.right.y)
-        //                {
-        //                    p = eCur.Solve(rx);
-        //                } else
-        //                {
-        //                    p = eCur.Solve(lx);
-        //                }
-        //                if (p.y > ty)
-        //                {
-        //                    p = eCur.SolveY(ty);
-        //                }
-        //            }
-        //        }
+           if (eCur.start.x >= bound.x &&
+               eCur.start.x <= bound.w &&
+               eCur.start.y <= bound.z &&
+               eCur.start.y >= bound.y)
+           {
+               Point p = new Point(0, 0);
+               if (eCur.left.x >= eCur.right.x)
+               { //down
+                   if (eCur.isVertical)
+                   {
+                       p = new Point(eCur.b, bound.y);
+                   } else
+                   {
+                       if (eCur.left.y > eCur.right.y)
+                       {
+                           p = eCur.Solve(bound.w);
+                       } else
+                       {
+                           p = eCur.Solve(bound.x);
+                       }
+                   }
+               } else if (eCur.left.x < eCur.right.x)
+               {//up
+                   if (eCur.isVertical)
+                   {
+                       p = new Point(eCur.b, bound.z);
+                   } else
+                   {
+                       if (eCur.left.y > eCur.right.y)
+                       {
+                           p = eCur.Solve(bound.w);
+                       } else
+                       {
+                           p = eCur.Solve(bound.x);
+                       }
+                   }
+               }
 
-        //        eCur.end = p;
-        //        points.Add(p);
-        //    }
-        //    FinishEdges(r.LeftChild);
-        //    FinishEdges(r.RightChild);
-        //}
+               eCur.end = p;
+               points.Add(p);
+           }
+           FinishEdges(r.LeftChild);
+           FinishEdges(r.RightChild);
+        }
     }
 
     public void HandlePointEvent(Event e)
@@ -159,14 +153,15 @@ public class Generator
             float x = ((Parabola)root).focus.x;
             float y = ((Parabola)root).focus.y;
 
-            //y of starting point of the new edge is actually -infinity, 
-            //but bound by the bounding box.
+            //y of starting point of the new edge is actually -infinity,
+            //but bound bound.y the bounding box.
             Point s = new Point((e.point.x + x) / 2, bound.z);
             Edge edge = new Edge("O", s, e.point, new Point(x, y))
             {
                 LeftChild = p,
                 RightChild = root
             };
+
             root = edge;
 
             edges.Add(edge);
@@ -176,14 +171,14 @@ public class Generator
             return;
         }
 
-        //find parabola at e.x    
+        //find parabola at e.x
         Parabola p2 = ParabolaUnderX(e.point.x);
 
         //create the new parabolas
         Parabola pl = new Parabola(p2.focus.ToString(), p2.focus);
         Parabola pr = new Parabola(p2.focus.ToString(), p2.focus);
 
-        //p2 will now have different neighbours, 
+        //p2 will now have different neighbours,
         //so the old circle event is invalid and can be deleted.
         queue.Delete(p2.circleEvent);
         p2.circleEvent = null;
@@ -242,7 +237,7 @@ public class Generator
             return;
         }
 
-        //The parabolas to the left and right of the parabola that 
+        //The parabolas to the left and right of the parabola that
         //is being removed.
         Parabola parLeft = e.par.LeftNeighbour();
         Parabola parRight = e.par.RightNeighbour();
@@ -336,7 +331,7 @@ public class Generator
             //the intersection, x1 and x2 of these two parabolas
             Point intersect = l.Intersect(r, sweepLine);
 
-            //Magic math! 
+            //Magic math!
             //but it chooses the right intersect point based on the y coordinate
             float a;
             if (!Mathf.Approximately(l.focus.y, r.focus.y) && l.focus.y < r.focus.y)
@@ -347,10 +342,10 @@ public class Generator
                 a = Math.Min(intersect.x, intersect.y);
             }
 
-            // a < x that means that the point x must be to the right of 
-            //intersect a important is that if a = NaN (we divided by zero) 
+            // a < x that means that the point x must be to the right of
+            //intersect a important is that if a = NaN (we divided bound.y zero)
             //a < x will not hold and we go left.
-            // this is because we sort events with equal y on highest 
+            // this is because we sort events with equal y on highest
             //x coordinate instead of smallest x
             if (a < x && !Mathf.Approximately(a, x))
             {
@@ -372,17 +367,13 @@ public class Generator
         Parabola l = par.LeftNeighbour();
         Parabola r = par.RightNeighbour();
         if (l == null || r == null || l.focus.Equals(r.focus))
-        {
             return;
-        }
 
         //Intersect point will be the center of a circle event
         Point p = lEdge.Intersect(rEdge);
-        if (p == null)
-        {
-            return;
-        }
-        
+        if (p == null) return;
+
+
         //y of event will be at (center - circle radius),
         //using pythagoras theorem to find radius
         float dx = (par.focus.x - p.x);
@@ -390,7 +381,7 @@ public class Generator
         float radius = Mathf.Sqrt(dx * dx + dy * dy);
         float site = p.y - radius;
 
-        //if (!isSite && (Mathf.Approximately(site, sweepLine) || site > sweepLine)) { return; }
+        if (!isSite && (Mathf.Approximately(site, sweepLine) || site > sweepLine)) { return; }
         Event e = new Event(site , p, false);
 
         par.circleEvent = e;

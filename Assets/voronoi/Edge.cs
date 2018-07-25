@@ -52,7 +52,6 @@ public class Edge : BeachLineNode
             p = Solve(other.b);
         } else
         {
-            Debug.Log("nooooooo");
             p = Solve((other.b - b) / (a - other.a));
         }
         if (p!= null)

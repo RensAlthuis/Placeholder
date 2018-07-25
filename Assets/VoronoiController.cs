@@ -88,7 +88,7 @@ public class VoronoiController : MonoBehaviour {
     void S1() {
 
         v.Add(new Point(26, 98));
-        v.Add(new Point(31, 86));
+        v.Add(new Point(63, 62));
         v.Add(new Point(66, 45));
         v.Add(new Point(55, 45));
 
