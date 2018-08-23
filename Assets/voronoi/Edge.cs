@@ -4,91 +4,50 @@ using UnityEngine;
 public class Edge : BeachLineNode
 {
 
-    
-    public Point start, end;
-    public Point left, right;
-    public float dx, dy;
-    public float a, b;
+    public Point start;
+    public Point dir;
+    public Point end;
+
+    private Point left, right;
     public Edge neighbour;
-    public Boolean isVertical;
 
     public Edge(string name, Point start, Point left, Point right) : base(name)
     {
-
         this.start = start;
+        dir = (new Vector2((left.x + right.x) / 2, (left.y + right.y) / 2) - start).normalized;
         this.left = left;
         this.right = right;
-        this.isParabola = false;
-        isVertical = Mathf.Approximately(this.left.y,this.right.y);
-        if (isVertical)
-        {
-            a = 0; // kinda should't be 0 but NaN
-            b = start.x;
-        } else
-        {
-            a = (this.right.x - this.left.x) / (this.left.y - this.right.y);
-            b = this.start.y - a * this.start.x;
-        }
+
     }
 
     //Intersect based on formula: y = ax + b
     public Point Intersect(Edge other)
     {
-
-        //parallel lines
-        if (isVertical && other.isVertical)
-            return null;
-        if (Mathf.Approximately(a, other.a))
-            if (!isVertical && !other.isVertical)
-                return null;
-
-        Point p;
-
-        if (isVertical)
+        Matrix m = new Matrix(new float[,]
         {
-            p = other.Solve(b);
-        } else if (other.isVertical)
-        {
-            p = Solve(other.b);
-        } else
-        {
-            p = Solve((other.b - b) / (a - other.a));
-        }
-        if (p!= null)
-            if (!IsPointOnLine(p) || !other.IsPointOnLine(p))
-                return null;
-        return p;
+            {dir.x, -other.dir.x, other.start.x - start.x},
+            {dir.y, -other.dir.y, other.start.y - start.y}
+        });
+
+        m.Solve();
+
+        return new Point(start.x + (dir.x) * m.mat[0,2], start.y + (dir.y) * m.mat[0,2]);
     }
 
     //Solve the equation for x
     public Point Solve(float x)
     {
-        if (isVertical) return null;
-        Point p = new Point(x , a * x + b);
-        if (!IsPointOnLine(p)) return null;
-        return p;
+        Matrix m = new Matrix(new float[,]{
+            {dir.x, 0, x - start.x},
+            {dir.y, 1, 0 - start.y}
+        });
+        m.Solve();
+        return new Point(x, start.y + dir.y * m.mat[0, 2]);
     }
 
     private Boolean IsPointOnLine(Point p)
     {
-        if (Mathf.Approximately(left.y, right.y))
-        {
-            if (!Mathf.Approximately(left.x, right.x) && left.x > right.x)
-                if (!Mathf.Approximately(p.y, start.y) && p.y > start.y)
-                    return false;
-            if (!Mathf.Approximately(left.x, right.x) && left.x < right.x)
-                if (!Mathf.Approximately(p.y, start.y) && p.y < start.y)
-                    return false;
-            return true;
-        }
-
-        if (left.y > right.y)
-            return !(!Mathf.Approximately(p.x, start.x) && p.x < start.x);
-
-        if (left.y < right.y)
-            return !(!Mathf.Approximately(p.x, start.x) && p.x > start.x);
-
-        return true;
+        return false;
     }
 
     override public string ToString()

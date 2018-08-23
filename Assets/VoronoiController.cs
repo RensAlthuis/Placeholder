@@ -21,6 +21,18 @@ public class VoronoiController : MonoBehaviour {
     private Generator g;
     private int old;
 
+    void Start() {
+        Edge e1 = new Edge("e1", new Point(0,0), new Point(0,2), new Point(2,0));
+        Edge e2 = new Edge("e2", new Point(2,0), new Point(0,0), new Point(4,0));
+        Debug.Log(e1.Intersect(e2));
+
+        Debug.Log(e1.Solve(2));
+        //S1();
+    }
+    void Update() {
+        //U1();
+    }
+
     private void MovePoints(float speed) {
         int index = 0;
         foreach (Point p in v) {
@@ -54,7 +66,7 @@ public class VoronoiController : MonoBehaviour {
         }
         g.Calculate();
         g.ConnectNeighbours();
-        g.FinishEdges(g.root);
+        //g.FinishEdges(g.root);
 
     }
 
@@ -75,14 +87,6 @@ public class VoronoiController : MonoBehaviour {
                 voronoiPointObjList.Add(go);
             }
         }
-    }
-
-
-    void Start() {
-        S1();
-    }
-    void Update() {
-        U1();
     }
 
     void S1() {
@@ -123,7 +127,7 @@ public class VoronoiController : MonoBehaviour {
         }
 
         if (Input.GetKeyDown(KeyCode.Keypad0)) {
-            g.FinishEdges(g.root);
+            //g.FinishEdges(g.root);
             MakePoints();
         }
 
@@ -164,7 +168,7 @@ public class VoronoiController : MonoBehaviour {
             g.Reset(v, bound);
             g.Calculate();
             g.ConnectNeighbours();
-            g.FinishEdges(g.root);
+            //g.FinishEdges(g.root);
             MakePoints();
         }
     }

@@ -77,60 +77,60 @@ public class Generator
         }
     }
 
-    public void FinishEdges(BeachLineNode r)
-    {
-        //Absolutely HIDEOUS CODE that extends all exposed edges
-        //to the edges of the bounding box
-        if (r.isParabola == false)
-        {
-           Edge eCur = (Edge)r;
-           Debug.Log(eCur.start);
+    // public void FinishEdges(BeachLineNode r)
+    // {
+    //     //Absolutely HIDEOUS CODE that extends all exposed edges
+    //     //to the edges of the bounding box
+    //     if (r.isParabola == false)
+    //     {
+    //        Edge eCur = (Edge)r;
+    //        Debug.Log(eCur.start);
 
-           if (eCur.start.x >= bound.x &&
-               eCur.start.x <= bound.w &&
-               eCur.start.y <= bound.z &&
-               eCur.start.y >= bound.y)
-           {
-               Point p = new Point(0, 0);
-               if (eCur.left.x >= eCur.right.x)
-               { //down
-                   if (eCur.isVertical)
-                   {
-                       p = new Point(eCur.b, bound.y);
-                   } else
-                   {
-                       if (eCur.left.y > eCur.right.y)
-                       {
-                           p = eCur.Solve(bound.w);
-                       } else
-                       {
-                           p = eCur.Solve(bound.x);
-                       }
-                   }
-               } else if (eCur.left.x < eCur.right.x)
-               {//up
-                   if (eCur.isVertical)
-                   {
-                       p = new Point(eCur.b, bound.z);
-                   } else
-                   {
-                       if (eCur.left.y > eCur.right.y)
-                       {
-                           p = eCur.Solve(bound.w);
-                       } else
-                       {
-                           p = eCur.Solve(bound.x);
-                       }
-                   }
-               }
+    //        if (eCur.start.x >= bound.x &&
+    //            eCur.start.x <= bound.w &&
+    //            eCur.start.y <= bound.z &&
+    //            eCur.start.y >= bound.y)
+    //        {
+    //            Point p = new Point(0, 0);
+    //            if (eCur.left.x >= eCur.right.x)
+    //            { //down
+    //                if (eCur.isVertical)
+    //                {
+    //                    p = new Point(eCur.b, bound.y);
+    //                } else
+    //                {
+    //                    if (eCur.left.y > eCur.right.y)
+    //                    {
+    //                        p = eCur.Solve(bound.w);
+    //                    } else
+    //                    {
+    //                        p = eCur.Solve(bound.x);
+    //                    }
+    //                }
+    //            } else if (eCur.left.x < eCur.right.x)
+    //            {//up
+    //                if (eCur.isVertical)
+    //                {
+    //                    p = new Point(eCur.b, bound.z);
+    //                } else
+    //                {
+    //                    if (eCur.left.y > eCur.right.y)
+    //                    {
+    //                        p = eCur.Solve(bound.w);
+    //                    } else
+    //                    {
+    //                        p = eCur.Solve(bound.x);
+    //                    }
+    //                }
+    //            }
 
-               eCur.end = p;
-               points.Add(p);
-           }
-           FinishEdges(r.LeftChild);
-           FinishEdges(r.RightChild);
-        }
-    }
+    //            eCur.end = p;
+    //            points.Add(p);
+    //        }
+    //        FinishEdges(r.LeftChild);
+    //        FinishEdges(r.RightChild);
+    //     }
+    // }
 
     public void HandlePointEvent(Event e)
     {
