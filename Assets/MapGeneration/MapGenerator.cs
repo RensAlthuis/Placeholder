@@ -3,20 +3,28 @@ using UnityEngine;
 using csDelaunay;
 
 
-public class MapGenerator : MonoBehaviour
+public class MapGenerator
 {
     // CONSTANTS
     private static int RELAXATION = 2;
 
-    public Material mat; // TEMP the default material used on all the tiles
-    public int lenghtX = 500;
-    public int lengthY = 500;
-    public int polygonNumber = 200; // the rough amount of tiles
+    private Material mat; // TEMP the default material used on all the tiles
+    private int lenghtX;
+    private int lengthY;
+    private int polygonNumber; // the rough amount of tiles
 
     private Dictionary<Vector2f, Site> sites;
     private GameObject pointcontainer;
 
-    void Start()
+    public MapGenerator(Material mat, int width, int height, int polygonNumber)
+    {
+        this.mat = mat;
+        lenghtX = width;
+        lengthY = height;
+        this.polygonNumber = polygonNumber;
+    }
+
+    public void newMap()
     {
         // 1) Creating points
         Rectf bounds = new Rectf(0, 0, lenghtX, lengthY);
