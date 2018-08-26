@@ -1,14 +1,20 @@
 using UnityEngine;
 
-public class TileMesh {
+public class TileObject{
     private GameObject obj;
-    private Mesh mesh;
     private Vector3[] hull;
 
-    public TileMesh(GameObject parent, int index, Vector3 pos, Vector3[] hull, int height){
+    public TileObject(GameObject parent, int index, Vector3 pos, Vector3[] hull, int height){
         this.hull = hull;
 
-        mesh = new Mesh();
+        obj = new GameObject();
+        obj.name = "Tile" + index;
+        obj.transform.position = pos;
+        obj.transform.SetParent(parent.transform);
+        obj.AddComponent<MeshFilter>();
+        obj.AddComponent<MeshRenderer>();
+
+        Mesh mesh = new Mesh();
         Vector3[] verts = new Vector3[hull.Length*2 + 1];
         verts[0] = new Vector3(0, 0, 0);
         for(int i = 1; i < hull.Length + 1; i++){
@@ -23,14 +29,8 @@ public class TileMesh {
 
         mesh.vertices = verts;
         mesh.triangles = Triangles();
-
-        obj = new GameObject();
-        obj.name = "Tile" + index;
-        obj.transform.position = pos;
-        obj.transform.SetParent(parent.transform);
-        obj.AddComponent<MeshFilter>();
-        obj.AddComponent<MeshRenderer>();
         obj.GetComponent<MeshFilter>().mesh = mesh;
+
     }
 
     public void setMaterial(Material mat){

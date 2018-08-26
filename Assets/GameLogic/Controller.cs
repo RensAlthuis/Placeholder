@@ -8,7 +8,7 @@ public class Controller : MonoBehaviour{
     public void Start(){
         TerrainTypes.preloadMaterials();
 
-        MapGenerator mapGen = new MapGenerator(mat,water, 2000, 2000, 2000, 300, 100);
+        MapGenerator mapGen = new MapGenerator(mat,water, 200, 200, 2000, 5, 10);
         mapGen.newMap();
     }
 }

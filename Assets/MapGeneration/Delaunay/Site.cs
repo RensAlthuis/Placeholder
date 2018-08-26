@@ -6,6 +6,9 @@ namespace csDelaunay {
 
 	public class Site : ICoord {
 
+		//yeah this is not pretty but it works
+		public Tile tile;
+
 		private static Queue<Site> pool = new Queue<Site>();
 
 		public static Site Create(Vector2f p, int index, float weigth) {
@@ -19,9 +22,9 @@ namespace csDelaunay {
 		public static void SortSites(List<Site> sites) {
 			sites.Sort(delegate(Site s0, Site s1) {
 				int returnValue = Voronoi.CompareByYThenX(s0,s1);
-				
+
 				int tempIndex;
-				
+
 				if (returnValue == -1) {
 					if (s0.siteIndex > s1.SiteIndex) {
 						tempIndex = s0.SiteIndex;
@@ -35,7 +38,7 @@ namespace csDelaunay {
 						s0.SiteIndex = tempIndex;
 					}
 				}
-				
+
 				return returnValue;
 			});
 		}
@@ -65,15 +68,15 @@ namespace csDelaunay {
 
 			return returnValue;
 		}
-		
+
 		private const float EPSILON = 0.005f;
 		private static bool CloseEnough(Vector2f p0, Vector2f p1) {
 			return (p0-p1).magnitude < EPSILON;
 		}
-		
+
 		private int siteIndex;
 		public int SiteIndex {get{return siteIndex;} set{siteIndex=value;}}
-		
+
 		private Vector2f coord;
 		public Vector2f Coord {get{return coord;}set{coord=value;}}
 
@@ -302,15 +305,15 @@ namespace csDelaunay {
 						}
 					} else if ((rightCheck & BoundsCheck.BOTTOM) != 0) {
 						py = bounds.bottom;
-						
+
 						if ((newCheck & BoundsCheck.RIGHT) != 0) {
 							px = bounds.right;
 							points.Add(new Vector2f(px,py));
-							
+
 						} else if ((newCheck & BoundsCheck.LEFT) != 0) {
 							px = bounds.left;
 							points.Add(new Vector2f(px,py));
-							
+
 						} else if ((newCheck & BoundsCheck.TOP) != 0) {
 							if (rightPoint.x - bounds.x + newPoint.x - bounds.x < bounds.width) {
 								px = bounds.left;
@@ -346,7 +349,7 @@ namespace csDelaunay {
 		public const int RIGHT = 8;
 
 		/*
-		 * 
+		 *
 		 * @param point
 		 * @param bounds
 		 * @return an int with the appropriate bits set if the Point lies on the corresponding bounds lines

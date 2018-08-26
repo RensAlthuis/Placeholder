@@ -5,16 +5,16 @@ public class Edge {
 
     // TODO: Actually having an edge instead of an empty class
 
-    Tile left;
-    Tile right;
+    public Tile left;
+    public Tile right;
 
-    public Edge (GameObject parent, EdgeDelaunay e) {
-        // obj = new GameObject();
-        // obj.name = "Edge" + e.EdgeIndex;
-        // obj.transform.SetParent(parent.transform);
+    public Edge (Tile left, Tile right) {
+        this.left = left;
+        this.right = right;
     }
 
-    // public override ToString(){
-    //     return
-    // }
+    public override string ToString(){
+        return ("(" + left.Pos + ", " + right.Pos + ")");
+    }
+
 }
