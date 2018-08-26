@@ -183,6 +183,7 @@ namespace csDelaunay {
 					(rightVertex != null ? rightVertex.VertexIndex.ToString() : "null") + "::";
 		}
 
+		
 		/*
 		 * Set clippedVertices to contain the two ends of the portion of the Voronoi edge that is visible
 		 * within the bounds. If no part of the Edge falls within the bounds, leave clippedVertices null
@@ -291,6 +292,7 @@ namespace csDelaunay {
 				clippedVertices[LR.RIGHT] = new Vector2f(x0, y0);
 				clippedVertices[LR.LEFT] = new Vector2f(x1, y1);
 			}
+
 		}
 		#endregion
 	}
