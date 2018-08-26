@@ -106,7 +106,7 @@ namespace csDelaunay {
 		}
 
 		public override string ToString() {
-            return "Tile " + siteIndex; // + ": " + coord; // changed 'Site' to 'Tile' and removed cord
+            return "Site " + siteIndex + ": " + coord;
 		}
 
 		private void Move(Vector2f p) {

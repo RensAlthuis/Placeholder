@@ -8,7 +8,6 @@ public class MapGenerator : MonoBehaviour
     // CONSTANTS
     private static int RELAXATION = 2;
 
-
     public Material mat; // TEMP the default material used on all the tiles
     public int lenghtX = 500;
     public int lengthY = 500;
@@ -16,7 +15,6 @@ public class MapGenerator : MonoBehaviour
 
     private Dictionary<Vector2f, Site> sites;
     private GameObject pointcontainer;
-
 
     void Start()
     {
@@ -31,15 +29,12 @@ public class MapGenerator : MonoBehaviour
 
 
         // 3) Create Unity stuff
-        List<Tile> listTiles = new List<Tile>(); // why does this exist?
         GameObject tiles = new GameObject() { name = "Tiles" };
         foreach (Site s in sites.Values){
             Tile tile = new Tile(tiles,s,bounds);
             tile.obj.GetComponent<MeshRenderer>().material = mat; // TEMP should be decided inside Tile
-            listTiles.Add(tile);
         }
     }
-
 
     private List<Vector2f> CreateRandomPoint(Rectf bounds) {
         List<Vector2f> points = new List<Vector2f>();

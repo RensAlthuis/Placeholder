@@ -10,7 +10,7 @@ public class Tile : MonoBehaviour {
 
     public Tile (GameObject parent, Site s, Rectf bounds) {
         obj = new GameObject();
-        obj.name = s.ToString();
+        obj.name = "Tile" + s.SiteIndex;
         obj.transform.position = new Vector3(s.x, 0, s.y);
         obj.transform.SetParent(parent.transform);
 
