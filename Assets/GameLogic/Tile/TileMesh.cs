@@ -4,7 +4,7 @@ class TileMesh{
     public Mesh mesh;
     private Vector3[] hull;
 
-    public TileMesh(GameObject obj, int height, Vector3[] hull){
+    public TileMesh(GameObject obj, float height, Vector3[] hull){
         this.hull = hull;
 
         mesh = new Mesh();

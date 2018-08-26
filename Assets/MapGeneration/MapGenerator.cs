@@ -12,16 +12,21 @@ public class MapGenerator
     private int lenghtX;
     private int lengthY;
     private int polygonNumber; // the rough amount of tiles
+    private int roughness;
+    private int heightdifference;
 
     private Dictionary<Vector2f, Site> sites;
     private GameObject pointcontainer;
 
-    public MapGenerator(Material mat, int width, int height, int polygonNumber)
+    public MapGenerator(Material mat, int width, int height, int polygonNumber, int roughness, int heightdifference)
     {
         this.mat = mat;
         lenghtX = width;
         lengthY = height;
         this.polygonNumber = polygonNumber;
+        if (roughness == 0) roughness = 1; //TODO: prolly change this so something more logical
+        this.roughness = roughness;
+        this.heightdifference = heightdifference;
     }
 
     public void newMap()
@@ -39,7 +44,8 @@ public class MapGenerator
         // 3) Create Unity stuff
         GameObject tiles = new GameObject() { name = "Tiles" };
         foreach (Site s in sites.Values){
-            Tile tile = new Tile(tiles,s,bounds);
+            float height = Mathf.PerlinNoise(s.x/roughness, s.y/roughness) * heightdifference;
+            Tile tile = new Tile(tiles, s, bounds, height);
             tile.obj.GetComponent<MeshRenderer>().material = mat; // TEMP should be decided inside Tile
         }
     }
