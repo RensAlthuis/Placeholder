@@ -3,11 +3,11 @@ using UnityEngine;
 using csDelaunay;
 
 
+
 public class MapGenerator {
 
     // CONSTANTS
     private static int RELAXATION = 2;
-    
 
     private Material mat; // TEMP the default material used on all the tiles
     private Material water;
@@ -44,13 +44,24 @@ public class MapGenerator {
         foreach (Site s in voronoi.SitesIndexedByLocation.Values){
             float height = Mathf.PerlinNoise(s.x/roughness, s.y/roughness) * heightDifference;
             height = (height < SEALEVEL ? SEALEVEL : height);
-            Tile tile = new Tile(tiles, s, bounds, height);
-            tile.obj.GetComponent<MeshRenderer>().material = (height == SEALEVEL ? water : mat); // TEMP should be decided inside Tile (and not depend on a variable)
+
+            // Generate the tileMesh
+            TileMesh tileMesh = new TileMesh(tiles,
+                                             s.SiteIndex,
+                                             new Vector3(s.x, height, s.y),
+                                             s.Region(bounds).ConvertAll(x => new Vector3(x.x - s.x, 0, x.y - s.y)).ToArray(),
+                                             30
+                                            );
+
+            Tile tile = new Tile(s, tileMesh, height == SEALEVEL ? TerrainTypes.Type.WATER : TerrainTypes.Type.LAND);
+
         }
 
         // 4) Creating edges
         GameObject edges = new GameObject() { name = "Edges" }; // TODO: find a clever way to link tiles and edges so that no duplicate edges are created
-        foreach (EdgeDelaunay e in voronoi.Edges) { Edge edge = new Edge(edges, e); }
+        foreach (EdgeDelaunay e in voronoi.Edges) {
+            Edge edge = new Edge(edges, e);
+        }
     }
 
     private List<Vector2f> CreateRandomPoint(Rectf bounds) {

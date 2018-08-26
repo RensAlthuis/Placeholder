@@ -1,42 +1,53 @@
 using UnityEngine;
 
-class TileMesh {
-    public Mesh mesh;
+public class TileMesh {
+    private GameObject obj;
+    private Mesh mesh;
     private Vector3[] hull;
 
-    public TileMesh(GameObject obj, float height, Vector3[] hull){
+    public TileMesh(GameObject parent, int index, Vector3 pos, Vector3[] hull, int height){
         this.hull = hull;
 
         mesh = new Mesh();
         Vector3[] verts = new Vector3[hull.Length*2 + 1];
-        verts[0] = new Vector3(0, height, 0);
+        verts[0] = new Vector3(0, 0, 0);
         for(int i = 1; i < hull.Length + 1; i++){
             verts[i] = hull[i-1];
         }
 
         int n = 0;
         for(int i = hull.Length + 1; i < hull.Length + 1 + hull.Length; i++){
-            verts[i] = new Vector3(hull[n].x, -10, hull[n].z);
+            verts[i] = new Vector3(hull[n].x, -height, hull[n].z);
             n++;
         }
 
         mesh.vertices = verts;
         mesh.triangles = Triangles();
 
+        obj = new GameObject();
+        obj.name = "Tile" + index;
+        obj.transform.position = pos;
+        obj.transform.SetParent(parent.transform);
         obj.AddComponent<MeshFilter>();
         obj.AddComponent<MeshRenderer>();
         obj.GetComponent<MeshFilter>().mesh = mesh;
     }
 
+    public void setMaterial(Material mat){
+        obj.GetComponent<MeshRenderer>().material = mat;
+    }
+
     private int[] Triangles(){
         int[] triangles = new int[hull.Length * 9];
 
-        //top plane
         int offset = hull.Length * 3;
         for(int i = 0; i < hull.Length; i++){
+            //top plane
             triangles[i*3] = 0;
             triangles[i*3+2] = i+1;
             triangles[i*3+1] = i+2;
+
+            //side planes
             triangles[offset + (i*6)] = i+1;
             triangles[offset + (i*6)+2] = i+hull.Length+1;
             triangles[offset + (i*6)+1] = i+2;
