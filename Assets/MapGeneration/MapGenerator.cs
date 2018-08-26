@@ -3,30 +3,31 @@ using UnityEngine;
 using csDelaunay;
 
 
-public class MapGenerator
-{
+public class MapGenerator {
+
     // CONSTANTS
     private static int RELAXATION = 2;
+    
 
     private Material mat; // TEMP the default material used on all the tiles
+    private Material water;
     private int lenghtX;
     private int lengthY;
     private int polygonNumber; // the rough amount of tiles
     private int roughness;
-    private int heightdifference;
+    private int heightDifference; // maybe both make these constants ?
+    private int SEALEVEL;
 
-    private Dictionary<Vector2f, Site> sites;
-    private GameObject pointcontainer;
-
-    public MapGenerator(Material mat, int width, int height, int polygonNumber, int roughness, int heightdifference)
+    public MapGenerator(Material mat, Material water, int width, int height, int polygonNumber, int roughness, int heightDifference)
     {
         this.mat = mat;
+        this.water = water;
         lenghtX = width;
         lengthY = height;
         this.polygonNumber = polygonNumber;
-        if (roughness == 0) roughness = 1; //TODO: prolly change this so something more logical
-        this.roughness = roughness;
-        this.heightdifference = heightdifference;
+        this.roughness = (roughness == 0 ? 1 : roughness); //TODO: prolly change this so something more logical
+        this.heightDifference = heightDifference;
+        SEALEVEL = heightDifference / 2;
     }
 
     public void newMap()
@@ -35,19 +36,21 @@ public class MapGenerator
         Rectf bounds = new Rectf(0, 0, lenghtX, lengthY);
         List<Vector2f> points = CreateRandomPoint(bounds);
 
-
         // 2) Creating actual voronoi diagram, with lloyd relaxation thingies
         Voronoi voronoi = new Voronoi(points, bounds, RELAXATION);
-        sites = voronoi.SitesIndexedByLocation;
 
-
-        // 3) Create Unity stuff
+        // 3) Creating tiles
         GameObject tiles = new GameObject() { name = "Tiles" };
-        foreach (Site s in sites.Values){
-            float height = Mathf.PerlinNoise(s.x/roughness, s.y/roughness) * heightdifference;
+        foreach (Site s in voronoi.SitesIndexedByLocation.Values){
+            float height = Mathf.PerlinNoise(s.x/roughness, s.y/roughness) * heightDifference;
+            height = (height < SEALEVEL ? SEALEVEL : height);
             Tile tile = new Tile(tiles, s, bounds, height);
-            tile.obj.GetComponent<MeshRenderer>().material = mat; // TEMP should be decided inside Tile
+            tile.obj.GetComponent<MeshRenderer>().material = (height == SEALEVEL ? water : mat); // TEMP should be decided inside Tile (and not depend on a variable)
         }
+
+        // 4) Creating edges
+        GameObject edges = new GameObject() { name = "Edges" }; // TODO: find a clever way to link tiles and edges so that no duplicate edges are created
+        foreach (EdgeDelaunay e in voronoi.Edges) { Edge edge = new Edge(edges, e); }
     }
 
     private List<Vector2f> CreateRandomPoint(Rectf bounds) {

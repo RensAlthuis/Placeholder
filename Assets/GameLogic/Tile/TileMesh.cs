@@ -1,6 +1,6 @@
 using UnityEngine;
 
-class TileMesh{
+class TileMesh {
     public Mesh mesh;
     private Vector3[] hull;
 
