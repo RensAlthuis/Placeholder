@@ -9,8 +9,6 @@ public class MapGenerator {
     // CONSTANTS
     private static int RELAXATION = 2;
 
-    private Material mat; // TEMP the default material used on all the tiles
-    private Material water;
     private int lenghtX;
     private int lengthY;
     private int polygonNumber; // the rough amount of tiles
@@ -18,9 +16,8 @@ public class MapGenerator {
     private int heightDifference; // maybe both make these constants ?
     private int SEALEVEL;
 
-    public MapGenerator(Material mat, Material water, int width, int height, int polygonNumber, int roughness, int heightDifference) {
-        this.mat = mat;
-        this.water = water;
+    public MapGenerator(int width, int height, int polygonNumber, int roughness, int heightDifference) {
+
         lenghtX = width;
         lengthY = height;
         this.polygonNumber = polygonNumber;
