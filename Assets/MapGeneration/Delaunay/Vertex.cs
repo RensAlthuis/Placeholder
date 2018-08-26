@@ -67,7 +67,7 @@ namespace csDelaunay {
 		 * 
 		 */
 		public static Vertex Intersect(Halfedge halfedge0, Halfedge halfedge1) {
-			Edge edge, edge0, edge1;
+			EdgeDelaunay edge, edge0, edge1;
 			Halfedge halfedge;
 			float determinant, intersectionX, intersectionY;
 			bool rightOfSite;

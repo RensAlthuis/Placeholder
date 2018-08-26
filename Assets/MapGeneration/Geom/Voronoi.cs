@@ -9,8 +9,8 @@ namespace csDelaunay {
 		private SiteList sites;
 		private List<Triangle> triangles;
 
-		private List<Edge> edges;
-		public List<Edge> Edges {get{return edges;}}
+		private List<EdgeDelaunay> edges;
+		public List<EdgeDelaunay> Edges {get{return edges;}}
 
 		// TODO generalize this so it doesn't have to be a rectangle;
 		// then we can make the fractal voronois-within-voronois
@@ -31,7 +31,7 @@ namespace csDelaunay {
 			}
 			triangles.Clear();
 
-			foreach (Edge e in edges) {
+			foreach (EdgeDelaunay e in edges) {
 				e.Dispose();
 			}
 			edges.Clear();
@@ -59,7 +59,7 @@ namespace csDelaunay {
 			AddSites(points);
 			this.plotBounds = plotBounds;
 			triangles = new List<Triangle>();
-			edges = new List<Edge>();
+			edges = new List<EdgeDelaunay>();
 
 			FortunesAlgorithm();
 		}
@@ -104,7 +104,7 @@ namespace csDelaunay {
 		}
 
 		public List<LineSegment> VoronoiBoundarayForSite(Vector2f coord) {
-			return LineSegment.VisibleLineSegments(Edge.SelectEdgesForSitePoint(coord, edges));
+			return LineSegment.VisibleLineSegments(EdgeDelaunay.SelectEdgesForSitePoint(coord, edges));
 		}
 		/*
 		public List<LineSegment> DelaunayLinesForSite(Vector2f coord) {
@@ -119,12 +119,12 @@ namespace csDelaunay {
 			return DelaunayLinesForEdges(HullEdges());
 		}*/
 
-		public List<Edge> HullEdges() {
+		public List<EdgeDelaunay> HullEdges() {
 			return edges.FindAll(edge=>edge.IsPartOfConvexHull());
 		}
 
 		public List<Vector2f> HullPointsInOrder() {
-			List<Edge> hullEdges = HullEdges();
+			List<EdgeDelaunay> hullEdges = HullEdges();
 
 			List<Vector2f> points = new List<Vector2f>();
 			if (hullEdges.Count == 0) {
@@ -138,7 +138,7 @@ namespace csDelaunay {
 
 			LR orientation;
 			for (int i = 0; i < hullEdges.Count; i++) {
-				Edge edge = hullEdges[i];
+				EdgeDelaunay edge = hullEdges[i];
 				orientation = orientations[i];
 				points.Add(edge.Site(orientation).Coord);
 			}
@@ -159,7 +159,7 @@ namespace csDelaunay {
 			Vector2f newIntStar = Vector2f.zero;
 			LR leftRight;
 			Halfedge lbnd, rbnd, llbnd, rrbnd, bisector;
-			Edge edge;
+			EdgeDelaunay edge;
 
 			Rectf dataBounds = sites.GetSitesBounds();
 
@@ -192,7 +192,7 @@ namespace csDelaunay {
 					//UnityEngine.Debug.Log("new Site is in region of existing site: " + bottomSite);
 
 					// Step 9
-					edge = Edge.CreateBisectingEdge(bottomSite, newSite);
+					edge = EdgeDelaunay.CreateBisectingEdge(bottomSite, newSite);
 					//UnityEngine.Debug.Log("new edge: " + edge);
 					edges.Add(edge);
 
@@ -253,7 +253,7 @@ namespace csDelaunay {
 						topSite = tempSite;
 						leftRight = LR.RIGHT;
 					}
-					edge = Edge.CreateBisectingEdge(bottomSite, topSite);
+					edge = EdgeDelaunay.CreateBisectingEdge(bottomSite, topSite);
 					edges.Add(edge);
 					bisector = Halfedge.Create(edge, leftRight);
 					halfEdges.Add(bisector);
@@ -287,7 +287,7 @@ namespace csDelaunay {
 			halfEdges.Clear();
 
 			// we need the vertices to clip the edges
-			foreach (Edge e in edges) {
+			foreach (EdgeDelaunay e in edges) {
 				e.ClipVertices(plotBounds);
 			}
 			// But we don't actually ever use them again!
@@ -358,7 +358,7 @@ namespace csDelaunay {
 		}
 
 		private Site LeftRegion(Halfedge he, Site bottomMostSite) {
-			Edge edge = he.edge;
+			EdgeDelaunay edge = he.edge;
 			if (edge == null) {
 				return bottomMostSite;
 			}
@@ -366,7 +366,7 @@ namespace csDelaunay {
 		}
 
 		private Site RightRegion(Halfedge he, Site bottomMostSite) {
-			Edge edge = he.edge;
+			EdgeDelaunay edge = he.edge;
 			if (edge == null) {
 				return bottomMostSite;
 			}

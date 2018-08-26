@@ -2,17 +2,14 @@ using UnityEngine;
 
 class TileMesh{
     public Mesh mesh;
-    Vector3 center;
-    Vector3[] hull;
+    private Vector3[] hull;
 
-    public GameObject obj;
-    public TileMesh(GameObject parent, Vector3 center, Vector3[] hull){
+    public TileMesh(GameObject obj, int height, Vector3[] hull){
         this.hull = hull;
-        this.center = center;
 
         mesh = new Mesh();
         Vector3[] verts = new Vector3[hull.Length*2 + 1];
-        verts[0] = center;
+        verts[0] = new Vector3(0, height, 0);
         for(int i = 1; i < hull.Length + 1; i++){
             verts[i] = hull[i-1];
         }
@@ -25,12 +22,10 @@ class TileMesh{
 
         mesh.vertices = verts;
         mesh.triangles = Triangles();
-        obj = new GameObject();
+
         obj.AddComponent<MeshFilter>();
         obj.AddComponent<MeshRenderer>();
         obj.GetComponent<MeshFilter>().mesh = mesh;
-        obj.name = "tilemesh";
-        obj.transform.SetParent(parent.transform);
     }
 
     private int[] Triangles(){
@@ -55,6 +50,5 @@ class TileMesh{
         triangles[triangles.Length - 2] = hull.Length+1;
 
         return triangles;
-
     }
 }

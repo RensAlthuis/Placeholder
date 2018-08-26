@@ -5,10 +5,10 @@ namespace csDelaunay {
 
 	public class LineSegment {
 
-		public static List<LineSegment> VisibleLineSegments(List<Edge> edges) {
+		public static List<LineSegment> VisibleLineSegments(List<EdgeDelaunay> edges) {
 			List<LineSegment> segments = new List<LineSegment>();
 
-			foreach (Edge edge in edges) {
+			foreach (EdgeDelaunay edge in edges) {
 				if (edge.Visible()) {
 					Vector2f p1 = edge.ClippedEnds[LR.LEFT];
 					Vector2f p2 = edge.ClippedEnds[LR.RIGHT];

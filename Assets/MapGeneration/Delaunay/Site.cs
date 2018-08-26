@@ -84,8 +84,8 @@ namespace csDelaunay {
 		public float Weigth {get{return weigth;}}
 
 		// The edges that define this Site's Voronoi region:
-		private List<Edge> edges;
-		public List<Edge> Edges {get{return edges;}}
+		private List<EdgeDelaunay> edges;
+		public List<EdgeDelaunay> Edges {get{return edges;}}
 		// which end of each edge hooks up with the previous edge in edges:
 		private List<LR> edgeOrientations;
 		// ordered list of points that define the region clipped to bounds:
@@ -99,14 +99,14 @@ namespace csDelaunay {
 			coord = p;
 			siteIndex = index;
 			this.weigth = weigth;
-			edges = new List<Edge>();
+			edges = new List<EdgeDelaunay>();
 			region = null;
 
 			return this;
 		}
 
 		public override string ToString() {
-			return "Site " + siteIndex + ": " + coord;
+            return "Tile " + siteIndex; // + ": " + coord; // changed 'Site' to 'Tile' and removed cord
 		}
 
 		private void Move(Vector2f p) {
@@ -134,12 +134,12 @@ namespace csDelaunay {
 			}
 		}
 
-		public void AddEdge(Edge edge) {
+		public void AddEdge(EdgeDelaunay edge) {
 			edges.Add(edge);
 		}
 
-		public Edge NearestEdge() {
-			edges.Sort(Edge.CompareSitesDistances);
+		public EdgeDelaunay NearestEdge() {
+			edges.Sort(EdgeDelaunay.CompareSitesDistances);
 			return edges[0];
 		}
 
@@ -151,13 +151,13 @@ namespace csDelaunay {
 				ReorderEdges();
 			}
 			List<Site> list = new List<Site>();
-			foreach (Edge edge in edges) {
+			foreach (EdgeDelaunay edge in edges) {
 				list.Add(NeighborSite(edge));
 			}
 			return list;
 		}
 
-		private Site NeighborSite(Edge edge) {
+		private Site NeighborSite(EdgeDelaunay edge) {
 			if (this == edge.LeftSite) {
 				return edge.RightSite;
 			}
@@ -192,7 +192,7 @@ namespace csDelaunay {
 			List<Vector2f> points = new List<Vector2f>();
 			int n = edges.Count;
 			int i = 0;
-			Edge edge;
+			EdgeDelaunay edge;
 
 			while (i < n && !edges[i].Visible()) {
 				i++;
@@ -222,7 +222,7 @@ namespace csDelaunay {
 
 		private void Connect(ref List<Vector2f> points, int j, Rectf bounds, bool closingUp = false) {
 			Vector2f rightPoint = points[points.Count-1];
-			Edge newEdge = edges[j];
+			EdgeDelaunay newEdge = edges[j];
 			LR newOrientation = edgeOrientations[j];
 
 			// The point that must be conected to rightPoint:

@@ -8,10 +8,10 @@ namespace csDelaunay {
 	 * The line segment connecting the two Sites is part of the Delaunay triangulation
 	 * The line segment connecting the two Vertices is part of the Voronoi diagram
 	 */
-	public class Edge {
+	public class EdgeDelaunay {
 
 		#region Pool
-		private static Queue<Edge> pool = new Queue<Edge>();
+		private static Queue<EdgeDelaunay> pool = new Queue<EdgeDelaunay>();
 		
 		private static int nEdges = 0;
 		/*
@@ -20,7 +20,7 @@ namespace csDelaunay {
 		 * @param site1
 		 * @return
 		 */
-		public static Edge CreateBisectingEdge(Site s0, Site s1) {
+		public static EdgeDelaunay CreateBisectingEdge(Site s0, Site s1) {
 			float dx, dy;
 			float absdx, absdy;
 			float a, b, c;
@@ -41,7 +41,7 @@ namespace csDelaunay {
 				c/= dy;
 			}
 
-			Edge edge = Edge.Create();
+			EdgeDelaunay edge = EdgeDelaunay.Create();
 
 			edge.LeftSite = s0;
 			edge.RightSite = s1;
@@ -55,22 +55,22 @@ namespace csDelaunay {
 			return edge;
 		}
 
-		private static Edge Create() {
-			Edge edge;
+		private static EdgeDelaunay Create() {
+			EdgeDelaunay edge;
 			if (pool.Count > 0) {
 				edge = pool.Dequeue();
 				edge.Init();
 			} else {
-				edge = new Edge();
+				edge = new EdgeDelaunay();
 			}
 
 			return edge;
 		}
 		#endregion
 
-		public static List<Edge> SelectEdgesForSitePoint(Vector2f coord, List<Edge> edgesToTest) {
+		public static List<EdgeDelaunay> SelectEdgesForSitePoint(Vector2f coord, List<EdgeDelaunay> edgesToTest) {
 			return edgesToTest.FindAll(
-			delegate(Edge e) {
+			delegate(EdgeDelaunay e) {
 				if (e.LeftSite != null) {
 					if (e.LeftSite.Coord == coord) return true;
 				}
@@ -81,7 +81,7 @@ namespace csDelaunay {
 			});
 		}
 
-		public static readonly Edge DELETED = new Edge();
+		public static readonly EdgeDelaunay DELETED = new EdgeDelaunay();
 
 		#region Object
 		// The equation of the edge: ax + by = c
@@ -114,7 +114,7 @@ namespace csDelaunay {
 			return (LeftSite.Coord - RightSite.Coord).magnitude;
 		}
 
-		public static int CompareSitesDistances_MAX(Edge edge0, Edge edge1) {
+		public static int CompareSitesDistances_MAX(EdgeDelaunay edge0, EdgeDelaunay edge1) {
 			float length0 = edge0.SitesDistance();
 			float length1 = edge1.SitesDistance();
 			if (length0 < length1) {
@@ -126,7 +126,7 @@ namespace csDelaunay {
 			return 0;
 		}
 
-		public static int CompareSitesDistances(Edge edge0, Edge edge1) {
+		public static int CompareSitesDistances(EdgeDelaunay edge0, EdgeDelaunay edge1) {
 			return - CompareSitesDistances_MAX(edge0,edge1);
 		}
 
@@ -166,12 +166,12 @@ namespace csDelaunay {
 			pool.Enqueue(this);
 		}
 
-		public Edge() {
+		public EdgeDelaunay() {
 			edgeIndex = nEdges++;
 			Init();
 		}
 
-		public Edge Init() {
+		public EdgeDelaunay Init() {
 			sites = new Dictionary<LR, Site>();
 
 			return this;

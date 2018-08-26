@@ -82,7 +82,7 @@ namespace csDelaunay {
 			List<Circle> circles = new List<Circle>();
 			foreach (Site site in sites) {
 				float radius = 0;
-				Edge nearestEdge = site.NearestEdge();
+				EdgeDelaunay nearestEdge = site.NearestEdge();
 
 				if (!nearestEdge.IsPartOfConvexHull()) radius = nearestEdge.SitesDistance() * 0.5f;
 				circles.Add(new Circle(site.x,site.y, radius));

@@ -6,14 +6,14 @@ namespace csDelaunay {
 
 	public class EdgeReorderer {
 
-		private List<Edge> edges;
+		private List<EdgeDelaunay> edges;
 		private List<LR> edgeOrientations;
 
-		public List<Edge> Edges {get{return edges;}}
+		public List<EdgeDelaunay> Edges {get{return edges;}}
 		public List<LR> EdgeOrientations {get{return edgeOrientations;}}
 
-		public EdgeReorderer(List<Edge> origEdges, Type criterion) {
-			edges = new List<Edge>();
+		public EdgeReorderer(List<EdgeDelaunay> origEdges, Type criterion) {
+			edges = new List<EdgeDelaunay>();
 			edgeOrientations = new List<LR>();
 			if (origEdges.Count > 0) {
 				edges = ReorderEdges(origEdges, criterion);
@@ -25,15 +25,15 @@ namespace csDelaunay {
 			edgeOrientations = null;
 		}
 
-		private List<Edge> ReorderEdges(List<Edge> origEdges, Type criterion) {
+		private List<EdgeDelaunay> ReorderEdges(List<EdgeDelaunay> origEdges, Type criterion) {
 			int i;
 			int n = origEdges.Count;
-			Edge edge;
+			EdgeDelaunay edge;
 			// We're going to reorder the edges in order of traversal
 			List<bool> done = new List<bool>();
 			int nDone = 0;
 			for (int b = 0; b < n; b++) done.Add(false);
-			List<Edge> newEdges = new List<Edge>();
+			List<EdgeDelaunay> newEdges = new List<EdgeDelaunay>();
 
 			i = 0;
 			edge = origEdges[i];
@@ -50,7 +50,7 @@ namespace csDelaunay {
 			}
 
 			if (firstPoint == Vertex.VERTEX_AT_INFINITY || lastPoint == Vertex.VERTEX_AT_INFINITY) {
-				return new List<Edge>();
+				return new List<EdgeDelaunay>();
 			}
 
 			done[i] = true;
@@ -72,7 +72,7 @@ namespace csDelaunay {
 						rightPoint = edge.RightSite;
 					}
 					if (leftPoint == Vertex.VERTEX_AT_INFINITY || rightPoint == Vertex.VERTEX_AT_INFINITY) {
-						return new List<Edge>();
+						return new List<EdgeDelaunay>();
 					}
 					if (leftPoint == lastPoint) {
 						lastPoint = rightPoint;

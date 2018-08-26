@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.4381942, g: 0.48620766, b: 0.5664874, a: 1}
+  m_IndirectSpecularColor: {r: 0.43819365, g: 0.486207, b: 0.5664868, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -191,13 +191,13 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 48383514}
-  m_LocalRotation: {x: 0.25493956, y: -0, z: -0, w: 0.96695703}
-  m_LocalPosition: {x: 187.7, y: 56, z: 6}
+  m_LocalRotation: {x: 0.2588191, y: 0, z: 0, w: 0.9659258}
+  m_LocalPosition: {x: 200, y: 50, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 29.54, y: 0, z: 0}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 30, y: 0, z: 0}
 --- !u!1 &498814998
 GameObject:
   m_ObjectHideFlags: 0
@@ -208,7 +208,7 @@ GameObject:
   - component: {fileID: 498815000}
   - component: {fileID: 498814999}
   m_Layer: 0
-  m_Name: GameObject
+  m_Name: MAIN
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -225,10 +225,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eb790e691a62b354888010dcb041947f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pointPrefabRed: {fileID: 1704181288538494, guid: b2cb5324e486884409d5bdefe5ffd0c3,
-    type: 2}
-  pointPrefabGreen: {fileID: 1929807697617758, guid: ac60f59c5ce35fa4fae700f2282a73a0,
-    type: 2}
   mat: {fileID: 2100000, guid: ad5b8dbe05e3e724daae728dd5f7430b, type: 2}
   polygonNumber: 200
 --- !u!4 &498815000
@@ -242,7 +238,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1194490794
 GameObject:

@@ -8,7 +8,7 @@ namespace csDelaunay {
 		#region Pool
 		private static Queue<Halfedge> pool = new Queue<Halfedge>();
 
-		public static Halfedge Create(Edge edge, LR lr) {
+		public static Halfedge Create(EdgeDelaunay edge, LR lr) {
 			if (pool.Count > 0) {
 				return pool.Dequeue().Init(edge,lr);
 			} else {
@@ -25,18 +25,18 @@ namespace csDelaunay {
 		public Halfedge edgeListRightNeighbor;
 		public Halfedge nextInPriorityQueue;
 
-		public Edge edge;
+		public EdgeDelaunay edge;
 		public LR leftRight;
 		public Vertex vertex;
 
 		// The vertex's y-coordinate in the transformed Voronoi space V
 		public float ystar;
 
-		public Halfedge(Edge edge, LR lr) {
+		public Halfedge(EdgeDelaunay edge, LR lr) {
 			Init(edge, lr);
 		}
 
-		private Halfedge Init(Edge edge, LR lr) {
+		private Halfedge Init(EdgeDelaunay edge, LR lr) {
 			this.edge = edge;
 			leftRight = lr;
 			nextInPriorityQueue = null;

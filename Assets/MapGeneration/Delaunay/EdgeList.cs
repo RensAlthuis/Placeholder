@@ -68,7 +68,7 @@ namespace csDelaunay {
 		public void Remove(Halfedge halfedge) {
 			halfedge.edgeListLeftNeighbor.edgeListRightNeighbor = halfedge.edgeListRightNeighbor;
 			halfedge.edgeListRightNeighbor.edgeListLeftNeighbor = halfedge.edgeListLeftNeighbor;
-			halfedge.edge = Edge.DELETED;
+			halfedge.edge = EdgeDelaunay.DELETED;
 			halfedge.edgeListLeftNeighbor = halfedge.edgeListRightNeighbor = null;
 		}
 
@@ -124,7 +124,7 @@ namespace csDelaunay {
 				return null;
 			}
 			halfedge = hash[b];
-			if (halfedge != null && halfedge.edge == Edge.DELETED) {
+			if (halfedge != null && halfedge.edge == EdgeDelaunay.DELETED) {
 				// Hash table points to deleted halfedge. Patch as necessary
 				hash[b] = null;
 				// Still can't dispose halfedge yet!
