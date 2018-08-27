@@ -9,9 +9,9 @@ public class CameraControl: MonoBehaviour
     public const float MINZOOM = 20.0f;
     public const float MAXZOOM = 60.0f;
     public const float LEFTBORDER = 0;
-    public const float RIGHTBORDER = 200;
+    public const float RIGHTBORDER = 1000;
     public const float BOTTOMBORDER = 0;
-    public const float TOPBORDER = 160;
+    public const float TOPBORDER = 500;
 
     void Start(){
 

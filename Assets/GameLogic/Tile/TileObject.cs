@@ -15,6 +15,7 @@ public class TileObject {
 
         // 1) Creating the game object
         obj = new GameObject();
+        obj.SetActive(false);
         obj.name = "Tile" + s.SiteIndex;
         obj.transform.position = new Vector3(s.x, height, s.y);
         obj.transform.SetParent(parent.transform);
@@ -33,7 +34,13 @@ public class TileObject {
             n++;
         }
 
+        Vector3[] normals = new Vector3[verts.Length];
+        for(int i = 0; i < verts.Length; i++){
+            normals[i] = Vector3.up;
+        }
+
         mesh.vertices = verts;
+        mesh.normals = normals;
         mesh.triangles = Triangles();
         obj.AddComponent<MeshFilter>();
         obj.AddComponent<MeshRenderer>();
