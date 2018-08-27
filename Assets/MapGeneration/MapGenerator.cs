@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using csDelaunay;
+using MapGraphics;
 
 public class MapGenerator {
 
@@ -36,7 +37,7 @@ public class MapGenerator {
         GameObject tiles = new GameObject() { name = "Tiles" };
         foreach (Site s in voronoi.SitesIndexedByLocation.Values){
             float height = GenerateHeight(s.x, s.y);
-            Tile tile = new Tile(tiles, s, height, GenerateType(height), bounds);
+            new Tile(tiles, s, height, GenerateType(height), bounds);
         }
         tiles.transform.Translate(new Vector3(0, -SEALEVEL, 0), Space.World); // min == SEALEVEL for sealevel occuring once! // also is this really needed?
 
@@ -44,7 +45,7 @@ public class MapGenerator {
         GameObject edges = new GameObject() { name = "Edges" };
         foreach (EdgeDelaunay e in voronoi.Edges) {
             if(!e.Visible()) continue;
-            Edge edge = new Edge(edges, e);
+            new Edge(edges, e);
         }
     }
 
@@ -53,8 +54,8 @@ public class MapGenerator {
         return (height < SEALEVEL ? SEALEVEL : height);
     }
 
-    private TerrainTypes.Type GenerateType(float height) {
-        return (height == SEALEVEL ? TerrainTypes.Type.WATER : TerrainTypes.Type.LAND);
+    private MapGraphics.Terrain GenerateType(float height) {
+        return (height == SEALEVEL ? MapGraphics.Terrain.WATER : MapGraphics.Terrain.LAND);
     }
 
     private List<Vector2f> CreateRandomPoint(Rectf bounds) {

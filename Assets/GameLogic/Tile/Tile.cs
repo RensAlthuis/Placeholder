@@ -1,4 +1,5 @@
 ﻿using csDelaunay;
+using MapGraphics;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -12,9 +13,9 @@ public class Tile {
     private Vector2f pos;
     public Vector2f Pos { get { return pos; } }
 
-    private TerrainTypes.Type type;
+    private MapGraphics.Terrain type;
 
-    public Tile (GameObject parent, Site s, float height, TerrainTypes.Type type, Rectf bounds) {
+    public Tile (GameObject parent, Site s, float height, MapGraphics.Terrain type, Rectf bounds) {
         //neighbors = s.NeighborSites(); // TODO: why does this not work?
         this.type = type;
 

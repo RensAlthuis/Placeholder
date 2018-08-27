@@ -1,11 +1,16 @@
 using csDelaunay;
 using UnityEngine;
+using MapGraphics;
 
 public class TileObject {
+    
+    // CONSTANTS
+    private static int DEPTH = -10;
+
     private GameObject obj;
     private Vector3[] hull;
 
-    public TileObject(GameObject parent, Site s, float height, TerrainTypes.Type type, Rectf bounds) {
+    public TileObject(GameObject parent, Site s, float height, MapGraphics.Terrain type, Rectf bounds) {
         hull = s.Region(bounds).ConvertAll(x => new Vector3(x.x - s.x, 0, x.y - s.y)).ToArray();
 
         // 1) Creating the game object
@@ -24,7 +29,7 @@ public class TileObject {
 
         int n = 0;
         for(int i = hull.Length + 1; i < hull.Length + 1 + hull.Length; i++){
-            verts[i] = new Vector3(hull[n].x, 0, hull[n].z);
+            verts[i] = new Vector3(hull[n].x, DEPTH, hull[n].z);
             n++;
         }
 
@@ -33,7 +38,7 @@ public class TileObject {
         obj.AddComponent<MeshFilter>();
         obj.AddComponent<MeshRenderer>();
         obj.GetComponent<MeshFilter>().mesh = mesh;
-        obj.GetComponent<MeshRenderer>().material = TerrainTypes.GetMaterial(type);
+        obj.GetComponent<MeshRenderer>().material = type.GetMaterial();
     }
 
     private int[] Triangles(){
