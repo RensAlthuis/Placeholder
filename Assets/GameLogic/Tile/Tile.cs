@@ -6,30 +6,27 @@ public class Tile {
     private List<Site> neighbors;
     private List<Edge> edges;
 
-    private TileObject tileMesh;
+    private TileObject tileObj;
     private int height;
-    private Site s;
-    public Vector2 Pos{get{return new Vector2(s.x, s.y);}}
+
+    private Vector2f pos;
+    public Vector2f Pos { get { return pos; } }
 
     private TerrainTypes.Type type;
 
-    public Tile (Site s, TileObject tileMesh, TerrainTypes.Type type) {
+    public Tile (GameObject parent, Site s, float height, TerrainTypes.Type type, Rectf bounds) {
         //neighbors = s.NeighborSites(); // TODO: why does this not work?
-        this.tileMesh = tileMesh;
-        this.s = s;
         this.type = type;
-        tileMesh.setMaterial(TerrainTypes.GetMaterial(type));
+
+        pos = s.Coord;
         s.tile = this;
+        tileObj = new TileObject(parent, s, height, type, bounds);
         edges = new List<Edge>();
     }
 
     public override string ToString(){
-        string str = "";
-        str += Pos.ToString();
-        str += ", ";
-        foreach(Edge e in edges){
-            str += e;
-        }
+        string str = Pos.ToString() + ", ";
+        foreach(Edge e in edges) { str += e; }
         return str;
     }
 

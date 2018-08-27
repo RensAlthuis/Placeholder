@@ -2,34 +2,31 @@
 using UnityEngine;
 using csDelaunay;
 
-
-
 public class MapGenerator {
 
     // CONSTANTS
     private static int RELAXATION = 2;
 
-    private int lenghtX;
+    private int lengthX;
     private int lengthY;
     private int polygonNumber; // the rough amount of tiles
     private int roughness;
     private int heightDifference; // maybe both make these constants ?
     private int SEALEVEL;
 
-    public MapGenerator(int width, int height, int polygonNumber, int roughness, int heightDifference) {
-
-        lenghtX = width;
-        lengthY = height;
+    public MapGenerator(int lengthX, int lengthY, int polygonNumber, int roughness, int heightDifference) {
+        this.lengthX = lengthX;
+        this.lengthY = lengthY;
         this.polygonNumber = polygonNumber;
         this.roughness = (roughness == 0 ? 1 : roughness); //TODO: prolly change this to something more logical
         this.heightDifference = heightDifference;
         SEALEVEL = heightDifference/2;
     }
 
-    public void newMap()
+    public void NewMap()
     {
         // 1) Creating points
-        Rectf bounds = new Rectf(0, 0, lenghtX, lengthY);
+        Rectf bounds = new Rectf(0, 0, lengthX, lengthY);
         List<Vector2f> points = CreateRandomPoint(bounds);
 
         // 2) Creating actual voronoi diagram, with lloyd relaxation thingies
@@ -37,25 +34,11 @@ public class MapGenerator {
 
         // 3) Creating tiles
         GameObject tiles = new GameObject() { name = "Tiles" };
-        List<Tile> tilelist = new List<Tile>();
-        float min = heightDifference;
         foreach (Site s in voronoi.SitesIndexedByLocation.Values){
-            float height = Mathf.PerlinNoise(s.x/lenghtX * roughness, s.y/lengthY * roughness) * heightDifference;
-            height = (height < SEALEVEL ? SEALEVEL : height);
-            if (height < min) min = height;
-            // Generate the tileMesh
-            TileObject tileMesh = new TileObject(tiles,
-                                             s.SiteIndex,
-                                             new Vector3(s.x, height, s.y),
-                                             s.Region(bounds).ConvertAll(x => new Vector3(x.x - s.x, 0, x.y - s.y)).ToArray(),
-                                             10
-                                            );
-
-            Tile tile = new Tile(s, tileMesh, height == SEALEVEL ? TerrainTypes.Type.WATER : TerrainTypes.Type.LAND);
-            tilelist.Add(tile);
-
+            float height = GenerateHeight(s.x, s.y);
+            Tile tile = new Tile(tiles, s, height, GenerateType(height), bounds);
         }
-        tiles.transform.Translate(new Vector3(0, -min, 0), Space.World);
+        tiles.transform.Translate(new Vector3(0, -SEALEVEL, 0), Space.World); // min == SEALEVEL for sealevel occuring once! // also is this really needed?
 
         // 4) Creating edges
         GameObject edges = new GameObject() { name = "Edges" };
@@ -66,6 +49,15 @@ public class MapGenerator {
             edge.right.addAdge(edge);
         }
 
+    }
+
+    private float GenerateHeight(float x, float y) {
+        float height = Mathf.PerlinNoise(x / lengthX * roughness, y / lengthY * roughness) * heightDifference;
+        return (height < SEALEVEL ? SEALEVEL : height);
+    }
+
+    private TerrainTypes.Type GenerateType(float height) {
+        return (height == SEALEVEL ? TerrainTypes.Type.WATER : TerrainTypes.Type.LAND);
     }
 
     private List<Vector2f> CreateRandomPoint(Rectf bounds) {

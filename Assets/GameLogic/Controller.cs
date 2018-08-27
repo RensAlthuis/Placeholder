@@ -6,6 +6,6 @@ public class Controller : MonoBehaviour{
         TerrainTypes.preloadMaterials();
 
         MapGenerator mapGen = new MapGenerator(200, 200, 2000, 5, 10);
-        mapGen.newMap();
+        mapGen.NewMap();
     }
 }
