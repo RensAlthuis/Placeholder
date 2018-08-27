@@ -54,8 +54,8 @@ public class MapGenerator {
         return (height < SEALEVEL ? SEALEVEL : height);
     }
 
-    private MapGraphics.Terrain GenerateType(float height) {
-        return (height == SEALEVEL ? MapGraphics.Terrain.WATER : MapGraphics.Terrain.LAND);
+    private TerrainType GenerateType(float height) {
+        return (height == SEALEVEL ? TerrainType.WATER : TerrainType.LAND);
     }
 
     private List<Vector2f> CreateRandomPoint(Rectf bounds) {

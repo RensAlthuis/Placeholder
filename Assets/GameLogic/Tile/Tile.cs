@@ -13,9 +13,9 @@ public class Tile {
     private Vector2f pos;
     public Vector2f Pos { get { return pos; } }
 
-    private MapGraphics.Terrain type;
+    private TerrainType type;
 
-    public Tile (GameObject parent, Site s, float height, MapGraphics.Terrain type, Rectf bounds) {
+    public Tile (GameObject parent, Site s, float height, TerrainType type, Rectf bounds) {
         //neighbors = s.NeighborSites(); // TODO: why does this not work?
         this.type = type;
 

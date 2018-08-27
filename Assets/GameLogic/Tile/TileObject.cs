@@ -10,7 +10,7 @@ public class TileObject {
     private GameObject obj;
     private Vector3[] hull;
 
-    public TileObject(GameObject parent, Site s, float height, MapGraphics.Terrain type, Rectf bounds) {
+    public TileObject(GameObject parent, Site s, float height, TerrainType type, Rectf bounds) {
         hull = s.Region(bounds).ConvertAll(x => new Vector3(x.x - s.x, 0, x.y - s.y)).ToArray();
 
         // 1) Creating the game object
