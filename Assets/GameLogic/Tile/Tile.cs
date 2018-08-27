@@ -30,7 +30,7 @@ public class Tile {
         return str;
     }
 
-    public void addAdge(Edge e){
+    public void addEdge(Edge e){
         edges.Add(e);
     }
 }

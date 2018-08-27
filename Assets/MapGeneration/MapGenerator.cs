@@ -9,7 +9,7 @@ public class MapGenerator {
 
     private int lengthX;
     private int lengthY;
-    private int polygonNumber; // the rough amount of tiles
+    private int polygonNumber; // the amount of tiles
     private int roughness;
     private int heightDifference; // maybe both make these constants ?
     private int SEALEVEL;
@@ -44,11 +44,8 @@ public class MapGenerator {
         GameObject edges = new GameObject() { name = "Edges" };
         foreach (EdgeDelaunay e in voronoi.Edges) {
             if(!e.Visible()) continue;
-            Edge edge = new Edge(e.LeftSite.tile, e.RightSite.tile);
-            edge.left.addAdge(edge);
-            edge.right.addAdge(edge);
+            Edge edge = new Edge(edges, e);
         }
-
     }
 
     private float GenerateHeight(float x, float y) {

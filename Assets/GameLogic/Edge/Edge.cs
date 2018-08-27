@@ -3,18 +3,21 @@ using UnityEngine;
 
 public class Edge {
 
-    // TODO: Actually having an edge instead of an empty class
+    private EdgeObject edgeObj;
 
-    public Tile left;
-    public Tile right;
+    private Tile left;
+    private Tile right;
 
-    public Edge (Tile left, Tile right) {
-        this.left = left;
-        this.right = right;
+    public Edge (GameObject parent, EdgeDelaunay e) {
+        left  = e.LeftSite.tile;
+        right = e.RightSite.tile;
+        left.addEdge(this);
+        right.addEdge(this);
+
+        //edgeObj = new EdgeObject(parent, e);
     }
 
     public override string ToString(){
         return ("(" + left.Pos + ", " + right.Pos + ")");
     }
-
 }

@@ -1,7 +1,7 @@
 using csDelaunay;
 using UnityEngine;
 
-public class TileObject{
+public class TileObject {
     private GameObject obj;
     private Vector3[] hull;
 
