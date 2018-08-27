@@ -8,6 +8,10 @@ public class CameraControl: MonoBehaviour
 
     public const float MINZOOM = 20.0f;
     public const float MAXZOOM = 60.0f;
+    public const float LEFTBORDER = 0;
+    public const float RIGHTBORDER = 200;
+    public const float BOTTOMBORDER = 0;
+    public const float TOPBORDER = 160;
 
     void Start(){
 
@@ -28,7 +32,13 @@ public class CameraControl: MonoBehaviour
 
         if(dragging){
             Vector3 diff = origin - hit;
+            Vector3 pos = Camera.main.transform.position;
+            if(pos.x < LEFTBORDER && diff.x < 0){ diff.x = 0; }
+            if(pos.x > RIGHTBORDER && diff.x > 0){ diff.x = 0; }
+            if(pos.z < BOTTOMBORDER && diff.z < 0){ diff.z = 0; }
+            if(pos.z > TOPBORDER && diff.z > 0){ diff.z = 0; }
             Camera.main.transform.Translate(diff, Space.World);
+
             mouseRay = Camera.main.ScreenPointToRay(Input.mousePosition);
             magnitude = (mouseRay.origin.y / mouseRay.direction.y);
             origin = mouseRay.origin -( mouseRay.direction * magnitude);
@@ -43,5 +53,6 @@ public class CameraControl: MonoBehaviour
                 Camera.main.transform.Translate(scrollDir * scroll, Space.World);
             }
         }
+
     }
 }
