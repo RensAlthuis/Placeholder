@@ -149,8 +149,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 914c340ebfb6bae4d96af465c3472d0e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  zoomspeed: 0
-  scrollSpeed: 0
 --- !u!20 &48383517
 Camera:
   m_ObjectHideFlags: 0
@@ -197,13 +195,13 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 48383514}
-  m_LocalRotation: {x: 0.38268343, y: 0, z: 0, w: 0.92387956}
+  m_LocalRotation: {x: 0.5, y: 0, z: 0, w: 0.8660254}
   m_LocalPosition: {x: 0, y: 50, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 45, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 60, y: 0, z: 0}
 --- !u!1 &498814998
 GameObject:
   m_ObjectHideFlags: 0
@@ -231,8 +229,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2e73ccac0642bda4b993d8fad1368a6e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mat: {fileID: 2100000, guid: ad5b8dbe05e3e724daae728dd5f7430b, type: 2}
-  water: {fileID: 2100000, guid: f76a2eb39da400f4682b20e95634c6fb, type: 2}
 --- !u!4 &498815000
 Transform:
   m_ObjectHideFlags: 0

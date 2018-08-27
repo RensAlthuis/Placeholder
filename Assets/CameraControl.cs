@@ -3,10 +3,11 @@ using UnityEngine;
 public class CameraControl: MonoBehaviour
 {
 
-    public float zoomspeed;
-    public float scrollSpeed;
     private bool dragging;
     private Vector3 origin;
+
+    public const float MINZOOM = 20.0f;
+    public const float MAXZOOM = 60.0f;
 
     void Start(){
 
@@ -31,6 +32,16 @@ public class CameraControl: MonoBehaviour
             mouseRay = Camera.main.ScreenPointToRay(Input.mousePosition);
             magnitude = (mouseRay.origin.y / mouseRay.direction.y);
             origin = mouseRay.origin -( mouseRay.direction * magnitude);
+            hit = origin;
+        }
+
+        float scroll = Input.GetAxis("Mouse ScrollWheel");
+        if (Mathf.Abs(scroll) > 0){
+            Vector3 scrollDir = hit - Camera.main.transform.position;
+            if((Camera.main.transform.position.y > MINZOOM && scroll > 0) ||
+               (Camera.main.transform.position.y < MAXZOOM && scroll < 0)  ){
+                Camera.main.transform.Translate(scrollDir * scroll, Space.World);
+            }
         }
     }
 }
