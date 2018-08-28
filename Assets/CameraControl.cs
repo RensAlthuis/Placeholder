@@ -5,13 +5,13 @@ public class CameraControl: MonoBehaviour
     // CONSTANTS
     private const float BORDER = 200; // decreasing the rectangle. optional!
     private const float LEFTBORDER = BORDER;
-    private const float BOTTOMBORDER = -50; // increasing the amount at which you can go down
+    private const float BOTTOMBORDER = -100; // increasing the amount at which you can go down
 
     private bool dragging;
     private Vector3 origin;
 
-    public const float MINZOOM = 100.0f;
-    public const float MAXZOOM = 300.0f;
+    public const float MINZOOM = 200.0f;
+    public const float MAXZOOM = 400.0f;
     
     private float RIGHTBORDER;
     private float TOPBORDER;
