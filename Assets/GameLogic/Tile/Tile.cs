@@ -36,7 +36,8 @@ public class Tile {
         edges.Add(e);
     }
 
-    internal void MouseDown() {
-        
+
+    internal void OnMouseDown() {
+        // do stuff
     }
 }

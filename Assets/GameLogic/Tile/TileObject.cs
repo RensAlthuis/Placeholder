@@ -10,7 +10,7 @@ public class TileObject : MonoBehaviour {
     private Vector3[] hull;
     private Tile tile;
 
-    public void Create(Tile tile, GameObject parent, Site s, float height, TerrainType type, Rectf bounds) { // ouch. this is public :(
+    internal void Create(Tile tile, GameObject parent, Site s, float height, TerrainType type, Rectf bounds) { // ouch. this is public :(
         hull = s.Region(bounds).ConvertAll(x => new Vector3(x.x - s.x, 0, x.y - s.y)).ToArray();
         this.tile = tile;
 
@@ -31,13 +31,15 @@ public class TileObject : MonoBehaviour {
         mesh.vertices = verts;
         mesh.triangles = Triangles();
         GetComponent<MeshFilter>().mesh = mesh;
+        GetComponent<MeshCollider>().sharedMesh = mesh;
         GetComponent<MeshRenderer>().material = type.GetMaterial();
     }
 
     private void OnMouseDown() {
         Debug.Log(name);
-        Destroy(this);
-        //tile.MouseDown();
+        GetComponent<MeshRenderer>().enabled = false; // as a test
+        
+        //tile.OnMouseDown();
     }
 
     private int[] Triangles(){

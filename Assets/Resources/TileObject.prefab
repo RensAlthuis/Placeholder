@@ -20,8 +20,8 @@ GameObject:
   m_Component:
   - component: {fileID: 4675601719418210}
   - component: {fileID: 33236766497336468}
+  - component: {fileID: 64473994374304646}
   - component: {fileID: 23236365034014738}
-  - component: {fileID: 114731000593041430}
   m_Layer: 0
   m_Name: TileObject
   m_TagString: Untagged
@@ -84,25 +84,17 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1775710950736536}
   m_Mesh: {fileID: 0}
---- !u!114 &114731000593041430
-MonoBehaviour:
+--- !u!64 &64473994374304646
+MeshCollider:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1775710950736536}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 247442469, guid: f7b54ff4a43d4fcf81b4538b678e0bcc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_SurfaceParent: {fileID: 0}
-  m_FreezeUpdates: 0
-  m_VolumeType: 1
-  m_SphereRadius: 2
-  m_HalfBoxExtents: {x: 4, y: 4, z: 4}
-  m_LodType: 1
-  m_NumUpdatesBeforeRemoval: 10
-  m_SecondsBetweenUpdates: 2.5
-  m_Layer: 0
   m_Material: {fileID: 0}
-  m_EnableCollisions: 1
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Convex: 0
+  m_CookingOptions: -1
+  m_SkinWidth: 0.01
+  m_Mesh: {fileID: 0}
