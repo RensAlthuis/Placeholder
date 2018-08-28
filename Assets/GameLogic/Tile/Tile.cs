@@ -2,6 +2,7 @@
 using MapGraphics;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class Tile {
     private List<Site> neighbors;
@@ -22,7 +23,7 @@ public class Tile {
 
         pos = s.Coord;
         s.tile = this;
-        tileObj = new TileObject(this, parent, s, height, type, bounds);
+        (UnityEngine.Object.Instantiate(Resources.Load("TileObject")) as GameObject).AddComponent<TileObject>().Create(this,parent,s,height,type,bounds);
     }
 
     public override string ToString(){
@@ -33,5 +34,9 @@ public class Tile {
 
     public void addEdge(Edge e){
         edges.Add(e);
+    }
+
+    internal void MouseDown() {
+        
     }
 }

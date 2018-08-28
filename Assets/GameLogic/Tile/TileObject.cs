@@ -10,13 +10,11 @@ public class TileObject : MonoBehaviour {
     private Vector3[] hull;
     private Tile tile;
 
-    public static void Create(Tile tile, GameObject parent, Site s, float height, TerrainType type, Rectf bounds) {
+    public void Create(Tile tile, GameObject parent, Site s, float height, TerrainType type, Rectf bounds) { // ouch. this is public :(
         hull = s.Region(bounds).ConvertAll(x => new Vector3(x.x - s.x, 0, x.y - s.y)).ToArray();
         this.tile = tile;
 
         // 1) Creating the game object
-        GameObject obj = (GameObject)Instantiate(Resources.Load("TileObject"));
-        
         name = "Tile" + s.SiteIndex;
         transform.position = new Vector3(s.x, height, s.y);
         transform.SetParent(parent.transform);
@@ -34,6 +32,12 @@ public class TileObject : MonoBehaviour {
         mesh.triangles = Triangles();
         GetComponent<MeshFilter>().mesh = mesh;
         GetComponent<MeshRenderer>().material = type.GetMaterial();
+    }
+
+    private void OnMouseDown() {
+        Debug.Log(name);
+        Destroy(this);
+        //tile.MouseDown();
     }
 
     private int[] Triangles(){
