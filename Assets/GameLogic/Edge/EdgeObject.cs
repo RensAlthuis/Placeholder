@@ -10,5 +10,4 @@ public class EdgeObject {
         obj.name = "Edge" + e.EdgeIndex;
         obj.transform.SetParent(parent.transform);
     }
-
 }

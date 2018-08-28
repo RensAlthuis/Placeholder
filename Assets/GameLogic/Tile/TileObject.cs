@@ -23,12 +23,11 @@ public class TileObject {
         Mesh mesh = new Mesh();
         Vector3[] verts = new Vector3[hull.Length*2 + 1];
         verts[0] = new Vector3(0, 0, 0);
-        for(int i = 1; i < hull.Length + 1; i++){
+        for(int i = 1; i < hull.Length + 1; i++) {
             verts[i] = hull[i-1];
         }
 
-        int n = 0;
-        for(int i = hull.Length + 1; i < hull.Length + 1 + hull.Length; i++){
+        for(int i = hull.Length + 1, n = 0; i < hull.Length + 1 + hull.Length; i++) {
             verts[i] = new Vector3(hull[n].x, DEPTH, hull[n].z);
             n++;
         }
