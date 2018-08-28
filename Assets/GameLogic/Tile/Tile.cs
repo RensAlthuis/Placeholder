@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class Tile {
     private List<Site> neighbors;
-    private List<Edge> edges;
+    private List<Edge> edges = new List<Edge>();
 
     private TileObject tileObj;
     private int height;
@@ -14,6 +14,7 @@ public class Tile {
     public Vector2f Pos { get { return pos; } }
 
     private TerrainType type;
+    public TerrainType Type { get { return type; } }
 
     public Tile (GameObject parent, Site s, float height, TerrainType type, Rectf bounds) {
         //neighbors = s.NeighborSites(); // TODO: why does this not work?
@@ -21,8 +22,7 @@ public class Tile {
 
         pos = s.Coord;
         s.tile = this;
-        tileObj = new TileObject(parent, s, height, type, bounds);
-        edges = new List<Edge>();
+        tileObj = new TileObject(this, parent, s, height, type, bounds);
     }
 
     public override string ToString(){

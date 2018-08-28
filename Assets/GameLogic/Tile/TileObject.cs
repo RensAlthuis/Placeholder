@@ -2,42 +2,38 @@ using csDelaunay;
 using UnityEngine;
 using MapGraphics;
 
-public class TileObject {
+public class TileObject : MonoBehaviour {
     
     // CONSTANTS
-    private static int DEPTH = -10;
+    private static int DEPTH = -30;
 
-    private GameObject obj;
     private Vector3[] hull;
+    private Tile tile;
 
-    public TileObject(GameObject parent, Site s, float height, TerrainType type, Rectf bounds) {
+    public static void Create(Tile tile, GameObject parent, Site s, float height, TerrainType type, Rectf bounds) {
         hull = s.Region(bounds).ConvertAll(x => new Vector3(x.x - s.x, 0, x.y - s.y)).ToArray();
+        this.tile = tile;
 
         // 1) Creating the game object
-        obj = new GameObject();
-        obj.name = "Tile" + s.SiteIndex;
-        obj.transform.position = new Vector3(s.x, height, s.y);
-        obj.transform.SetParent(parent.transform);
+        GameObject obj = (GameObject)Instantiate(Resources.Load("TileObject"));
+        
+        name = "Tile" + s.SiteIndex;
+        transform.position = new Vector3(s.x, height, s.y);
+        transform.SetParent(parent.transform);
 
         // 2) Creating the mesh
         Mesh mesh = new Mesh();
         Vector3[] verts = new Vector3[hull.Length*2 + 1];
         verts[0] = new Vector3(0, 0, 0);
-        for(int i = 1; i < hull.Length + 1; i++) {
-            verts[i] = hull[i-1];
-        }
-
-        for(int i = hull.Length + 1, n = 0; i < hull.Length + 1 + hull.Length; i++) {
+        for(int i = 1; i < hull.Length + 1; i++) { verts[i] = hull[i-1]; }
+        for(int i = hull.Length + 1, n = 0; i < hull.Length + 1 + hull.Length; i++, n++) {
             verts[i] = new Vector3(hull[n].x, DEPTH, hull[n].z);
-            n++;
         }
 
         mesh.vertices = verts;
         mesh.triangles = Triangles();
-        obj.AddComponent<MeshFilter>();
-        obj.AddComponent<MeshRenderer>();
-        obj.GetComponent<MeshFilter>().mesh = mesh;
-        obj.GetComponent<MeshRenderer>().material = type.GetMaterial();
+        GetComponent<MeshFilter>().mesh = mesh;
+        GetComponent<MeshRenderer>().material = type.GetMaterial();
     }
 
     private int[] Triangles(){

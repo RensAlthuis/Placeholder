@@ -2,23 +2,28 @@ using UnityEngine;
 
 public class CameraControl: MonoBehaviour
 {
+    // CONSTANTS
+    private const float BORDER = 200; // decreasing the rectangle. optional!
+    private const float LEFTBORDER = BORDER;
+    private const float BOTTOMBORDER = -50; // increasing the amount at which you can go down
 
     private bool dragging;
     private Vector3 origin;
 
-    public const float MINZOOM = 20.0f;
-    public const float MAXZOOM = 60.0f;
-    public const float LEFTBORDER = 0;
-    public const float RIGHTBORDER = 200;
-    public const float BOTTOMBORDER = 0;
-    public const float TOPBORDER = 160;
+    public const float MINZOOM = 100.0f;
+    public const float MAXZOOM = 300.0f;
+    
+    private float RIGHTBORDER;
+    private float TOPBORDER;
 
-    void Start(){
-
+    private void Start() {
+        Controller c = GameObject.Find("MAIN").GetComponent<Controller>();
+        RIGHTBORDER = c.lengthX - BORDER;
+        TOPBORDER = c.lengthY - BORDER;
+        transform.position = new Vector3(LEFTBORDER, MAXZOOM, BOTTOMBORDER);
     }
 
-    void Update(){
-
+    private void Update(){
         Ray mouseRay = Camera.main.ScreenPointToRay(Input.mousePosition);
         float magnitude = (mouseRay.origin.y / mouseRay.direction.y);
         Vector3 hit = mouseRay.origin -( mouseRay.direction * magnitude);
