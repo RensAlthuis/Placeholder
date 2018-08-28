@@ -35,7 +35,6 @@ public class MapGenerator {
 
         // 3) Creating tiles
         GameObject tiles = new GameObject() { name = "Tiles" };
-        // tiles.isStatic = true;
         foreach (Site s in voronoi.SitesIndexedByLocation.Values){
             float height = GenerateHeight(s.x, s.y);
             new Tile(tiles, s, height, GenerateType(height), bounds);
@@ -47,20 +46,6 @@ public class MapGenerator {
         foreach (EdgeDelaunay e in voronoi.Edges) {
             if(!e.Visible()) continue;
             new Edge(edges, e);
-        }
-
-
-        Material[] matlist =  new Material[]{TerrainType.WATER.GetMaterial(), TerrainType.LAND.GetMaterial()};
-        List<MeshFilter> meshList = new List<MeshFilter>();
-        tiles.GetComponentsInChildren<MeshFilter>(true, meshList);
-
-        for(int i = 0; i <= meshList.Count / 3000; i++){
-            Debug.Log(i);
-            Mesh mesh = createSingleMesh(meshList.GetRange(i * 3000,  Mathf.Min(3000, meshList.Count - (i*3000))).ToArray(), tiles.transform.localToWorldMatrix);
-            GameObject obj = new GameObject(){ name = "tileMeshPart" };
-            obj.transform.SetParent(tiles.transform);
-            obj.AddComponent<MeshFilter>().mesh = mesh;
-            obj.AddComponent<MeshRenderer>().materials = matlist;
         }
     }
 
@@ -79,41 +64,6 @@ public class MapGenerator {
             points.Add(new Vector2f(Random.Range(bounds.left, bounds.right), Random.Range(bounds.bottom, bounds.top)));
         }
         return points;
-    }
-    private Mesh createSingleMesh(MeshFilter[] meshes, Matrix4x4 transform){
-    //combine mesh
-        List<CombineInstance> water = new List<CombineInstance>();
-        List<CombineInstance> land = new List<CombineInstance>();
-
-        for(int i = 0; i < meshes.Length; i++){
-            CombineInstance ci = new CombineInstance();
-            MeshRenderer renderer = meshes[i].GetComponent<MeshRenderer>();
-            string materialName = renderer.material.name.Replace(" (Instance)", "");
-            if(materialName == "Blue"){
-                ci.mesh = meshes[i].mesh;
-                ci.transform = meshes[i].transform.localToWorldMatrix;
-                water.Add(ci);
-            }else if(materialName == "Green"){
-                ci.mesh = meshes[i].mesh;
-                ci.transform = meshes[i].transform.localToWorldMatrix;
-                land.Add(ci);
-            }
-        }
-
-        Mesh combinedWaterMesh = new Mesh();
-        combinedWaterMesh.CombineMeshes(water.ToArray());
-        Mesh combinedLandMesh = new Mesh();
-        combinedLandMesh.CombineMeshes(land.ToArray());
-        CombineInstance[] totalmesh = new CombineInstance[2];
-        totalmesh[0].mesh = combinedWaterMesh;
-        totalmesh[0].transform = transform;
-        totalmesh[1].mesh = combinedLandMesh;
-        totalmesh[1].transform = transform;
-
-        Mesh finalMesh = new Mesh();
-
-        finalMesh.CombineMeshes(totalmesh, false);
-        return finalMesh;
     }
 }
 
