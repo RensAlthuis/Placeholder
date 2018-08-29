@@ -10,7 +10,15 @@ public class TileObject : MonoBehaviour {
     private Vector3[] hull;
     private Tile tile;
 
-    internal void Create(Tile tile, GameObject parent, Site s, float height, TerrainType type, Rectf bounds) { // ouch. this is public :(
+    public static void Create(Tile tile, GameObject parent, Site s, float height, TerrainType type, Rectf bounds) { // yey nicer code
+        GameObject obj = (Instantiate(new GameObject()) as GameObject);
+        obj.AddComponent<MeshFilter>();
+        obj.AddComponent<MeshCollider>();
+        obj.AddComponent<MeshRenderer>();
+        obj.AddComponent<TileObject>().Set(tile, parent, s, height, type, bounds);
+    }
+
+    private void Set(Tile tile, GameObject parent, Site s, float height, TerrainType type, Rectf bounds) {
         hull = s.Region(bounds).ConvertAll(x => new Vector3(x.x - s.x, 0, x.y - s.y)).ToArray();
         this.tile = tile;
 

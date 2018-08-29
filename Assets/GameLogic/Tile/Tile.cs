@@ -23,7 +23,7 @@ public class Tile {
 
         pos = s.Coord;
         s.tile = this;
-        (UnityEngine.Object.Instantiate(Resources.Load("TileObject")) as GameObject).AddComponent<TileObject>().Create(this,parent,s,height,type,bounds);
+        TileObject.Create(this, parent, s, height, type, bounds);
     }
 
     public override string ToString(){
