@@ -1,43 +1,48 @@
-﻿using csDelaunay;
-using MapGraphics;
+﻿using MapGraphics;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
 
 public class Tile {
-    private List<Site> neighbors;
+    public Tile[] neighbors;
     private List<Edge> edges = new List<Edge>();
+    TileMap tileMap;
 
     private TileObject tileObj;
     private int height;
 
-    private Vector2f pos;
-    public Vector2f Pos { get { return pos; } }
 
     private TerrainType type;
     public TerrainType Type { get { return type; } }
 
-    public Tile (GameObject parent, Site s, float height, TerrainType type, Rectf bounds) {
-        //neighbors = s.NeighborSites(); // TODO: why does this not work?
+    public Tile (TileMap tileMap, TileObject obj, TerrainType type) {
+        this.tileMap = tileMap;
+        tileObj = obj;
         this.type = type;
-
-        pos = s.Coord;
-        s.tile = this;
-        (UnityEngine.Object.Instantiate(Resources.Load("TileObject")) as GameObject).AddComponent<TileObject>().Create(this,parent,s,height,type,bounds);
     }
 
     public override string ToString(){
-        string str = Pos.ToString() + ", ";
-        foreach(Edge e in edges) { str += e; }
-        return str;
+        Vector3 pos = tileObj.transform.position;
+        return pos.x + ", " + pos.y + ", " + pos.z;
     }
 
     public void addEdge(Edge e){
         edges.Add(e);
     }
 
+    public void Select(){
+            float H, S, V;
+            Color.RGBToHSV(type.GetMaterial().color, out H, out S, out V);
+            Color c = Color.HSVToRGB(H, S, 1);
+            tileObj.setColor(c);
 
-    internal void OnMouseDown() {
-        // do stuff
+    }
+
+    public void Deselect(){
+            tileObj.setColor(type.GetMaterial().color);
+    }
+
+    public void OnMouseDown() {
+        tileMap.setSelected(this);
     }
 }

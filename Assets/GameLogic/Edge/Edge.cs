@@ -17,7 +17,7 @@ public class Edge {
         //edgeObj = new EdgeObject(parent, e);
     }
 
-    public override string ToString(){
-        return ("(" + left.Pos + ", " + right.Pos + ")");
-    }
+    // public override string ToString(){
+    //     return ("(" + left.Pos + ", " + right.Pos + ")");
+    // }
 }

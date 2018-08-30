@@ -6,8 +6,16 @@ namespace csDelaunay {
 
 	public class Site : ICoord {
 
-		//yeah this is not pretty but it works
+		//yeah this is not pretty but it works I think
 		public Tile tile;
+		public Tile[] getNeighbourTiles(){
+			List<Site> sites = NeighborSites();
+			Tile[] tiles = new Tile[sites.Count];
+			for(int i = 0; i < sites.Count; i++){
+				tiles[i] = sites[i].tile;
+			}
+			return tiles;
+		}
 
 		private static Queue<Site> pool = new Queue<Site>();
 

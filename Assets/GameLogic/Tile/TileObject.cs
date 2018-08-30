@@ -1,52 +1,56 @@
-using csDelaunay;
 using UnityEngine;
 using MapGraphics;
 
 public class TileObject : MonoBehaviour {
-    
+
     // CONSTANTS
     private static int DEPTH = -30;
+    private int numCorners;
+    private int index;
 
-    private Vector3[] hull;
-    private Tile tile;
-
-    internal void Create(Tile tile, GameObject parent, Site s, float height, TerrainType type, Rectf bounds) { // ouch. this is public :(
-        hull = s.Region(bounds).ConvertAll(x => new Vector3(x.x - s.x, 0, x.y - s.y)).ToArray();
-        this.tile = tile;
+    public void Init(GameObject parent, int index, Vector3 pos, Vector3[] hull, Material mat){
 
         // 1) Creating the game object
-        name = "Tile" + s.SiteIndex;
-        transform.position = new Vector3(s.x, height, s.y);
+        this.index = index;
+        name = "Tile" + index;
+        numCorners = hull.Length;
+        transform.position = pos;
         transform.SetParent(parent.transform);
 
         // 2) Creating the mesh
         Mesh mesh = new Mesh();
-        Vector3[] verts = new Vector3[hull.Length*2 + 1];
+        Vector3[] verts = new Vector3[numCorners *2 + 1];
         verts[0] = new Vector3(0, 0, 0);
-        for(int i = 1; i < hull.Length + 1; i++) { verts[i] = hull[i-1]; }
-        for(int i = hull.Length + 1, n = 0; i < hull.Length + 1 + hull.Length; i++, n++) {
+
+        for(int i = 1; i < numCorners  + 1; i++) {
+            verts[i] = hull[i-1];
+        }
+
+        for(int i = numCorners  + 1, n = 0; i < numCorners  + 1 + numCorners ; i++, n++) {
             verts[i] = new Vector3(hull[n].x, DEPTH, hull[n].z);
         }
 
         mesh.vertices = verts;
         mesh.triangles = Triangles();
-        GetComponent<MeshFilter>().mesh = mesh;
-        GetComponent<MeshCollider>().sharedMesh = mesh;
-        GetComponent<MeshRenderer>().material = type.GetMaterial();
+        gameObject.AddComponent<MeshFilter>().mesh = mesh;
+        gameObject.AddComponent<MeshRenderer>().material = mat;
+        gameObject.AddComponent<MeshCollider>();
     }
 
     private void OnMouseDown() {
-        Debug.Log(name);
-        GetComponent<MeshRenderer>().enabled = false; // as a test
-        
-        //tile.OnMouseDown();
+        TileMap map = gameObject.GetComponentInParent<TileMap>();
+        map.tiles[index].OnMouseDown();
+    }
+
+    public void setColor(Color col){
+        GetComponent<MeshRenderer>().material.color = col;
     }
 
     private int[] Triangles(){
-        int[] triangles = new int[hull.Length * 9];
+        int[] triangles = new int[numCorners  * 9];
 
-        int offset = hull.Length * 3;
-        for(int i = 0; i < hull.Length; i++){
+        int offset = numCorners  * 3;
+        for(int i = 0; i < numCorners ; i++){
             //top plane
             triangles[i*3] = 0;
             triangles[i*3+2] = i+1;
@@ -54,16 +58,17 @@ public class TileObject : MonoBehaviour {
 
             //side planes
             triangles[offset + (i*6)] = i+1;
-            triangles[offset + (i*6)+2] = i+hull.Length+1;
+            triangles[offset + (i*6)+2] = i+numCorners +1;
             triangles[offset + (i*6)+1] = i+2;
             triangles[offset + (i*6)+3] = i+2;
-            triangles[offset + (i*6)+5] = i+hull.Length+1;
-            triangles[offset + (i*6)+4] = i+2+hull.Length;
+            triangles[offset + (i*6)+5] = i+numCorners +1;
+            triangles[offset + (i*6)+4] = i+2+numCorners ;
         }
+        //fix loopback
         triangles[offset - 2] = 1;
         triangles[triangles.Length - 3] = 1;
         triangles[triangles.Length - 5] = 1;
-        triangles[triangles.Length - 2] = hull.Length+1;
+        triangles[triangles.Length - 2] = numCorners +1;
 
         return triangles;
     }
