@@ -16,10 +16,11 @@ public class Unit : MonoBehaviour {
 	void Update () {
 
 		//smooth tile movement
-		if (dest != null){
+		if (dest != Vector3.zero){
 			float distance = Vector3.Distance(transform.position, dest);
 			float speed = Mathf.Lerp(0.1f, SPEED, SPEED*(distance/startDist));
 			transform.position = Vector3.MoveTowards(transform.position, dest, speed);
+			if(distance < 1){dest = Vector3.zero;};
 		}
 	}
 
