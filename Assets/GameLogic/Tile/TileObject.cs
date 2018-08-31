@@ -6,16 +6,33 @@ public class TileObject : MonoBehaviour {
     // CONSTANTS
     private static int DEPTH = -30;
     private int numCorners;
-    public int index;
+    private int index;
+    private TileMap tileMap;
 
-    public void Init(GameObject parent, int index, Vector3 pos, Vector3[] hull, Material mat){
+    public static TileObject Create(TileMap tileMap, csDelaunay.Site s, float height, Material mat, Rectf bounds) { // yey nicer code
 
-        // 1) Creating the game object
+        //Maybe move this to MapGenerator
+        Vector3[] hull = s.Region(bounds).ConvertAll(x => new Vector3(x.x - s.x, 0, x.y - s.y)).ToArray();
+        Vector3 pos = new Vector3(s.x, height, s.y);
+
+        //creating the object
+        GameObject obj = new GameObject();
+        obj.AddComponent<MeshFilter>();
+        obj.AddComponent<MeshCollider>();
+        obj.AddComponent<MeshRenderer>();
+        return obj.AddComponent<TileObject>().Init(tileMap, s.SiteIndex, pos, hull, mat);
+    }
+
+    private TileObject Init(TileMap tileMap, int index, Vector3 pos, Vector3[] hull, Material mat){
+
+        this.tileMap = tileMap;
         this.index = index;
+
+        // 1) setting the object's data
         name = "Tile" + index;
         numCorners = hull.Length;
         transform.position = pos;
-        transform.SetParent(parent.transform);
+        transform.SetParent(tileMap.transform);
 
         // 2) Creating the mesh
         Mesh mesh = new Mesh();
@@ -32,14 +49,16 @@ public class TileObject : MonoBehaviour {
 
         mesh.vertices = verts;
         mesh.triangles = Triangles();
-        gameObject.AddComponent<MeshFilter>().mesh = mesh;
-        gameObject.AddComponent<MeshRenderer>().material = mat;
-        gameObject.AddComponent<MeshCollider>();
+        GetComponent<MeshFilter>().mesh = mesh;
+        GetComponent<MeshRenderer>().material = mat;
+        GetComponent<MeshCollider>().sharedMesh = mesh;
+
+        return this;
     }
 
     private void OnMouseDown() {
-        TileMap map = gameObject.GetComponentInParent<TileMap>();
-        map.tiles[index].OnMouseDown();
+        Debug.Log("Click" + index);
+        tileMap.tiles[index].OnMouseDown();
     }
 
     public void setColor(Color col){

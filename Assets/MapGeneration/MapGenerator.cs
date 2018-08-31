@@ -22,14 +22,6 @@ public static class MapGenerator {
         MapGenerator.SEALEVEL = heightDifference/2;
     }
 
-    // public MapGenerator(int lengthX, int lengthY, int polygonNumber, int roughness, int heightDifference) {
-    //     bounds = new Rectf(0, 0, lengthX, lengthY);
-    //     this.polygonNumber = polygonNumber;
-    //     this.roughness = (roughness == 0 ? 1 : roughness); //TODO: prolly change this to something more logical
-    //     this.heightDifference = heightDifference;
-    //     SEALEVEL = heightDifference/2;
-    // }
-
     public static Tile[] NewMap(TileMap tileMap)
     {
         Tile[] tileList = new Tile[polygonNumber]; // we will definitely need this at some point
@@ -43,14 +35,9 @@ public static class MapGenerator {
         // 3) Creating tiles
         foreach (Site s in voronoi.SitesIndexedByLocation.Values){
             float height = GenerateHeight(s.x, s.y);
-
-            Vector3[] hull = s.Region(bounds).ConvertAll(x => new Vector3(x.x - s.x, 0, x.y - s.y)).ToArray();
-            Debug.Log(height);
-            Vector3 pos = new Vector3(s.x, height, s.y);
             TerrainType type = GenerateType(height);
-            TileObject tObj = (new GameObject()).AddComponent<TileObject>();
-            tObj.Init(tileMap.gameObject, s.SiteIndex, pos, hull, type.GetMaterial());
 
+            TileObject tObj = TileObject.Create(tileMap, s, height, type.GetMaterial(), bounds);
             Tile tile = new Tile(tileMap, tObj, type);
             tileList[s.SiteIndex] = tile;
             s.tile = tile;

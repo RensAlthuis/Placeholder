@@ -37,7 +37,7 @@ public class Tile {
             Color c = Color.HSVToRGB(H, S, 1);
             tileObj.setColor(c);
             GameObject.Find("Unit").GetComponent<Unit>().moveToTile(tileObj);
-            Debug.Log("Selected:" + tileObj.index);
+            // Debug.Log("Selected:" + tileObj.index);
 
     }
 
