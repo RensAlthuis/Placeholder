@@ -19,6 +19,7 @@ public class TileMap : MonoBehaviour {
     public void Start(){
         MapGenerator.setOptions(lengthX, lengthY, polygonNumber, roughness, heightDifference);
         // GameObject tiles = new GameObject() { name = "Tiles" };
+        transform.position = Vector3.zero;
         tiles = MapGenerator.NewMap(this);
     }
 
@@ -27,6 +28,7 @@ public class TileMap : MonoBehaviour {
             tile.Select();
             if(selected != null)
                 selected.Deselect();
+
             selected = tile;
         }
     }

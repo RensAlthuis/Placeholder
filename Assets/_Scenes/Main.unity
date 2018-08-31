@@ -276,6 +276,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   lengthX: 2000
   lengthY: 2000
+  unit: {fileID: 114879885048118646, guid: df965aa2cebaefa40bcc447080527e1c, type: 2}
 --- !u!4 &498815000
 Transform:
   m_ObjectHideFlags: 0

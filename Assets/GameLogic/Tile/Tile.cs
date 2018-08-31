@@ -12,6 +12,7 @@ public class Tile {
     private int height;
 
 
+
     private TerrainType type;
     public TerrainType Type { get { return type; } }
 
@@ -35,6 +36,8 @@ public class Tile {
             Color.RGBToHSV(type.GetMaterial().color, out H, out S, out V);
             Color c = Color.HSVToRGB(H, S, 1);
             tileObj.setColor(c);
+            GameObject.Find("Unit").GetComponent<Unit>().moveToTile(tileObj);
+            Debug.Log("Selected:" + tileObj.index);
 
     }
 

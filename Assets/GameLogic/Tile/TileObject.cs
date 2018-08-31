@@ -6,7 +6,7 @@ public class TileObject : MonoBehaviour {
     // CONSTANTS
     private static int DEPTH = -30;
     private int numCorners;
-    private int index;
+    public int index;
 
     public void Init(GameObject parent, int index, Vector3 pos, Vector3[] hull, Material mat){
 

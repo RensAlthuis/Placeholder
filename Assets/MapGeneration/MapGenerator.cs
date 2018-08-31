@@ -45,6 +45,7 @@ public static class MapGenerator {
             float height = GenerateHeight(s.x, s.y);
 
             Vector3[] hull = s.Region(bounds).ConvertAll(x => new Vector3(x.x - s.x, 0, x.y - s.y)).ToArray();
+            Debug.Log(height);
             Vector3 pos = new Vector3(s.x, height, s.y);
             TerrainType type = GenerateType(height);
             TileObject tObj = (new GameObject()).AddComponent<TileObject>();
@@ -53,6 +54,7 @@ public static class MapGenerator {
             Tile tile = new Tile(tileMap, tObj, type);
             tileList[s.SiteIndex] = tile;
             s.tile = tile;
+            Debug.Log(tObj.transform.position.y);
         }
 
         //damn this is ugly :c
