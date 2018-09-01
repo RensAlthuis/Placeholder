@@ -19,7 +19,7 @@ namespace MapEngine {
         };
 
         public Material GetMaterial() {
-            if (!mats.ContainsKey(this)) return mats[LAND];
+            if (!mats.ContainsKey(this)) throw new System.Exception("This type does not exist or is not defined");
             return mats[this];
         }
     }

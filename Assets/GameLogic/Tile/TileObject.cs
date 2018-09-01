@@ -9,7 +9,6 @@ public class TileObject : MonoBehaviour {
 
     private Tile tile;
 
-    private int numCorners;
     private TerrainType type;
 
     public static TileObject Create(Tile tile, Site s, float height, TerrainType type, Rectf bounds, Transform transformMap) {
@@ -37,7 +36,24 @@ public class TileObject : MonoBehaviour {
         GetComponent<MeshRenderer>().material.color = type.GetMaterial().color;
     }
 
+    // an example of 'highlight'
+
+    private float currV;
+
+    private void Update() {
+        float H, S, V;
+        Color.RGBToHSV(type.GetMaterial().color, out H, out S, out V);
+        GetComponent<MeshRenderer>().material.color = Color.HSVToRGB(H, S, currV);
+        currV = Mathf.MoveTowards(currV, V, 0.01f);
+    }
+
+    public void Hightlight() {
+        currV = 1;
+    }
+
     // ====================== TILE MESH GENERATION =============================
+
+    private int numCorners;
 
     private TileObject Init(Tile tile, Site s, float height, TerrainType type, Rectf bounds, Transform transformMap) {
         Vector3[] hull = s.Region(bounds).ConvertAll(x => new Vector3(x.x - s.x, 0, x.y - s.y)).ToArray();

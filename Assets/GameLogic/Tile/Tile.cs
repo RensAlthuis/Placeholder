@@ -11,13 +11,16 @@ public class Tile : Selectable {
     private Tile[] neighbors;
     private List<Edge> edges = new List<Edge>();
     private TerrainType type;
+    private Vector3 coord;
 
     public Tile[] Neighbors { get { return neighbors; } }
     public List<Edge> Edges { get { return edges; } }
     public TerrainType Type { get { return type; } }
+    public Vector3 Coord { get { return coord; } } // the position at which objects gat placed
 
     public Tile(MapController tileMap, Site s, float height, TerrainType type, Rectf bounds, Transform tilesTransform) {
         s.tile = this;
+        coord = new Vector3(s.x, height, s.y);
         tileObj = TileObject.Create(this, s, height, type, bounds, tilesTransform);
         neighbors = s.getNeighbourTiles(); // :(
         this.tileMap = tileMap;
@@ -36,19 +39,22 @@ public class Tile : Selectable {
     // ========================= INTERACTION ==============================
 
     private bool selected;
-    public bool Selected { get { return selected; } }
+    public bool isSelected { get { return selected; } } // unnecessary
 
     public void Select() {
-        if (!selected) {
+        if(tileMap.SetSelected(this)) {
             selected = true;
-            tileMap.SetSelected(this);
             tileObj.SetSelected();
-        } else {
-            selected = false;
-            tileMap.SetDeselected(this);
-            tileObj.SetDeselected();
         }
+    }
 
-        //GameObject.Find("Unit").GetComponent<Unit>().moveToTile(tileObj); //this shouldn't be here // should be in controller
+    public bool Deselect(Selectable obj) {
+        selected = false;
+        tileObj.SetDeselected();
+        return true;
+    }
+
+    public void Highlight() {
+        tileObj.Hightlight();
     }
 }
