@@ -38,7 +38,7 @@ public class TileObject : MonoBehaviour {
 
     // an example of 'highlight'
 
-    private float currV;
+    private float currV = 0; // because of this, the world 'awakes'
 
     private void Update() {
         float H, S, V;
