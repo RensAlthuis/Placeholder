@@ -7,7 +7,7 @@ namespace MapGraphics {
 
         public static TerrainType WATER = new TerrainType(0);
         public static TerrainType LAND = new TerrainType(1);
-        
+
         private int type; // no one knows about this. terrains little secret
         private TerrainType (int type) {
             this.type = type;

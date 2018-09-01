@@ -25,7 +25,7 @@ public class Unit : MonoBehaviour {
 	}
 
 	public void moveToTile(TileObject tObj){
-		dest = new Vector3(tObj.transform.position.x, tObj.transform.position.y + 10,tObj.transform.position.z);
+		dest = new Vector3(tObj.transform.position.x, tObj.transform.position.y + tObj.transform.localScale.y,tObj.transform.position.z);
 		startDist = Vector3.Distance(transform.position, dest);
 	}
 }

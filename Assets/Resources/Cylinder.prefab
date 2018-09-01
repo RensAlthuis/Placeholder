@@ -24,7 +24,7 @@ GameObject:
   - component: {fileID: 136895509721393784}
   - component: {fileID: 114879885048118646}
   m_Layer: 0
-  m_Name: Unit
+  m_Name: Cylinder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

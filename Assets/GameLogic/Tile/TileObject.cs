@@ -36,19 +36,48 @@ public class TileObject : MonoBehaviour {
 
         // 2) Creating the mesh
         Mesh mesh = new Mesh();
-        Vector3[] verts = new Vector3[numCorners *2 + 1];
-        verts[0] = new Vector3(0, 0, 0);
+        // Vector3[] verts = new Vector3[numCorners *2 + 1];
+        // verts[0] = new Vector3(0, 0, 0);
 
-        for(int i = 1; i < numCorners  + 1; i++) {
-            verts[i] = hull[i-1];
-        }
+        // for(int i = 1; i < numCorners  + 1; i++) {
+        //     verts[i] = hull[i-1];
+        // }
 
-        for(int i = numCorners  + 1, n = 0; i < numCorners  + 1 + numCorners ; i++, n++) {
-            verts[i] = new Vector3(hull[n].x, DEPTH, hull[n].z);
+        // for(int i = numCorners  + 1, n = 0; i < numCorners  + 1 + numCorners ; i++, n++) {
+        //     verts[i] = new Vector3(hull[n].x, DEPTH, hull[n].z);
+        // }
+
+        // Vector3[] normals = new Vector3[verts.Length];
+        // for(int i = 0; i < verts.Length; i++){
+        //     normals[i] = Vector3.up;
+        // }
+
+        Vector3[] verts = Verts(hull);
+
+        int[] triangles = new int[verts.Length];
+        for(int i = 0; i < verts.Length; i++){
+            triangles[i] = i;
         }
+        float minX = Mathf.Infinity;
+        float minY = Mathf.Infinity;
+        for(int i = 0; i < hull.Length; i++){
+            if(minX > hull[i].x) minX = hull[i].x;
+            if(minY > hull[i].z) minY = hull[i].z;
+        }
+        minX = -minX;
+        minY = -minY;
+        float div = Mathf.NegativeInfinity;
+        for(int i = 0; i < hull.Length; i++){
+            if(div < hull[i].x+minX) div = hull[i].x + minX;
+            if(div < hull[i].z+minY) div = hull[i].z + minY;
+        }
+        Vector2[] uvs = Uvs(verts, minX, minY, div);
 
         mesh.vertices = verts;
-        mesh.triangles = Triangles();
+        mesh.triangles = triangles;
+        mesh.uv = uvs;
+        // mesh.normals = normals;
+        // mesh.triangles = Triangles();
         GetComponent<MeshFilter>().mesh = mesh;
         GetComponent<MeshRenderer>().material = mat;
         GetComponent<MeshCollider>().sharedMesh = mesh;
@@ -58,11 +87,66 @@ public class TileObject : MonoBehaviour {
 
     private void OnMouseDown() {
         Debug.Log("Click" + index);
-        tileMap.tiles[index].OnMouseDown();
+        tileMap.setSelected(tileMap.tiles[index]);
     }
 
     public void setColor(Color col){
         GetComponent<MeshRenderer>().material.color = col;
+    }
+
+
+    private Vector2[] Uvs(Vector3[] verts, float minX, float minY, float div){
+        Vector2[] uvs = new Vector2[verts.Length];
+        Vector2 mid = new Vector2(0.5f, 0.5f);
+        Debug.Log(index);
+        for(int i = 0; i < verts.Length; i++){
+            // uvs[i*3] = mid;
+            uvs[i] = new Vector2((verts[i].x+minX)/div, (verts[i].z+minY)/div);
+        }
+        return uvs;
+    }
+
+    private Vector3[] Verts(Vector3[] hull){
+        Vector3[] verts= new Vector3[numCorners  * 9];
+
+        int offset = numCorners  * 3;
+
+        Vector3 p;
+        Vector3 p1;
+        for(int i = 0; i < numCorners-1 ; i++){
+            p = hull[i];
+            p1 = hull[i+1];
+
+            //top plane
+            verts[i*3] = Vector3.zero;
+            verts[i*3+2] = p;
+            verts[i*3+1] = p1;
+
+            //side planes
+            verts[offset + (i*6)] = p;
+            verts[offset + (i*6)+2] = new Vector3(p.x, p.y - 30, p.z);
+            verts[offset + (i*6)+1] = new Vector3(p1.x, p1.y -30, p1.z);
+            verts[offset + (i*6)+3] = p;
+            verts[offset + (i*6)+5] = new Vector3(p1.x, p1.y -30, p1.z);
+            verts[offset + (i*6)+4] = p1;
+        }
+        //fix loopback
+        int index = numCorners -1;
+
+        verts[index*3] = Vector3.zero;
+        verts[index*3+2] = hull[index];
+        verts[index*3+1] = hull[0];
+
+        p = hull[index];
+        p1 = hull[0];
+        verts[offset + (index*6)] = p;
+        verts[offset + (index*6)+2] = new Vector3(p.x, p.y - 30, p.z);
+        verts[offset + (index*6)+1] = new Vector3(p1.x, p1.y -30, p1.z);
+        verts[offset + (index*6)+3] = p;
+        verts[offset + (index*6)+5] = new Vector3(p1.x, p1.y -30, p1.z);
+        verts[offset + (index*6)+4] = p1;
+
+        return verts;
     }
 
     private int[] Triangles(){

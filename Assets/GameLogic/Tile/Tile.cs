@@ -11,8 +11,6 @@ public class Tile {
     private TileObject tileObj;
     private int height;
 
-
-
     private TerrainType type;
     public TerrainType Type { get { return type; } }
 
@@ -32,20 +30,14 @@ public class Tile {
     }
 
     public void Select(){
-            float H, S, V;
-            Color.RGBToHSV(type.GetMaterial().color, out H, out S, out V);
-            Color c = Color.HSVToRGB(H, S, 1);
-            tileObj.setColor(c);
-            GameObject.Find("Unit").GetComponent<Unit>().moveToTile(tileObj);
-            // Debug.Log("Selected:" + tileObj.index);
-
+        float H, S, V;
+        Color.RGBToHSV(type.GetMaterial().color, out H, out S, out V);
+        Color c = Color.HSVToRGB(H, S, 1);
+        tileObj.setColor(c);
+        GameObject.Find("Unit").GetComponent<Unit>().moveToTile(tileObj); //this shouldn't be here
     }
 
     public void Deselect(){
-            tileObj.setColor(type.GetMaterial().color);
-    }
-
-    public void OnMouseDown() {
-        tileMap.setSelected(this);
+        tileObj.setColor(type.GetMaterial().color);
     }
 }

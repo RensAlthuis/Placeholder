@@ -17,10 +17,7 @@ public class TileMap : MonoBehaviour {
     private Rectf bounds;
 
     public void Start(){
-        MapGenerator.setOptions(lengthX, lengthY, polygonNumber, roughness, heightDifference);
-        // GameObject tiles = new GameObject() { name = "Tiles" };
-        transform.position = Vector3.zero;
-        tiles = MapGenerator.NewMap(this);
+        tiles = MapGenerator.NewMap(this, lengthX, lengthY, polygonNumber, roughness, heightDifference);
     }
 
     public void setSelected(Tile tile){

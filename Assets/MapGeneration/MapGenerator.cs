@@ -14,16 +14,15 @@ public static class MapGenerator {
     private static int heightDifference; // maybe both make these constants ?
     private static int SEALEVEL;
 
-    public static void setOptions(int lengthX, int lengthY, int polygonNumber, int roughness, int heightDifference){
+    public static Tile[] NewMap(TileMap tileMap,int lengthX, int lengthY, int polygonNumber, int roughness, int heightDifference)
+    {
+
         MapGenerator.bounds = new Rectf(0, 0, lengthX, lengthY);
         MapGenerator.polygonNumber = polygonNumber;
         MapGenerator.roughness = (roughness == 0 ? 1 : roughness); //TODO: prolly change this to something more logical
         MapGenerator.heightDifference = heightDifference;
         MapGenerator.SEALEVEL = heightDifference/2;
-    }
 
-    public static Tile[] NewMap(TileMap tileMap)
-    {
         Tile[] tileList = new Tile[polygonNumber]; // we will definitely need this at some point
 
         // 1) Creating points
@@ -41,7 +40,6 @@ public static class MapGenerator {
             Tile tile = new Tile(tileMap, tObj, type);
             tileList[s.SiteIndex] = tile;
             s.tile = tile;
-            Debug.Log(tObj.transform.position.y);
         }
 
         //damn this is ugly :c

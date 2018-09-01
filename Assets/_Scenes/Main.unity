@@ -216,7 +216,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!114 &490343639
 MonoBehaviour:
@@ -229,8 +229,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 34a7cc206e873784ea2ac51e1de0d506, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lengthX: 2000
-  lengthY: 2000
+  lengthX: 200
+  lengthY: 200
   polygonNumber: 2000
   roughness: 5
   heightDifference: 10
@@ -241,7 +241,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 490343638}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 784.48413, y: -205.41867, z: 743.70825}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -274,8 +274,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2e73ccac0642bda4b993d8fad1368a6e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lengthX: 2000
-  lengthY: 2000
+  lengthX: 200
+  lengthY: 200
   unit: {fileID: 114879885048118646, guid: df965aa2cebaefa40bcc447080527e1c, type: 2}
 --- !u!4 &498815000
 Transform:
