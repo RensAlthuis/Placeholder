@@ -27,13 +27,13 @@ public class TileObject : MonoBehaviour {
         tile.Select();
     }
 
-    public void SetSelected(TerrainType type) { // when the tile is selected
+    public void SetSelected() { // when the tile is selected
         float H, S, V;
         Color.RGBToHSV(type.GetMaterial().color, out H, out S, out V);
         GetComponent<MeshRenderer>().material.color = Color.HSVToRGB(H, S, 1);
     }
 
-    public void SetDeselected(TerrainType type) { // when the tile is deselected
+    public void SetDeselected() { // when the tile is deselected
         GetComponent<MeshRenderer>().material.color = type.GetMaterial().color;
     }
 

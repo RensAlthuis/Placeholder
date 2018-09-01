@@ -1,8 +1,10 @@
 ﻿using UnityEngine;
 using MapEngine;
+using System;
 
 public class MapController : MonoBehaviour {
 
+    private Controller controller;
     private Tile[] tiles;
     private Tile selected;
 
@@ -13,10 +15,18 @@ public class MapController : MonoBehaviour {
     public int heightDifference = 10;
 
     public void Start() {
+        controller = GetComponent<Controller>();
         tiles = MapGenerator.NewMap(this, lengthX, lengthY, polygonNumber, roughness, heightDifference);
     }
 
-    public void setSelected(Tile tile) {
-        selected = tile;
+    internal void SetSelected(Tile tile) {
+        controller.selected = tile;
+        // interaction with tile
     }
+
+    internal void SetDeselected(Tile tile) {
+        controller.selected = null;
+    }
+
+    // maybe all global graphical map stuff also here? like fog and random birds
 }

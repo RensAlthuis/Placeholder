@@ -20,15 +20,12 @@ namespace MapEngine {
             Voronoi voronoi = new Voronoi(points, bounds, RELAXATION);
 
             // 3) Creating tiles
+            GameObject tiles = new GameObject() { name = "Tiles" };
             Tile[] tileArray = new Tile[polygonNumber]; // TILEARRAY
             foreach (Site s in voronoi.SitesIndexedByLocation.Values) {
-                float height = GenerateHeight(s.x, s.y, bounds, (roughness == 0 ? 1 : roughness), heightDifference, SEALEVEL); //TODO: prolly change this to something more logical
+                float height = GenerateHeight(s.x, s.y, bounds, (roughness <= 0 ? 1 : roughness), heightDifference, SEALEVEL); //TODO: prolly change this to something more logical
                 TerrainType type = GenerateType(height, SEALEVEL);
-
-                tileArray[s.SiteIndex] = new Tile(tileMap, s, height, type, bounds); // TILEARRAY
-
-                tileArray[s.SiteIndex] = tile;
-                s.tile = tile;
+                tileArray[s.SiteIndex] = new Tile(tileMap, s, height, type, bounds, tiles.transform); // TILEARRAY
             }
 
             // 4) Creating edges
@@ -56,6 +53,5 @@ namespace MapEngine {
             return points;
         }
     }
-
 }
 

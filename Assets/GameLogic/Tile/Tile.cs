@@ -1,7 +1,6 @@
 ﻿using MapEngine;
 using System.Collections.Generic;
 using UnityEngine;
-using System;
 using csDelaunay;
 
 public class Tile : Selectable {
@@ -12,15 +11,14 @@ public class Tile : Selectable {
     private Tile[] neighbors;
     private List<Edge> edges = new List<Edge>();
     private TerrainType type;
-    private bool selected;
 
     public Tile[] Neighbors { get { return neighbors; } }
     public List<Edge> Edges { get { return edges; } }
     public TerrainType Type { get { return type; } }
-    public bool Selected { get { return selected; } }
 
-    public Tile(MapController tileMap, Site s, float height, TerrainType type, Rectf bounds) {
-        tileObj = TileObject.Create(this, s, height, type, bounds, tileMap.transform);
+    public Tile(MapController tileMap, Site s, float height, TerrainType type, Rectf bounds, Transform tilesTransform) {
+        s.tile = this;
+        tileObj = TileObject.Create(this, s, height, type, bounds, tilesTransform);
         neighbors = s.getNeighbourTiles(); // :(
         this.tileMap = tileMap;
         this.type = type;
@@ -37,17 +35,20 @@ public class Tile : Selectable {
 
     // ========================= INTERACTION ==============================
 
-    public bool Select() {
-        if (selected != tile) {
-            if (selected != null) selected.Deselect(); // deselect
-            tile.Select(); // select
-            selected = tile;
+    private bool selected;
+    public bool Selected { get { return selected; } }
+
+    public void Select() {
+        if (!selected) {
+            selected = true;
+            tileMap.SetSelected(this);
+            tileObj.SetSelected();
+        } else {
+            selected = false;
+            tileMap.SetDeselected(this);
+            tileObj.SetDeselected();
         }
-        tileObj.SetDeselected(type);
 
-        tileObj.SetSelected(type);
-        //GameObject.Find("Unit").GetComponent<Unit>().moveToTile(tileObj); //this shouldn't be here // should be in tilemap
-
-        return true;
+        //GameObject.Find("Unit").GetComponent<Unit>().moveToTile(tileObj); //this shouldn't be here // should be in controller
     }
 }

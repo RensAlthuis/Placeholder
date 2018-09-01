@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.4381942, g: 0.48620766, b: 0.5664874, a: 1}
+  m_IndirectSpecularColor: {r: 0.43819365, g: 0.486207, b: 0.5664868, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -202,51 +202,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 60, y: 0, z: 0}
---- !u!1 &490343638
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 490343640}
-  - component: {fileID: 490343639}
-  m_Layer: 0
-  m_Name: TileMap
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 4294967295
-  m_IsActive: 1
---- !u!114 &490343639
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 490343638}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 34a7cc206e873784ea2ac51e1de0d506, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  lengthX: 200
-  lengthY: 200
-  polygonNumber: 2000
-  roughness: 5
-  heightDifference: 10
---- !u!4 &490343640
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 490343638}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 3
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &498814998
 GameObject:
   m_ObjectHideFlags: 0
@@ -256,6 +211,7 @@ GameObject:
   m_Component:
   - component: {fileID: 498815000}
   - component: {fileID: 498814999}
+  - component: {fileID: 498815001}
   m_Layer: 0
   m_Name: MAIN
   m_TagString: Untagged
@@ -274,9 +230,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2e73ccac0642bda4b993d8fad1368a6e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lengthX: 200
-  lengthY: 200
-  unit: {fileID: 114879885048118646, guid: df965aa2cebaefa40bcc447080527e1c, type: 2}
 --- !u!4 &498815000
 Transform:
   m_ObjectHideFlags: 0
@@ -290,6 +243,22 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &498815001
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 498814998}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 34a7cc206e873784ea2ac51e1de0d506, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  lengthX: 200
+  lengthY: 200
+  polygonNumber: 2000
+  roughness: 5
+  heightDifference: 10
 --- !u!1 &1194490794
 GameObject:
   m_ObjectHideFlags: 0

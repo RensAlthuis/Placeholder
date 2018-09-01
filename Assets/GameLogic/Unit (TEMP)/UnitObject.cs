@@ -8,13 +8,13 @@ public class UnitObject : MonoBehaviour {
     public Vector3 dest;
 	private float startDist;
 	
+    /*
     void Start () {
 
 	}
 
 	// Update is called once per frame
 	void Update () {
-
 		//smooth tile movement
 		if (dest != Vector3.zero){
 			float distance = Vector3.Distance(transform.position, dest);
@@ -27,5 +27,5 @@ public class UnitObject : MonoBehaviour {
 	public void moveToTile(TileObject tObj){
 		dest = new Vector3(tObj.transform.position.x, tObj.transform.position.y + tObj.transform.localScale.y,tObj.transform.position.z);
 		startDist = Vector3.Distance(transform.position, dest);
-	}
+	}*/
 }

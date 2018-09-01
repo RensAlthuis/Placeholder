@@ -6,6 +6,7 @@ public class Unit : Selectable {
     public Vector3 dest;
 	private float startDist;
 
+    /*
     public Unit() {
         
     }
@@ -13,9 +14,9 @@ public class Unit : Selectable {
 	public void moveToTile(TileObject tObj){
 		dest = new Vector3(tObj.transform.position.x, tObj.transform.position.y + tObj.transform.localScale.y,tObj.transform.position.z);
 		startDist = Vector3.Distance(transform.position, dest);
-	}
+	} */
 
-    public bool Select() {
-        return true;
+    public void Select() {
+        
     }
 }
