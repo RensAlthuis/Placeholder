@@ -1,8 +1,7 @@
-using UnityEngine;
+﻿using UnityEngine;
 using System;
 
-public class TileMap : MonoBehaviour {
-
+public class MapController : MonoBehaviour {
 
     public Tile[] tiles;
 
@@ -16,16 +15,14 @@ public class TileMap : MonoBehaviour {
 
     private Rectf bounds;
 
-    public void Start(){
+    public void Start() {
         tiles = MapGenerator.NewMap(this, lengthX, lengthY, polygonNumber, roughness, heightDifference);
     }
 
-    public void setSelected(Tile tile){
-        if(selected != tile){
-            tile.Select();
-            if(selected != null)
-                selected.Deselect();
-
+    public void setSelected(Tile tile) {
+        if (selected != tile) {
+            if (selected != null) selected.Deselect(); // deselect
+            tile.Select(); // select
             selected = tile;
         }
     }

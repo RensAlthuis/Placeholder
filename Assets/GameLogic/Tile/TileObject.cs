@@ -1,32 +1,46 @@
 using UnityEngine;
 using MapGraphics;
+using csDelaunay;
 
 public class TileObject : MonoBehaviour {
 
     // CONSTANTS
     private static int DEPTH = -30;
+
     private int numCorners;
     private int index;
-    private TileMap tileMap;
+    private MapController tileMap;
 
-    public static TileObject Create(TileMap tileMap, csDelaunay.Site s, float height, Material mat, Rectf bounds) { // yey nicer code
-
-        //Maybe move this to MapGenerator
-        Vector3[] hull = s.Region(bounds).ConvertAll(x => new Vector3(x.x - s.x, 0, x.y - s.y)).ToArray();
-        Vector3 pos = new Vector3(s.x, height, s.y);
-
-        //creating the object
+    public static TileObject Create(MapController tileMap, Site s, float height, Material mat, Rectf bounds) {
         GameObject obj = new GameObject();
         obj.AddComponent<MeshFilter>();
         obj.AddComponent<MeshCollider>();
         obj.AddComponent<MeshRenderer>();
-        return obj.AddComponent<TileObject>().Init(tileMap, s.SiteIndex, pos, hull, mat);
+        return obj.AddComponent<TileObject>().Init(tileMap, s, height, mat, bounds);
     }
 
-    private TileObject Init(TileMap tileMap, int index, Vector3 pos, Vector3[] hull, Material mat){
+    private void OnMouseDown() { // first to know if it has been clicked
+        Debug.Log("Click" + index);
+        tileMap.setSelected(tileMap.tiles[index]);
+    }
 
+    public void setSelected(TerrainType type) { // when the tile is selected
+        float H, S, V;
+        Color.RGBToHSV(type.GetMaterial().color, out H, out S, out V);
+        GetComponent<MeshRenderer>().material.color = Color.HSVToRGB(H, S, 1);
+    }
+
+    public void setDeselected(TerrainType type) { // when the tile is deselected
+        GetComponent<MeshRenderer>().material.color = type.GetMaterial().color;
+    }
+
+    // ====================== TILE MESH GENERATION =============================
+
+    private TileObject Init(MapController tileMap, Site s, float height, Material mat, Rectf bounds) {
+        Vector3[] hull = s.Region(bounds).ConvertAll(x => new Vector3(x.x - s.x, 0, x.y - s.y)).ToArray();
+        Vector3 pos = new Vector3(s.x, height, s.y);
         this.tileMap = tileMap;
-        this.index = index;
+        index = s.SiteIndex;
 
         // 1) setting the object's data
         name = "Tile" + index;
@@ -35,6 +49,7 @@ public class TileObject : MonoBehaviour {
         transform.SetParent(tileMap.transform);
 
         // 2) Creating the mesh
+        //Maybe move this to MapGenerator
         Mesh mesh = new Mesh();
         // Vector3[] verts = new Vector3[numCorners *2 + 1];
         // verts[0] = new Vector3(0, 0, 0);
@@ -84,16 +99,6 @@ public class TileObject : MonoBehaviour {
 
         return this;
     }
-
-    private void OnMouseDown() {
-        Debug.Log("Click" + index);
-        tileMap.setSelected(tileMap.tiles[index]);
-    }
-
-    public void setColor(Color col){
-        GetComponent<MeshRenderer>().material.color = col;
-    }
-
 
     private Vector2[] Uvs(Vector3[] verts, float minX, float minY, float div){
         Vector2[] uvs = new Vector2[verts.Length];

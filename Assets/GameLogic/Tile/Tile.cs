@@ -6,7 +6,7 @@ using System;
 public class Tile {
     public Tile[] neighbors;
     private List<Edge> edges = new List<Edge>();
-    TileMap tileMap;
+    MapController tileMap;
 
     private TileObject tileObj;
     private int height;
@@ -14,7 +14,7 @@ public class Tile {
     private TerrainType type;
     public TerrainType Type { get { return type; } }
 
-    public Tile (TileMap tileMap, TileObject obj, TerrainType type) {
+    public Tile (MapController tileMap, TileObject obj, TerrainType type) {
         this.tileMap = tileMap;
         tileObj = obj;
         this.type = type;
@@ -30,14 +30,11 @@ public class Tile {
     }
 
     public void Select(){
-        float H, S, V;
-        Color.RGBToHSV(type.GetMaterial().color, out H, out S, out V);
-        Color c = Color.HSVToRGB(H, S, 1);
-        tileObj.setColor(c);
-        GameObject.Find("Unit").GetComponent<Unit>().moveToTile(tileObj); //this shouldn't be here
+        tileObj.setSelected(type);
+        GameObject.Find("Unit").GetComponent<Unit>().moveToTile(tileObj); //this shouldn't be here // should be in tilemap
     }
 
     public void Deselect(){
-        tileObj.setColor(type.GetMaterial().color);
+        tileObj.setDeselected(type);
     }
 }
