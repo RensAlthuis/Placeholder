@@ -95,6 +95,7 @@ public class TileObject : MonoBehaviour {
     }
 
 
+    //TODO: fix side panels!
     private Vector2[] Uvs(Vector3[] verts, float minX, float minY, float div){
         Vector2[] uvs = new Vector2[verts.Length];
         Vector2 mid = new Vector2(0.5f, 0.5f);
