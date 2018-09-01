@@ -61,14 +61,13 @@ public class TileObject : MonoBehaviour {
         this.tile = tile;
         this.type = type;
 
-        // 1) setting the object's data
+        // 1) Setting the object's data
         name = "Tile" + s.SiteIndex;
         numCorners = hull.Length;
         transform.position = pos;
         transform.SetParent(transformMap);
 
         // 2) Creating the mesh
-        //Maybe move this to MapGenerator
         Mesh mesh = new Mesh();
         // Vector3[] verts = new Vector3[numCorners *2 + 1];
         // verts[0] = new Vector3(0, 0, 0);

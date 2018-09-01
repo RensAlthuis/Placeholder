@@ -15,7 +15,7 @@ namespace MapEngine {
         }
 
         private static Dictionary<UnitType, GameObject> mats = new Dictionary<UnitType, GameObject>() {
-            { RED_BARRON, Resources.Load<GameObject>("Cylinder") }
+            { RED_BARRON, Resources.Load<GameObject>("RedBarron") }
         };
 
         public GameObject GetObject() {
