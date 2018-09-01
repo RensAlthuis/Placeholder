@@ -22,7 +22,5 @@ namespace MapEngine {
             if (!mats.ContainsKey(this)) return mats[LAND];
             return mats[this];
         }
-
-        // Something like a dictionary of textures?
     }
 }

@@ -6,7 +6,6 @@ public class MapController : MonoBehaviour {
 
     private Controller controller;
     private Tile[] tiles;
-    private Tile selected;
 
     public int lengthX = 2000;
     public int lengthY = 2000;
@@ -20,6 +19,7 @@ public class MapController : MonoBehaviour {
     }
 
     internal void SetSelected(Tile tile) {
+        if(controller.selected != null) controller.selected.Select(); // feedback to the current selected object
         controller.selected = tile;
         // interaction with tile
     }
