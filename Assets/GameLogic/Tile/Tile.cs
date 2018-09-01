@@ -1,22 +1,28 @@
-﻿using MapGraphics;
+﻿using MapEngine;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using csDelaunay;
 
-public class Tile {
-    public Tile[] neighbors;
-    private List<Edge> edges = new List<Edge>();
-    MapController tileMap;
-
+public class Tile : Selectable {
+    private MapController tileMap;
     private TileObject tileObj;
+    
     private int height;
-
+    private Tile[] neighbors;
+    private List<Edge> edges = new List<Edge>();
     private TerrainType type;
-    public TerrainType Type { get { return type; } }
+    private bool selected;
 
-    public Tile (MapController tileMap, TileObject obj, TerrainType type) {
+    public Tile[] Neighbors { get { return neighbors; } }
+    public List<Edge> Edges { get { return edges; } }
+    public TerrainType Type { get { return type; } }
+    public bool Selected { get { return selected; } }
+
+    public Tile(MapController tileMap, Site s, float height, TerrainType type, Rectf bounds) {
+        tileObj = TileObject.Create(this, s, height, type, bounds, tileMap.transform);
+        neighbors = s.getNeighbourTiles(); // :(
         this.tileMap = tileMap;
-        tileObj = obj;
         this.type = type;
     }
 
@@ -29,12 +35,19 @@ public class Tile {
         edges.Add(e);
     }
 
-    public void Select(){
-        tileObj.setSelected(type);
-        GameObject.Find("Unit").GetComponent<Unit>().moveToTile(tileObj); //this shouldn't be here // should be in tilemap
-    }
+    // ========================= INTERACTION ==============================
 
-    public void Deselect(){
-        tileObj.setDeselected(type);
+    public bool Select() {
+        if (selected != tile) {
+            if (selected != null) selected.Deselect(); // deselect
+            tile.Select(); // select
+            selected = tile;
+        }
+        tileObj.SetDeselected(type);
+
+        tileObj.SetSelected(type);
+        //GameObject.Find("Unit").GetComponent<Unit>().moveToTile(tileObj); //this shouldn't be here // should be in tilemap
+
+        return true;
     }
 }

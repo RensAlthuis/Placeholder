@@ -1,5 +1,5 @@
 using UnityEngine;
-using MapGraphics;
+using MapEngine;
 using csDelaunay;
 
 public class TileObject : MonoBehaviour {
@@ -7,46 +7,49 @@ public class TileObject : MonoBehaviour {
     // CONSTANTS
     private static int DEPTH = -30;
 
-    private int numCorners;
-    private int index;
-    private MapController tileMap;
+    private Tile tile;
 
-    public static TileObject Create(MapController tileMap, Site s, float height, Material mat, Rectf bounds) {
+    private int numCorners;
+    private TerrainType type;
+
+    public static TileObject Create(Tile tile, Site s, float height, TerrainType type, Rectf bounds, Transform transformMap) {
         GameObject obj = new GameObject();
         obj.AddComponent<MeshFilter>();
         obj.AddComponent<MeshCollider>();
         obj.AddComponent<MeshRenderer>();
-        return obj.AddComponent<TileObject>().Init(tileMap, s, height, mat, bounds);
+        return obj.AddComponent<TileObject>().Init(tile, s, height, type, bounds, transformMap);
     }
+
+    // ====================== OBJECT INTERACTION =============================
 
     private void OnMouseDown() { // first to know if it has been clicked
-        Debug.Log("Click" + index);
-        tileMap.setSelected(tileMap.tiles[index]);
+        Debug.Log("Clicked on " + name);
+        tile.Select();
     }
 
-    public void setSelected(TerrainType type) { // when the tile is selected
+    public void SetSelected(TerrainType type) { // when the tile is selected
         float H, S, V;
         Color.RGBToHSV(type.GetMaterial().color, out H, out S, out V);
         GetComponent<MeshRenderer>().material.color = Color.HSVToRGB(H, S, 1);
     }
 
-    public void setDeselected(TerrainType type) { // when the tile is deselected
+    public void SetDeselected(TerrainType type) { // when the tile is deselected
         GetComponent<MeshRenderer>().material.color = type.GetMaterial().color;
     }
 
     // ====================== TILE MESH GENERATION =============================
 
-    private TileObject Init(MapController tileMap, Site s, float height, Material mat, Rectf bounds) {
+    private TileObject Init(Tile tile, Site s, float height, TerrainType type, Rectf bounds, Transform transformMap) {
         Vector3[] hull = s.Region(bounds).ConvertAll(x => new Vector3(x.x - s.x, 0, x.y - s.y)).ToArray();
         Vector3 pos = new Vector3(s.x, height, s.y);
-        this.tileMap = tileMap;
-        index = s.SiteIndex;
+        this.tile = tile;
+        this.type = type;
 
         // 1) setting the object's data
-        name = "Tile" + index;
+        name = "Tile" + s.SiteIndex;
         numCorners = hull.Length;
         transform.position = pos;
-        transform.SetParent(tileMap.transform);
+        transform.SetParent(transformMap);
 
         // 2) Creating the mesh
         //Maybe move this to MapGenerator
@@ -94,7 +97,7 @@ public class TileObject : MonoBehaviour {
         // mesh.normals = normals;
         // mesh.triangles = Triangles();
         GetComponent<MeshFilter>().mesh = mesh;
-        GetComponent<MeshRenderer>().material = mat;
+        GetComponent<MeshRenderer>().material = type.GetMaterial();
         GetComponent<MeshCollider>().sharedMesh = mesh;
 
         return this;
@@ -103,7 +106,7 @@ public class TileObject : MonoBehaviour {
     private Vector2[] Uvs(Vector3[] verts, float minX, float minY, float div){
         Vector2[] uvs = new Vector2[verts.Length];
         Vector2 mid = new Vector2(0.5f, 0.5f);
-        Debug.Log(index);
+        Debug.Log(name);
         for(int i = 0; i < verts.Length; i++){
             // uvs[i*3] = mid;
             uvs[i] = new Vector2((verts[i].x+minX)/div, (verts[i].z+minY)/div);

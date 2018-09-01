@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace MapGraphics {
+namespace MapEngine {
 
     public class TerrainType {
 
@@ -19,10 +19,10 @@ namespace MapGraphics {
         };
 
         public Material GetMaterial() {
-            if (!mats.ContainsKey(this)) {
-                return mats[LAND];
-            }
+            if (!mats.ContainsKey(this)) return mats[LAND];
             return mats[this];
         }
+
+        // Something like a dictionary of textures?
     }
 }

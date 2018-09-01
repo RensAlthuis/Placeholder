@@ -1,11 +1,10 @@
 using UnityEngine;
 
-public class CameraControl: MonoBehaviour
-{
-    // CONSTANTS
-    private const float BORDER = 0; // decreasing the rectangle. optional!
-    private const float LEFTBORDER = 0;
-    private const float BOTTOMBORDER = 0; // increasing the amount at which you can go down
+public class CameraControl: MonoBehaviour {
+
+    // CONSTANTS // These variables DO NOT depend on the size of the map!! though they do depend on the height and angle of the camera
+    private const float LEFTBORDER = 200; // decreasing the amount at which you can go sideways
+    private const float BOTTOMBORDER = -50; // increasing the amount at which you can go down
 
     private bool dragging;
     private Vector3 origin;
@@ -18,8 +17,8 @@ public class CameraControl: MonoBehaviour
 
     private void Start() {
         MapController c = GameObject.Find("MAIN").GetComponent<MapController>();
-        RIGHTBORDER = c.lengthX - BORDER;
-        TOPBORDER = c.lengthY - BORDER;
+        RIGHTBORDER = c.lengthX - LEFTBORDER;
+        TOPBORDER = c.lengthY - LEFTBORDER;
         transform.position = new Vector3(LEFTBORDER, MAXZOOM, BOTTOMBORDER);
     }
 
@@ -58,6 +57,5 @@ public class CameraControl: MonoBehaviour
                 Camera.main.transform.Translate(scrollDir * scroll, Space.World);
             }
         }
-
     }
 }
