@@ -4,7 +4,7 @@ using UnityEngine;
 using csDelaunay;
 
 public class Tile : Selectable {
-    private MapController tileMap;
+    private MainController tileMap;
     private TileObject tileObj;
     
     private int height;
@@ -18,7 +18,7 @@ public class Tile : Selectable {
     public TerrainType Type { get { return type; } }
     public Vector3 Coord { get { return coord; } } // the position at which objects gat placed
 
-    public Tile(MapController tileMap, Site s, float height, TerrainType type, Rectf bounds, Transform tilesTransform) {
+    public Tile(MainController tileMap, Site s, float height, TerrainType type, Rectf bounds, Transform tilesTransform) {
         s.tile = this;
         coord = new Vector3(s.x, height, s.y);
         tileObj = TileObject.Create(this, s, height, type, bounds, tilesTransform);
@@ -27,16 +27,11 @@ public class Tile : Selectable {
         this.type = type;
     }
 
-    public override string ToString(){
-        Vector3 pos = tileObj.transform.position;
-        return pos.x + ", " + pos.y + ", " + pos.z;
-    }
-
     public void addEdge(Edge e){
         edges.Add(e);
     }
 
-    // ========================= INTERACTION ==============================
+    // ========================= SELECTABLE ==============================
 
     private bool selected;
     public bool isSelected { get { return selected; } } // unnecessary
@@ -56,5 +51,9 @@ public class Tile : Selectable {
 
     public void Highlight() {
         tileObj.Hightlight();
+    }
+
+    public string Name() {
+        return type.GetName() + " tile";
     }
 }

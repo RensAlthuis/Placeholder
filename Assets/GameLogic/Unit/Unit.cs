@@ -1,17 +1,17 @@
 ﻿using MapEngine;
-using System;
-using UnityEngine;
 
 public class Unit : Selectable {
 
     private UnitObject unitObj;
-    private MapController tileMap;
+    private MainController tileMap;
 
     private Tile tile; // the tile at which the unit is currently standing
+    private UnitType type; // the type of unit
 
-    public Unit(MapController tileMap, Tile tile, UnitType type) {
+    public Unit(MainController tileMap, Tile tile, UnitType type) {
         this.tileMap = tileMap;
         this.tile = tile;
+        this.type = type;
         unitObj = UnitObject.Create(this, type);
         unitObj.SpawnTo(tile);
     }
@@ -43,5 +43,9 @@ public class Unit : Selectable {
 
     public void Highlight() {
         
+    }
+
+    public string Name() {
+        return type.GetName();
     }
 }

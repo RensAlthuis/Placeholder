@@ -6,11 +6,11 @@ namespace MapEngine {
     public class UnitType {
 
         // get ready for a LONG list of units
-        public static UnitType RED_BARRON = new UnitType(0);
-        public static UnitType MISTER_C = new UnitType(1);
+        public static UnitType RED_BARRON = new UnitType("red barron");
+        public static UnitType MISTER_C = new UnitType("mister c");
 
-        private int type; // no one knows about this. units little secret
-        private UnitType (int type) {
+        private string type; // no one knows about this. units little secret
+        private UnitType (string type) {
             this.type = type;
         }
 
@@ -22,6 +22,10 @@ namespace MapEngine {
         public GameObject GetGameObject() {
             if (!objs.ContainsKey(this)) throw new System.Exception("This type does not exist or is not defined");
             return objs[this];
+        }
+
+        public string GetName() {
+            return type;
         }
     }
 }

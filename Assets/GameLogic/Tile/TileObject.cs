@@ -22,7 +22,6 @@ public class TileObject : MonoBehaviour {
     // ====================== OBJECT INTERACTION =============================
 
     private void OnMouseDown() { // first to know if it has been clicked
-        Debug.Log("Clicked on " + name);
         tile.Select();
     }
 
@@ -121,7 +120,6 @@ public class TileObject : MonoBehaviour {
     private Vector2[] Uvs(Vector3[] verts, float minX, float minY, float div){
         Vector2[] uvs = new Vector2[verts.Length];
         Vector2 mid = new Vector2(0.5f, 0.5f);
-        Debug.Log(name);
         for(int i = 0; i < verts.Length; i++){
             // uvs[i*3] = mid;
             uvs[i] = new Vector2((verts[i].x+minX)/div, (verts[i].z+minY)/div);

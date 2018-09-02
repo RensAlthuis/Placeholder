@@ -16,7 +16,7 @@ public class CameraControl: MonoBehaviour {
     private float TOPBORDER;
 
     private void Start() {
-        MapController c = GameObject.Find("MAIN").GetComponent<MapController>();
+        MainController c = GameObject.Find("MAIN").GetComponent<MainController>();
         RIGHTBORDER = c.lengthX - LEFTBORDER;
         TOPBORDER = c.lengthY + BOTTOMBORDER;
         transform.position = new Vector3(LEFTBORDER, MAXZOOM, BOTTOMBORDER);

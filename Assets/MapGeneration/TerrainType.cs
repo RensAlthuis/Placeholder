@@ -5,11 +5,11 @@ namespace MapEngine {
 
     public class TerrainType {
 
-        public static TerrainType WATER = new TerrainType(0);
-        public static TerrainType LAND = new TerrainType(1);
+        public static TerrainType WATER = new TerrainType("water"); // I now made extra use of the type! :) it can be read like a string
+        public static TerrainType LAND = new TerrainType("land");
 
-        private int type; // no one knows about this. terrains little secret
-        private TerrainType (int type) {
+        private string type; // no one knows about this. terrains little secret
+        private TerrainType (string type) {
             this.type = type;
         }
 
@@ -21,6 +21,10 @@ namespace MapEngine {
         public Material GetMaterial() {
             if (!mats.ContainsKey(this)) throw new System.Exception("This type does not exist or is not defined");
             return mats[this];
+        }
+
+        public string GetName() {
+            return type;
         }
     }
 }

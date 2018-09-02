@@ -9,17 +9,17 @@ namespace MapEngine {
         // CONSTANTS
         private static int RELAXATION = 2;
 
-        public static Tile[] NewMap(MapController tileMap, int lengthX, int lengthY, int polygonNumber, int roughness, int heightDifference) {
+        public static Tile[] NewMap(MainController tileMap, int lengthX, int lengthY, int polygonNumber, int roughness, int heightDifference) {
             Rectf bounds = new Rectf(0, 0, lengthX, lengthY);
             int SEALEVEL = heightDifference / 2;
 
-            // 1 Creating points
+            // 1) Creating points
             List<Vector2f> points = CreateRandomPoint(bounds, polygonNumber);
 
-            // 2 Creating actual voronoi diagram, with lloyd relaxation thingies
+            // 2) Creating actual voronoi diagram, with lloyd relaxation thingies
             Voronoi voronoi = new Voronoi(points, bounds, RELAXATION);
 
-            // 3 Creating tiles
+            // 3) Creating tiles
             GameObject tiles = new GameObject() { name = "Tiles" };
             Tile[] tileArray = new Tile[polygonNumber]; // TILEARRAY
             foreach (Site s in voronoi.SitesIndexedByLocation.Values) {
@@ -28,7 +28,7 @@ namespace MapEngine {
                 tileArray[s.SiteIndex] = new Tile(tileMap, s, height, type, bounds, tiles.transform); // TILEARRAY
             }
 
-            // 4 Creating edges
+            // 4) Creating edges
             GameObject edges = new GameObject() { name = "Edges" };
             foreach (EdgeDelaunay e in voronoi.Edges) {
                 if (!e.Visible()) continue;

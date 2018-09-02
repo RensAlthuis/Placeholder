@@ -47,13 +47,13 @@ public class UnitObject : MonoBehaviour {
         }
 	}
 
-	public void MoveTo(Tile tile){
+	public void MoveTo(Tile tile){ // to slowly move to the tile
         dest = tile.Coord + new Vector3(0,BADHEIGHTFIX,0);
         move = true;
 		startDist = Vector3.Distance(transform.position, dest);
 	}
 
-    public void SpawnTo(Tile tile) {
+    public void SpawnTo(Tile tile) { // to instantly move to the selected tile
         transform.position = tile.Coord + new Vector3(0, BADHEIGHTFIX, 0);
     }
 }
