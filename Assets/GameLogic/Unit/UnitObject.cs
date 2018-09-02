@@ -10,7 +10,7 @@ public class UnitObject : MonoBehaviour {
     private Unit unit;
 
     public static UnitObject Create(Unit unit, UnitType type) {
-        return Instantiate(type.GetObject()).AddComponent<UnitObject>().Init(unit);
+        return Instantiate(type.GetGameObject()).AddComponent<UnitObject>().Init(unit);
     }
 
     private UnitObject Init(Unit unit) {

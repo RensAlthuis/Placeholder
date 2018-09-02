@@ -22,8 +22,8 @@ public class MapController : MonoBehaviour {
     public void Start() {
         tiles = MapGenerator.NewMap(this, lengthX, lengthY, polygonNumber, roughness, heightDifference);
         new Unit(this, tiles[0], UnitType.RED_BARRON);
-        new Unit(this, tiles[1], UnitType.RED_BARRON);
-        new Unit(this, tiles[2], UnitType.RED_BARRON);
+        new Unit(this, tiles[1], UnitType.MISTER_C);
+        new Unit(this, tiles[2], UnitType.MISTER_C);
     }
 
     internal bool SetSelected(Selectable obj) { // governs the selected and previous-selected objected
