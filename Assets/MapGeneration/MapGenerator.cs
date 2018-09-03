@@ -1,75 +1,57 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using csDelaunay;
-using MapGraphics;
 
-public static class MapGenerator {
+namespace MapEngine {
 
-    // CONSTANTS
-    private static int RELAXATION = 2;
+    public static class MapGenerator {
 
-    private static Rectf bounds;
-    private static int polygonNumber; // the amount of tiles
-    private static int roughness;
-    private static int heightDifference; // maybe both make these constants ?
-    private static int SEALEVEL;
+        // CONSTANTS
+        private static int RELAXATION = 2;
 
-    public static Tile[] NewMap(TileMap tileMap,int lengthX, int lengthY, int polygonNumber, int roughness, int heightDifference)
-    {
+        public static Tile[] NewMap(MainController tileMap, int lengthX, int lengthY, int polygonNumber, int roughness, int heightDifference) {
+            Rectf bounds = new Rectf(0, 0, lengthX, lengthY);
+            int SEALEVEL = heightDifference / 2;
 
-        MapGenerator.bounds = new Rectf(0, 0, lengthX, lengthY);
-        MapGenerator.polygonNumber = polygonNumber;
-        MapGenerator.roughness = (roughness == 0 ? 1 : roughness); //TODO: prolly change this to something more logical
-        MapGenerator.heightDifference = heightDifference;
-        MapGenerator.SEALEVEL = heightDifference/2;
+            // 1) Creating points
+            List<Vector2f> points = CreateRandomPoint(bounds, polygonNumber);
 
-        Tile[] tileList = new Tile[polygonNumber]; // we will definitely need this at some point
+            // 2) Creating actual voronoi diagram, with lloyd relaxation thingies
+            Voronoi voronoi = new Voronoi(points, bounds, RELAXATION);
 
-        // 1) Creating points
-        List<Vector2f> points = CreateRandomPoint(bounds);
+            // 3) Creating tiles
+            GameObject tiles = new GameObject() { name = "Tiles" };
+            Tile[] tileArray = new Tile[polygonNumber]; // TILEARRAY
+            foreach (Site s in voronoi.SitesIndexedByLocation.Values) {
+                float height = GenerateHeight(s.x, s.y, bounds, (roughness <= 0 ? 1 : roughness), heightDifference, SEALEVEL); //TODO: prolly change this to something more logical
+                TerrainType type = GenerateType(height, SEALEVEL);
+                tileArray[s.SiteIndex] = new Tile(tileMap, s, height, type, bounds, tiles.transform); // TILEARRAY
+            }
 
-        // 2) Creating actual voronoi diagram, with lloyd relaxation thingies
-        Voronoi voronoi = new Voronoi(points, bounds, RELAXATION);
+            // 4) Creating edges
+            GameObject edges = new GameObject() { name = "Edges" };
+            foreach (EdgeDelaunay e in voronoi.Edges) {
+                if (!e.Visible()) continue;
+                new Edge(edges, e);
+            }
 
-        // 3) Creating tiles
-        foreach (Site s in voronoi.SitesIndexedByLocation.Values){
-            float height = GenerateHeight(s.x, s.y);
-            TerrainType type = GenerateType(height);
-
-            TileObject tObj = TileObject.Create(tileMap, s, height, type.GetMaterial(), bounds);
-            Tile tile = new Tile(tileMap, tObj, type);
-            tileList[s.SiteIndex] = tile;
-            s.tile = tile;
+            return tileArray; // TILEARRAY
         }
 
-        //damn this is ugly :c
-        foreach(Site s in voronoi.SitesIndexedByLocation.Values){
-            s.tile.neighbors = s.getNeighbourTiles();
+        private static float GenerateHeight(float x, float y, Rectf bounds, int roughness, int heightDifference, int SEALEVEL) {
+            float height = Mathf.PerlinNoise(x / bounds.width * roughness, y / bounds.height * roughness) * heightDifference;
+            return (height < SEALEVEL ? SEALEVEL : height);
         }
 
-        // 4) Creating edges
-        GameObject edges = new GameObject() { name = "Edges" };
-        foreach (EdgeDelaunay e in voronoi.Edges) {
-            if(!e.Visible()) continue;
-            new Edge(edges, e);
+        private static TerrainType GenerateType(float height, int SEALEVEL) {
+            return (height == SEALEVEL ? TerrainType.WATER : TerrainType.LAND);
         }
 
-        return tileList;
-    }
-
-    private static float GenerateHeight(float x, float y) {
-        float height = Mathf.PerlinNoise(x / bounds.width * roughness, y / bounds.height * roughness) * heightDifference;
-        return (height < SEALEVEL ? SEALEVEL : height);
-    }
-
-    private static TerrainType GenerateType(float height) {
-        return (height == SEALEVEL ? TerrainType.WATER : TerrainType.LAND);
-    }
-
-    private static List<Vector2f> CreateRandomPoint(Rectf bounds) {
-        List<Vector2f> points = new List<Vector2f>();
-        for (int i = 0; i < polygonNumber; i++) { points.Add(new Vector2f(Random.Range(bounds.left, bounds.right), Random.Range(bounds.bottom, bounds.top))); }
-        return points;
+        private static List<Vector2f> CreateRandomPoint(Rectf bounds, int polygonNumber) {
+            List<Vector2f> points = new List<Vector2f>();
+            for (int i = 0; i < polygonNumber; i++) { points.Add(new Vector2f(Random.Range(bounds.left, bounds.right), Random.Range(bounds.bottom, bounds.top))); }
+            return points;
+        }
     }
 }
 

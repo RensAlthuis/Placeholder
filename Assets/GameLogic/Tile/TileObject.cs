@@ -1,38 +1,70 @@
 using UnityEngine;
-using MapGraphics;
+using MapEngine;
+using csDelaunay;
 
 public class TileObject : MonoBehaviour {
 
     // CONSTANTS
     private static int DEPTH = -30;
-    private int numCorners;
-    private int index;
-    private TileMap tileMap;
 
-    public static TileObject Create(TileMap tileMap, csDelaunay.Site s, float height, Material mat, Rectf bounds) { // yey nicer code
+    private Tile tile;
 
-        //Maybe move this to MapGenerator
-        Vector3[] hull = s.Region(bounds).ConvertAll(x => new Vector3(x.x - s.x, 0, x.y - s.y)).ToArray();
-        Vector3 pos = new Vector3(s.x, height, s.y);
+    private TerrainType type;
 
-        //creating the object
+    public static TileObject Create(Tile tile, Site s, float height, TerrainType type, Rectf bounds, Transform transformMap) {
         GameObject obj = new GameObject();
         obj.AddComponent<MeshFilter>();
         obj.AddComponent<MeshCollider>();
         obj.AddComponent<MeshRenderer>();
-        return obj.AddComponent<TileObject>().Init(tileMap, s.SiteIndex, pos, hull, mat);
+        return obj.AddComponent<TileObject>().Init(tile, s, height, type, bounds, transformMap);
     }
 
-    private TileObject Init(TileMap tileMap, int index, Vector3 pos, Vector3[] hull, Material mat){
+    // ====================== OBJECT INTERACTION =============================
 
-        this.tileMap = tileMap;
-        this.index = index;
+    private void OnMouseDown() { // first to know if it has been clicked
+        tile.Select();
+    }
 
-        // 1) setting the object's data
-        name = "Tile" + index;
+    public void SetSelected() { // when the tile is selected
+        float H, S, V;
+        Color.RGBToHSV(type.GetMaterial().color, out H, out S, out V);
+        GetComponent<MeshRenderer>().material.color = Color.HSVToRGB(H, S, 1);
+    }
+
+    public void SetDeselected() { // when the tile is deselected
+        GetComponent<MeshRenderer>().material.color = type.GetMaterial().color;
+    }
+
+    // an example of 'highlight'
+
+    private float currV = 0; // because of this, the world 'awakes'
+
+    private void Update() {
+        float H, S, V;
+        Color.RGBToHSV(type.GetMaterial().color, out H, out S, out V);
+        GetComponent<MeshRenderer>().material.color = Color.HSVToRGB(H, S, currV);
+        currV = Mathf.MoveTowards(currV, V, 0.01f);
+    }
+
+    public void Hightlight() {
+        currV = 1;
+    }
+
+    // ====================== TILE MESH GENERATION =============================
+
+    private int numCorners;
+
+    private TileObject Init(Tile tile, Site s, float height, TerrainType type, Rectf bounds, Transform transformMap) {
+        Vector3[] hull = s.Region(bounds).ConvertAll(x => new Vector3(x.x - s.x, 0, x.y - s.y)).ToArray();
+        Vector3 pos = new Vector3(s.x, height, s.y);
+        this.tile = tile;
+        this.type = type;
+
+        // 1) Setting the object's data
+        name = "Tile" + s.SiteIndex;
         numCorners = hull.Length;
         transform.position = pos;
-        transform.SetParent(tileMap.transform);
+        transform.SetParent(transformMap);
 
         // 2) Creating the mesh
         Mesh mesh = new Mesh();
@@ -79,27 +111,15 @@ public class TileObject : MonoBehaviour {
         // mesh.normals = normals;
         // mesh.triangles = Triangles();
         GetComponent<MeshFilter>().mesh = mesh;
-        GetComponent<MeshRenderer>().material = mat;
+        GetComponent<MeshRenderer>().material = type.GetMaterial();
         GetComponent<MeshCollider>().sharedMesh = mesh;
 
         return this;
     }
 
-    private void OnMouseDown() {
-        Debug.Log("Click" + index);
-        tileMap.setSelected(tileMap.tiles[index]);
-    }
-
-    public void setColor(Color col){
-        GetComponent<MeshRenderer>().material.color = col;
-    }
-
-
-    //TODO: fix side panels!
     private Vector2[] Uvs(Vector3[] verts, float minX, float minY, float div){
         Vector2[] uvs = new Vector2[verts.Length];
         Vector2 mid = new Vector2(0.5f, 0.5f);
-        Debug.Log(index);
         for(int i = 0; i < verts.Length; i++){
             // uvs[i*3] = mid;
             uvs[i] = new Vector2((verts[i].x+minX)/div, (verts[i].z+minY)/div);
