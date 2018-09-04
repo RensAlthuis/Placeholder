@@ -5,6 +5,7 @@ public abstract class Selectable : MonoBehaviour{ // All things that can be sele
 
     MeshCollider meshCollider;
     protected bool selected;
+    public static Selectable current;
 
     public delegate void onSelect(Selectable obj);
     public static event onSelect Click;

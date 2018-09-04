@@ -15,25 +15,21 @@ public class TileMap : MonoBehaviour{
     public int roughness = 5;
     public int heightDifference = 10;
 
-    private Selectable selected;
-
     public void Start(){
         tiles = MapGenerator.NewMap(this, lengthX, lengthY, amountTiles, roughness, heightDifference, tilePrefab);
         Selectable.Click += SetSelected;
     }
 
     public void SetSelected(Selectable obj) { // governs the selected and previous-selected objected
-        if(obj.GetType() != typeof(TileSelectable)) return;
-        //deselect current selection
-        if(selected != null){
-            selected.Deselect();
+        if(Selectable.current != null){
+            Selectable.current.Deselect();
         }
 
-        //set new selection if given
-        if(obj != null){
-            selected = obj;
-            obj.Select();
-        }
+        if(obj == null) return;
+        if(obj.GetType() != typeof(TileSelectable)) return;
+
+        Selectable.current = obj;
+        obj.Select();
     }
 
     public void DeselectAll() {

@@ -15,6 +15,6 @@ public class UnitData : MonoBehaviour{
 
     public void Init(TileData currentTile){
         this.currentTile = currentTile;
-        unitMovement.SpawnTo(currentTile);
+        unitMovement.SpawnTo(this.currentTile);
     }
 }
