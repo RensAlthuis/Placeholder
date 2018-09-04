@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44300273, g: 0.49219579, b: 0.5719249, a: 1}
+  m_IndirectSpecularColor: {r: 0.44300318, g: 0.49219626, b: 0.57192606, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -146,9 +146,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 48383514}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 914c340ebfb6bae4d96af465c3472d0e, type: 3}
+  m_Script: {fileID: 11500000, guid: e89da487d416ad249863fa6cf66ae247, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  LEFTBORDER: 0
+  BOTTOMBORDER: -10
+  RIGHTBORDER: 200
+  TOPBORDER: 200
 --- !u!20 &48383517
 Camera:
   m_ObjectHideFlags: 0
@@ -213,6 +217,7 @@ GameObject:
   - component: {fileID: 285515359}
   - component: {fileID: 285515358}
   - component: {fileID: 285515357}
+  - component: {fileID: 285515361}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -296,6 +301,20 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &285515361
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 285515356}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4bc692d159a188a4c9e460ed06f0c593, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  selectedPanel: {fileID: 0}
+  selectedName: {fileID: 0}
+  selectedImage: {fileID: 0}
 --- !u!1 &339373786
 GameObject:
   m_ObjectHideFlags: 0
@@ -375,7 +394,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 498815000}
-  - component: {fileID: 498815001}
+  - component: {fileID: 498814999}
   m_Layer: 0
   m_Name: MAIN
   m_TagString: Untagged
@@ -383,6 +402,20 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &498814999
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 498814998}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f0b17ce0c85eeee44a319d98db6457c5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tileMap: {fileID: 1050482576}
+  ui: {fileID: 285515361}
+  unitPrefab: {fileID: 1269830998908102, guid: 9706fa17d10b4d64dbee9be0f34d4a92, type: 2}
 --- !u!4 &498815000
 Transform:
   m_ObjectHideFlags: 0
@@ -396,25 +429,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &498815001
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 498814998}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 34a7cc206e873784ea2ac51e1de0d506, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  lengthX: 200
-  lengthY: 200
-  amountTiles: 200
-  roughness: 5
-  heightDifference: 10
-  selectedPanel: {fileID: 339373786}
-  selectedName: {fileID: 1964162842}
-  selectedImage: {fileID: 753302281}
 --- !u!1 &753302279
 GameObject:
   m_ObjectHideFlags: 0
@@ -484,6 +498,52 @@ CanvasRenderer:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 753302279}
   m_CullTransparentMesh: 0
+--- !u!1 &1050482575
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1050482577}
+  - component: {fileID: 1050482576}
+  m_Layer: 0
+  m_Name: TileMap
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1050482576
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1050482575}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8ee546d574ef04c4e93f84ecc917da70, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tilePrefab: {fileID: 1491599815289052, guid: a7fa706c58303904991d85e324ac966c, type: 2}
+  lengthX: 200
+  lengthY: 200
+  amountTiles: 2000
+  roughness: 5
+  heightDifference: 10
+--- !u!4 &1050482577
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1050482575}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1194490794
 GameObject:
   m_ObjectHideFlags: 0

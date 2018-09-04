@@ -7,10 +7,10 @@ namespace csDelaunay {
 	public class Site : ICoord {
 
 		//yeah this is not pretty but it works I think
-		public Tile tile;
-		public Tile[] getNeighbourTiles(){
+		public TileData tile;
+		public TileData[] getNeighbourTiles(){
 			List<Site> sites = NeighborSites();
-			Tile[] tiles = new Tile[sites.Count];
+			TileData[] tiles = new TileData[sites.Count];
 			for(int i = 0; i < sites.Count; i++){
 				tiles[i] = sites[i].tile;
 			}

@@ -3,8 +3,10 @@ using UnityEngine;
 public class CameraControl: MonoBehaviour {
 
     // CONSTANTS // These variables DO NOT depend on the size of the map!! though they do depend on the height and angle of the camera
-    private const float LEFTBORDER = 0; // decreasing the amount at which you can go sideways
-    private const float BOTTOMBORDER = -10; // increasing the amount at which you can go down
+    [SerializeField] private float LEFTBORDER = 0; // decreasing the amount at which you can go sideways
+    [SerializeField]private float BOTTOMBORDER = -10; // increasing the amount at which you can go down
+    [SerializeField]private float RIGHTBORDER = 200;
+    [SerializeField]private float TOPBORDER = 200;
 
     private bool dragging;
     private Vector3 origin;
@@ -12,13 +14,8 @@ public class CameraControl: MonoBehaviour {
     public const float MINZOOM = 20.0f;
     public const float MAXZOOM = 40.0f;
     
-    private float RIGHTBORDER;
-    private float TOPBORDER;
 
     private void Start() {
-        MainController c = GameObject.Find("MAIN").GetComponent<MainController>();
-        RIGHTBORDER = c.lengthX - LEFTBORDER;
-        TOPBORDER = c.lengthY + BOTTOMBORDER;
         transform.position = new Vector3(LEFTBORDER, MAXZOOM, BOTTOMBORDER);
     }
 

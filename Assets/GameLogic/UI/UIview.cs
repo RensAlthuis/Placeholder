@@ -12,15 +12,15 @@ public class UIview {
         this.selectedPanel = selectedPanel;
         this.selectedName = selectedName;
         this.selectedImage = selectedImage;
-        Unselect();
+        // Unselect();
 	}
 
-    public void Selected(Selectable selected) {
-        selectedPanel.SetActive(true);
-        selectedName.text = selected.Name();
-    }
+    // public void Selected(Selectable selected) {
+    //     selectedPanel.SetActive(true);
+    //     selectedName.text = selected.Name();
+    // }
 
-    public void Unselect() {
-        selectedPanel.SetActive(false);
-    }
+    // public void Unselect() {
+    //     selectedPanel.SetActive(false);
+    // }
 }

@@ -9,7 +9,7 @@ namespace MapEngine {
         // CONSTANTS
         private static int RELAXATION = 2;
 
-        public static Tile[] NewMap(MainController tileMap, int lengthX, int lengthY, int polygonNumber, int roughness, int heightDifference) {
+        public static TileData[] NewMap(TileMap tileMap, int lengthX, int lengthY, int polygonNumber, int roughness, int heightDifference, GameObject tilePrefab) {
             Rectf bounds = new Rectf(0, 0, lengthX, lengthY);
             int SEALEVEL = heightDifference / 2;
 
@@ -21,11 +21,21 @@ namespace MapEngine {
 
             // 3) Creating tiles
             GameObject tiles = new GameObject() { name = "Tiles" };
-            Tile[] tileArray = new Tile[polygonNumber]; // TILEARRAY
+            TileData[] tileArray = new TileData[polygonNumber]; // TILEARRAY
             foreach (Site s in voronoi.SitesIndexedByLocation.Values) {
+                //create properties
                 float height = GenerateHeight(s.x, s.y, bounds, (roughness <= 0 ? 1 : roughness), heightDifference, SEALEVEL); //TODO: prolly change this to something more logical
                 TerrainType type = GenerateType(height, SEALEVEL);
-                tileArray[s.SiteIndex] = new Tile(tileMap, s, height, type, bounds, tiles.transform); // TILEARRAY
+                Vector3[] hull = s.Region(bounds).ConvertAll(x => new Vector3(x.x - s.x, 0, x.y - s.y)).ToArray();
+                Mesh mesh = TileMesh.Create(hull);
+                Vector3 pos = new Vector3(s.x, height, s.y);
+
+                //initialise Tile
+                GameObject tileObj = GameObject.Instantiate(tilePrefab, tileMap.transform);
+                tileArray[s.SiteIndex] = tileObj.GetComponent<TileData>();
+                tileArray[s.SiteIndex].Init(tileMap, s.SiteIndex, pos, mesh, type); // TILEARRAY
+                tileObj.GetComponent<TileSelectable>().SetCollisionMesh(mesh);
+                s.tile = tileArray[s.SiteIndex]; //ugly stuff
             }
 
             // 4) Creating edges
@@ -44,7 +54,7 @@ namespace MapEngine {
         }
 
         private static TerrainType GenerateType(float height, int SEALEVEL) {
-            return (height == SEALEVEL ? TerrainType.WATER : TerrainType.LAND);
+            return (height == SEALEVEL ? TerrainLoader.WATER : TerrainLoader.LAND);
         }
 
         private static List<Vector2f> CreateRandomPoint(Rectf bounds, int polygonNumber) {

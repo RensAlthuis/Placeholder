@@ -5,8 +5,8 @@ public class Edge {
 
     private EdgeObject edgeObj;
 
-    private Tile left;
-    private Tile right;
+    private TileData left;
+    private TileData right;
 
     public Edge (GameObject parent, EdgeDelaunay e) {
         left  = e.LeftSite.tile;
