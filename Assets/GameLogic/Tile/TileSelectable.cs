@@ -36,9 +36,9 @@ public class TileSelectable : Selectable
         if(on){
             float H, S, V;
             Color.RGBToHSV(TerrainLoader.GetMaterial(tileData.type).color, out H, out S, out V);
-            GetComponent<MeshRenderer>().material.color = Color.HSVToRGB(H, S, 1);
+            meshRenderer.material.color = Color.HSVToRGB(H, S, 1);
         }else{
-            GetComponent<MeshRenderer>().material = TerrainLoader.GetMaterial(tileData.type);
+            meshRenderer.material = TerrainLoader.GetMaterial(tileData.type);
         }
     }
 }

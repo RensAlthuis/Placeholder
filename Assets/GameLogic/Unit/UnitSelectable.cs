@@ -2,11 +2,7 @@ using UnityEngine;
 
 
 public class UnitSelectable : Selectable{
-    UnitMovement unitMovement;
 
-    protected override void Awake(){
-        base.Awake();
-    }
     public override void Select() { // when the unit is selected
         selected = true;
     }

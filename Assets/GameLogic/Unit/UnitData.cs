@@ -5,16 +5,15 @@ using UnityEngine;
 public class UnitData : MonoBehaviour{
 
     private TileData currentTile;
-    private UnitType type;
+    [SerializeField] private UnitType type;
     private UnitMovement unitMovement;
     private bool selected;
 
     void Awake(){
         unitMovement = GetComponent<UnitMovement>();
-        type = GetComponent<UnitType>();
     }
 
-    public void Init(TileData currentTile) {
+    public void Init(TileData currentTile){
         this.currentTile = currentTile;
         unitMovement.SpawnTo(currentTile);
     }

@@ -219,7 +219,7 @@ GameObject:
   - component: {fileID: 285515357}
   - component: {fileID: 285515361}
   m_Layer: 5
-  m_Name: Canvas
+  m_Name: UI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -312,9 +312,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4bc692d159a188a4c9e460ed06f0c593, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  selectedPanel: {fileID: 0}
-  selectedName: {fileID: 0}
-  selectedImage: {fileID: 0}
+  selectedPanel: {fileID: 339373786}
+  selectedName: {fileID: 1964162842}
+  selectedImage: {fileID: 753302281}
 --- !u!1 &339373786
 GameObject:
   m_ObjectHideFlags: 0
@@ -415,7 +415,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tileMap: {fileID: 1050482576}
   ui: {fileID: 285515361}
-  unitPrefab: {fileID: 1269830998908102, guid: 9706fa17d10b4d64dbee9be0f34d4a92, type: 2}
 --- !u!4 &498815000
 Transform:
   m_ObjectHideFlags: 0

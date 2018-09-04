@@ -44,7 +44,6 @@ public static class TileMesh{
         }
 
         Vector2[] uvs = new Vector2[verts.Length];
-        Vector2 mid = new Vector2(0.5f, 0.5f);
         for(int i = 0; i < verts.Length; i++){
             uvs[i] = new Vector2((verts[i].x+minX)/div, (verts[i].z+minY)/div);
         }

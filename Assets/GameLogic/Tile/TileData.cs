@@ -8,11 +8,11 @@ using csDelaunay;
 public class TileData : MonoBehaviour{
     private MeshFilter meshFilter;
     private MeshRenderer meshRenderer;
+    public TerrainType type;
     private List<Edge> edges;
 
     public TileMap tileMap{get; private set;}
     public TileData[] neighbors{get; private set;}
-    public TerrainType type{get; private set;}
     public Vector3 pos{get; private set;}
     public int index {get; private set;}
 
@@ -35,5 +35,9 @@ public class TileData : MonoBehaviour{
 
     public void addEdge(Edge e){
         edges.Add(e);
+    }
+
+    public void setNeighbours(TileData[] neighbors){
+        this.neighbors = neighbors;
     }
 }

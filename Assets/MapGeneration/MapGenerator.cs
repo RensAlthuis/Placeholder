@@ -20,7 +20,6 @@ namespace MapEngine {
             Voronoi voronoi = new Voronoi(points, bounds, RELAXATION);
 
             // 3) Creating tiles
-            GameObject tiles = new GameObject() { name = "Tiles" };
             TileData[] tileArray = new TileData[polygonNumber]; // TILEARRAY
             foreach (Site s in voronoi.SitesIndexedByLocation.Values) {
                 //create properties
@@ -43,6 +42,12 @@ namespace MapEngine {
             foreach (EdgeDelaunay e in voronoi.Edges) {
                 if (!e.Visible()) continue;
                 new Edge(edges, e);
+            }
+
+            // this has to be here because all tiles need to exist before we can assign neighbours
+            // it's ugly but only takes a couple miliseconds so.. oh well
+            foreach(Site s in voronoi.SitesIndexedByLocation.Values){
+                s.tile.setNeighbours(s.getNeighbourTiles());
             }
 
             return tileArray; // TILEARRAY

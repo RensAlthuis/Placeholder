@@ -3,13 +3,6 @@ using UnityEngine;
 
 namespace MapEngine {
 
-    public struct TerrainType{
-        public int id;
-        public string name;
-        public string path;
-    }
-
-
     public static class TerrainLoader {
 
         public static TerrainType DEFAULT = new TerrainType(){id = 0, name = "Default", path = "Materials/Default"};
@@ -21,6 +14,7 @@ namespace MapEngine {
         };
 
         public static Material GetMaterial(TerrainType type) {
+
             if (!mats.ContainsKey(type)){
                 mats[type] = Resources.Load<Material>(type.path);
             }
