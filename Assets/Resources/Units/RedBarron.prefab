@@ -137,6 +137,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d966c90b4c6db824fb478a0cbe1b3a32, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  type:
+    id: 1
+    name: Red Barron
+    path: Units/RedBarron
 --- !u!114 &114608462191905370
 MonoBehaviour:
   m_ObjectHideFlags: 1

@@ -17,7 +17,7 @@ public static class TileMesh{
         Vector2[] uvs = Uvs(verts, hull);
 
         mesh.vertices = verts;
-        mesh.triangles = Triangles(verts.Length);
+        mesh.triangles = Triangles(hull.Length);
         mesh.uv = uvs;
         mesh.normals = normals;
 
@@ -60,81 +60,74 @@ public static class TileMesh{
 
     private static Vector3[] Verts(Vector3[] hull){
         int numCorners = hull.Length;
-        Vector3[] verts= new Vector3[numCorners  * 9];
-
-        int offset = numCorners  * 3;
+        Vector3[] verts = new Vector3[1 + numCorners*5];
+        verts[0] = Vector3.zero;
 
         Vector3 p;
         Vector3 p1;
-        for(int i = 0; i < numCorners-1 ; i++){
+
+        int n;
+        int offset = numCorners;
+        for(int i = 0; i < numCorners -1; i++){
             p = hull[i];
             p1 = hull[i+1];
 
-            //top plane
-            verts[i*3] = Vector3.zero;
-            verts[i*3+2] = p;
-            verts[i*3+1] = p1;
+            //Top plane
+            verts[i+1] = p;
 
-            //side planes
-            verts[offset + (i*6)] = p;
-            verts[offset + (i*6)+2] = new Vector3(p.x, p.y - DEPTH, p.z);
-            verts[offset + (i*6)+1] = new Vector3(p1.x, p1.y - DEPTH, p1.z);
-            verts[offset + (i*6)+3] = p;
-            verts[offset + (i*6)+5] = new Vector3(p1.x, p1.y - DEPTH, p1.z);
-            verts[offset + (i*6)+4] = p1;
+            n = i*4 + 1;
+            //Side plane
+            verts[offset + n] = p;
+            verts[offset + n+1] = new Vector3(p.x, p.y - DEPTH, p.z);
+            verts[offset + n+2] = new Vector3(p1.x, p1.y - DEPTH, p1.z);
+            verts[offset + n+3] = p1;
         }
-        //fix loopback
-        int index = numCorners -1;
 
-        verts[index*3] = Vector3.zero;
-        verts[index*3+2] = hull[index];
-        verts[index*3+1] = hull[0];
-
-        p = hull[index];
-        p1 = hull[0];
-        verts[offset + (index*6)] = p;
-        verts[offset + (index*6)+2] = new Vector3(p.x, p.y - DEPTH, p.z);
-        verts[offset + (index*6)+1] = new Vector3(p1.x, p1.y - DEPTH, p1.z);
-        verts[offset + (index*6)+3] = p;
-        verts[offset + (index*6)+5] = new Vector3(p1.x, p1.y - DEPTH, p1.z);
-        verts[offset + (index*6)+4] = p1;
-
-        return verts;
+            //fix loopback
+            n = numCorners -1;
+            verts[n+1] = hull[n];
+            verts[offset + n*4+1] = hull[n];
+            verts[offset + n*4+2] = new Vector3(hull[n].x, hull[n].y - DEPTH, hull[n].z);
+            verts[offset + n*4+3] = new Vector3(hull[0].x, hull[0].y - DEPTH, hull[0].z);
+            verts[offset + n*4+4] = hull[0];
+            return verts;
     }
 
-    private static int[] Triangles(int count){
+    private static int[] Triangles(int numCorners){
 
-        int[] triangles = new int[count];
-        for(int i = 0; i < count; i++){
-            triangles[i] = i;
-        }
-
-        return triangles;
-
-        /* USING DUPLICATE VERTS FOR NOW, PROLLY SHOULD FIX THAT
         int[] triangles = new int[numCorners  * 9];
-        int offset = numCorners  * 3;
-        for(int i = 0; i < numCorners ; i++){
+        int offset = numCorners*3;
+        int n;
+        for(int i = 0; i < numCorners-1; i++){
             //top plane
             triangles[i*3] = 0;
             triangles[i*3+2] = i+1;
             triangles[i*3+1] = i+2;
 
-            //side planes
-            triangles[offset + (i*6)] = i+1;
-            triangles[offset + (i*6)+2] = i+numCorners +1;
-            triangles[offset + (i*6)+1] = i+2;
-            triangles[offset + (i*6)+3] = i+2;
-            triangles[offset + (i*6)+5] = i+numCorners +1;
-            triangles[offset + (i*6)+4] = i+2+numCorners ;
+            // //side planes
+            n = i*6;
+            triangles[offset + n]   = numCorners + i*4+1;
+            triangles[offset + n+2] = numCorners + i*4+2;
+            triangles[offset + n+1] = numCorners + i*4+3;
+            triangles[offset + n+3] = numCorners + i*4+3;
+            triangles[offset + n+5] = numCorners + i*4+4;
+            triangles[offset + n+4] = numCorners + i*4+1;
         }
         //fix loopback
-        triangles[offset - 2] = 1;
-        triangles[triangles.Length - 3] = 1;
-        triangles[triangles.Length - 5] = 1;
-        triangles[triangles.Length - 2] = numCorners +1;
+        int a = numCorners-1;
+        triangles[a*3]   = 0;
+        triangles[a*3+2] = a+1;
+        triangles[a*3+1] = 1;
+
+        n = a*6;
+        triangles[offset + n]   = numCorners + a*4+1;
+        triangles[offset + n+2] = numCorners + a*4+2;
+        triangles[offset + n+1] = numCorners + a*4+3;
+        triangles[offset + n+3] = numCorners + a*4+3;
+        triangles[offset + n+5] = numCorners + a*4+4;
+        triangles[offset + n+4] = numCorners + a*4+1;
 
         return triangles;
-        */
     }
+
 }
