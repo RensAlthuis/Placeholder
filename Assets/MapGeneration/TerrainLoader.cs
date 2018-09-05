@@ -5,9 +5,9 @@ namespace MapEngine {
 
     public static class TerrainLoader {
 
-        public static TerrainType DEFAULT = new TerrainType(){id = 0, name = "Default", path = "Materials/Default"};
-        public static TerrainType WATER = new TerrainType(){id = 1, name = "Water", path = "Materials/Terrain/Water"};
-        public static TerrainType LAND = new TerrainType(){id = 2, name = "Grass", path = "Materials/Terrain/Grass"};
+        public static TerrainType DEFAULT = new TerrainType(0, "Default", "Materials/Default");
+        public static TerrainType WATER = new TerrainType(1, "Water", "Materials/Terrain/Water");
+        public static TerrainType LAND = new TerrainType(2, "Grass", "Materials/Terrain/Grass");
 
         private static Dictionary<TerrainType, Material> mats = new Dictionary<TerrainType, Material>(){
             {DEFAULT, Resources.Load<Material>(DEFAULT.path)}

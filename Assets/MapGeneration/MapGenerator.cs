@@ -26,17 +26,20 @@ namespace MapEngine {
                 float height = GenerateHeight(s.x, s.y, bounds, (roughness <= 0 ? 1 : roughness), heightDifference, SEALEVEL); //TODO: prolly change this to something more logical
                 TerrainType type = GenerateType(height, SEALEVEL);
                 Vector3[] hull = s.Region(bounds).ConvertAll(x => new Vector3(x.x - s.x, 0, x.y - s.y)).ToArray();
-                Mesh mesh = TileMesh.Create(hull);
                 Vector3 pos = new Vector3(s.x, height, s.y);
+                Mesh mesh = TileMesh.Create(hull);
 
                 //initialise Tile
                 GameObject tileObj = GameObject.Instantiate(tilePrefab, tileMap.transform);
                 tileObj.tag = "Tile";
                 tileArray[s.SiteIndex] = tileObj.GetComponent<TileData>();
                 tileArray[s.SiteIndex].Init(tileMap, s.SiteIndex, pos, mesh, type); // TILEARRAY
+                if(type.Equals(TerrainLoader.WATER)){
+                    tileObj.GetComponent<MeshRenderer>().receiveShadows = false;
+                    tileObj.GetComponent<MeshRenderer>().shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
+                }
                 tileObj.GetComponent<TileSelectable>().SetCollisionMesh(mesh);
                 s.tile = tileArray[s.SiteIndex]; //ugly stuff
-                tileObj.isStatic = true;
             }
 
             GameObject[] objects = GameObject.FindGameObjectsWithTag("Tile");

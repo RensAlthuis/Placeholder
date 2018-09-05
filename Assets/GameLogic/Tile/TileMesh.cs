@@ -13,7 +13,7 @@ public static class TileMesh{
         Mesh mesh = new Mesh();
 
         Vector3[] verts = Verts(hull);
-        Vector3[] normals = Normals(verts);
+        Vector3[] normals = Normals(verts, hull.Length);
         Vector2[] uvs = Uvs(verts, hull);
 
         mesh.vertices = verts;
@@ -50,11 +50,25 @@ public static class TileMesh{
         return uvs;
     }
 
-    public static Vector3[] Normals(Vector3[] verts){
+    public static Vector3[] Normals(Vector3[] verts, int numCorners){
         Vector3[] normals = new Vector3[verts.Length];
-        for(int i = 0; i < verts.Length; i++){
+        //top verts
+        for(int i = 0; i < numCorners+1; i++){
             normals[i] = Vector3.up;
         }
+
+        int offset = numCorners+1;
+        for(int i = 0; i< numCorners; i++){
+            int n = offset + i*4;
+            Vector3 A = verts[n] - verts[n+1];
+            Vector3 B = verts[n+2] - verts[n+1];
+            Vector3 dir = Vector3.Cross(A, B).normalized;
+            normals[n] = dir;
+            normals[n + 1] = dir;
+            normals[n + 2] = dir;
+            normals[n + 3] = dir;
+        }
+
         return normals;
     }
 
