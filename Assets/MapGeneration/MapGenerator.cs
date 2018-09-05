@@ -31,12 +31,16 @@ namespace MapEngine {
 
                 //initialise Tile
                 GameObject tileObj = GameObject.Instantiate(tilePrefab, tileMap.transform);
+                tileObj.tag = "Tile";
                 tileArray[s.SiteIndex] = tileObj.GetComponent<TileData>();
                 tileArray[s.SiteIndex].Init(tileMap, s.SiteIndex, pos, mesh, type); // TILEARRAY
                 tileObj.GetComponent<TileSelectable>().SetCollisionMesh(mesh);
                 s.tile = tileArray[s.SiteIndex]; //ugly stuff
+                tileObj.isStatic = true;
             }
 
+            GameObject[] objects = GameObject.FindGameObjectsWithTag("Tile");
+            StaticBatchingUtility.Combine(objects, tileMap.gameObject);
             // 4) Creating edges
             GameObject edges = new GameObject() { name = "Edges" };
             foreach (EdgeDelaunay e in voronoi.Edges) {
