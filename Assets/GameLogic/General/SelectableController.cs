@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 
-[RequireComponent(typeof(MeshCollider))]
 public class SelectableController : MonoBehaviour{ // All things that can be selected
 
     public static ISelectable current;
@@ -8,10 +7,16 @@ public class SelectableController : MonoBehaviour{ // All things that can be sel
     public delegate void onSelect(ISelectable obj);
     public static event onSelect Click = delegate {};
 
-    public static void doClick(ISelectable obj){
+    private void Awake(){
+        MouseController m = GameObject.FindObjectOfType<MouseController>();
+        m.leftClick += doClick;
+    }
+
+    private static void doClick(GameObject obj){
+            ISelectable s = obj.GetComponent<ISelectable>();
             current?.Deselect();
-            current = obj;
-            Click(obj);
+            current = s;
+            Click(s);
     }
 
 }

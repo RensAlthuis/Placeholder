@@ -8,7 +8,7 @@ public class TileSelectable : MonoBehaviour, ISelectable
 {
 
     private MeshRenderer meshRenderer;
-    TileData tileData;
+    private TileData tileData;
     private bool selected;
 
     private void Awake(){
@@ -19,10 +19,6 @@ public class TileSelectable : MonoBehaviour, ISelectable
     public string Name()
     {
         return name;
-    }
-
-    public void OnMouseDown(){
-        SelectableController.doClick(this);
     }
 
     public void Select()

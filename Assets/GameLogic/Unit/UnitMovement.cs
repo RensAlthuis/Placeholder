@@ -7,9 +7,6 @@ public class UnitMovement : MonoBehaviour {
     private bool move;
     private const float SPEED = 1f;
 
-    void Awake(){
-    }
-
     // Update is called once per frame, so to keep to the same speed, FixedUpdate should be used
     void Update () {
         if (move) {
