@@ -38,7 +38,7 @@ namespace MapEngine {
                     tileObj.GetComponent<MeshRenderer>().receiveShadows = false;
                     tileObj.GetComponent<MeshRenderer>().shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
                 }
-                tileObj.GetComponent<TileSelectable>().SetCollisionMesh(mesh);
+                tileObj.GetComponent<MeshCollider>().sharedMesh = mesh;
                 s.tile = tileArray[s.SiteIndex]; //ugly stuff
             }
 

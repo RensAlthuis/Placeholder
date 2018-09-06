@@ -17,18 +17,18 @@ public class TileMap : MonoBehaviour{
 
     public void Start(){
         tiles = MapGenerator.NewMap(this, lengthX, lengthY, amountTiles, roughness, heightDifference, tilePrefab);
-        Selectable.Click += SetSelected;
+        SelectableController.Click += SetSelected;
     }
 
-    public void SetSelected(Selectable obj) { // governs the selected and previous-selected objected
-        if(Selectable.current != null){
-            Selectable.current.Deselect();
+    public void SetSelected(ISelectable obj) { // governs the selected and previous-selected objected
+        if(SelectableController.current != null){
+            SelectableController.current.Deselect();
         }
 
         if(obj == null) return;
-        if(obj.GetType() != typeof(TileSelectable)) return;
+        if(! (obj is TileSelectable)) return;
 
-        Selectable.current = obj;
+        SelectableController.current = obj;
         obj.Select();
     }
 

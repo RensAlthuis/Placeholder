@@ -8,10 +8,10 @@ public class UI : MonoBehaviour{
     public Image selectedImage;
 
     private void Start(){
-        Selectable.Click += UpdatePanel;
+        SelectableController.Click += UpdatePanel;
     }
 
-    private void UpdatePanel(Selectable selected){
+    private void UpdatePanel(ISelectable selected){
         if (selected == null){
             selectedPanel.SetActive(false);
         }else{

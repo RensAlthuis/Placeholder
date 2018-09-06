@@ -1,21 +1,24 @@
 using UnityEngine;
 
 
-public class UnitSelectable : Selectable{
+[RequireComponent(typeof(MeshCollider))]
+public class UnitSelectable : MonoBehaviour, ISelectable{
 
-    public override void Select() { // when the unit is selected
-        if(Selectable.current != null){
-            Selectable.current.Deselect();
-        }
-        selected = true;
-        Selectable.current = this;
+    private bool selected;
+
+    private void OnMouseDown(){
+        SelectableController.doClick(this);
     }
 
-    public override void Deselect() { // when the unit is deselected
+    public void Select() { // when the unit is selected
+        selected = true;
+    }
+
+    public void Deselect() { // when the unit is deselected
         selected = false;
     }
 
-    public override string Name()
+    public string Name()
     {
         return name;
     }

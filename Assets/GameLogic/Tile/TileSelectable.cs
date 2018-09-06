@@ -3,30 +3,35 @@ using MapEngine;
 
 [RequireComponent(typeof(MeshRenderer))]
 [RequireComponent(typeof(TileData))]
-public class TileSelectable : Selectable
+[RequireComponent(typeof(MeshCollider))]
+public class TileSelectable : MonoBehaviour, ISelectable
 {
 
     private MeshRenderer meshRenderer;
     TileData tileData;
+    private bool selected;
 
-    protected override void Awake(){
-        base.Awake();
+    private void Awake(){
         meshRenderer = GetComponent<MeshRenderer>();
         tileData = GetComponent<TileData>();
     }
 
-    public override string Name()
+    public string Name()
     {
         return name;
     }
 
-    public override void Select()
+    public void OnMouseDown(){
+        SelectableController.doClick(this);
+    }
+
+    public void Select()
     {
         selected = true;
         HighLight(true);
     }
 
-    public override void Deselect()
+    public void Deselect()
     {
         selected = false;
         HighLight(false);
