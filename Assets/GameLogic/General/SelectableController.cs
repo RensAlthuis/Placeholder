@@ -16,6 +16,7 @@ public class SelectableController : MonoBehaviour{ // All things that can be sel
             ISelectable s = obj.GetComponent<ISelectable>();
             current?.Deselect();
             current = s;
+            s?.Select();
             Click(s);
     }
 

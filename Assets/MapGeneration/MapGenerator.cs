@@ -9,7 +9,7 @@ namespace MapEngine {
         // CONSTANTS
         private static int RELAXATION = 2;
 
-        public static TileData[] NewMap(TileMap tileMap, int lengthX, int lengthY, int polygonNumber, int roughness, int heightDifference, GameObject tilePrefab) {
+        public static TileData[] NewMap(TileMap parent, int lengthX, int lengthY, int polygonNumber, int roughness, int heightDifference, GameObject tilePrefab) {
             Rectf bounds = new Rectf(0, 0, lengthX, lengthY);
             int SEALEVEL = heightDifference / 2;
 
@@ -30,20 +30,20 @@ namespace MapEngine {
                 Mesh mesh = TileMesh.Create(hull);
 
                 //initialise Tile
-                GameObject tileObj = GameObject.Instantiate(tilePrefab, tileMap.transform);
+                GameObject tileObj = GameObject.Instantiate(tilePrefab, parent.transform);
                 tileObj.tag = "Tile";
                 tileArray[s.SiteIndex] = tileObj.GetComponent<TileData>();
-                tileArray[s.SiteIndex].Init(tileMap, s.SiteIndex, pos, mesh, type); // TILEARRAY
+                tileArray[s.SiteIndex].Init(parent, s.SiteIndex, pos, mesh, type); // TILEARRAY
                 if(type.Equals(TerrainLoader.WATER)){
                     tileObj.GetComponent<MeshRenderer>().receiveShadows = false;
                     tileObj.GetComponent<MeshRenderer>().shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
                 }
                 tileObj.GetComponent<MeshCollider>().sharedMesh = mesh;
-                s.tile = tileArray[s.SiteIndex]; //ugly stuff
+                s.tile = tileObj; //ugly stuff
             }
 
             GameObject[] objects = GameObject.FindGameObjectsWithTag("Tile");
-            StaticBatchingUtility.Combine(objects, tileMap.gameObject);
+            StaticBatchingUtility.Combine(objects, parent.gameObject);
             // 4) Creating edges
             GameObject edges = new GameObject() { name = "Edges" };
             foreach (EdgeDelaunay e in voronoi.Edges) {
@@ -54,7 +54,7 @@ namespace MapEngine {
             // this has to be here because all tiles need to exist before we can assign neighbours
             // it's ugly but only takes a couple miliseconds so.. oh well
             foreach(Site s in voronoi.SitesIndexedByLocation.Values){
-                s.tile.setNeighbours(s.getNeighbourTiles());
+                s.tile.GetComponent<TileData>().setNeighbours(s.getNeighbourTiles());
             }
 
             return tileArray; // TILEARRAY

@@ -1,10 +1,11 @@
 using UnityEngine;
 
 public class Controller : MonoBehaviour{
-    public TileMap tileMap;
     public UI ui;
-    private void Start(){
 
+    private TileController tileController;
+    private void Start(){
+        tileController = FindObjectOfType<TileController>();
     }
 
     void Update ()
@@ -12,7 +13,7 @@ public class Controller : MonoBehaviour{
 		if(Input.GetKeyDown(KeyCode.B))
 		{
             GameObject obj = Instantiate(UnitLoader.GetPrefab(UnitLoader.RED_BARRON));
-            obj.GetComponent<UnitMovement>()?.SpawnTo(tileMap.GetTile(0));
+            obj.GetComponent<UnitMovement>()?.SpawnTo(tileController.GetTile(0));
         }
     }
 

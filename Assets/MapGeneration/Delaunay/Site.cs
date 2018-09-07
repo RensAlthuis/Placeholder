@@ -1,16 +1,17 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace csDelaunay {
 
 	public class Site : ICoord {
 
 		//yeah this is not pretty but it works I think
-		public TileData tile;
-		public TileData[] getNeighbourTiles(){
+		public GameObject tile;
+		public GameObject[] getNeighbourTiles(){
 			List<Site> sites = NeighborSites();
-			TileData[] tiles = new TileData[sites.Count];
+			GameObject[] tiles = new GameObject[sites.Count];
 			for(int i = 0; i < sites.Count; i++){
 				tiles[i] = sites[i].tile;
 			}

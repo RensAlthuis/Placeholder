@@ -5,14 +5,14 @@ public class Edge {
 
     private EdgeObject edgeObj;
 
-    private TileData left;
-    private TileData right;
+    private GameObject left;
+    private GameObject right;
 
     public Edge (GameObject parent, EdgeDelaunay e) {
         left  = e.LeftSite.tile;
         right = e.RightSite.tile;
-        left.addEdge(this);
-        right.addEdge(this);
+        left.GetComponent<TileData>().addEdge(this);
+        right.GetComponent<TileData>().addEdge(this);
 
         //edgeObj = new EdgeObject(parent, e);
     }

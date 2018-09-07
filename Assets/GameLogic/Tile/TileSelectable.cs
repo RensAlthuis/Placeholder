@@ -9,7 +9,6 @@ public class TileSelectable : MonoBehaviour, ISelectable
 
     private MeshRenderer meshRenderer;
     private TileData tileData;
-    private bool selected;
 
     private void Awake(){
         meshRenderer = GetComponent<MeshRenderer>();
@@ -23,17 +22,15 @@ public class TileSelectable : MonoBehaviour, ISelectable
 
     public void Select()
     {
-        selected = true;
         HighLight(true);
     }
 
     public void Deselect()
     {
-        selected = false;
         HighLight(false);
     }
 
-    private void HighLight(bool on){
+    public void HighLight(bool on){
         if(on){
             float H, S, V;
             Color.RGBToHSV(TerrainLoader.GetMaterial(tileData.type).color, out H, out S, out V);

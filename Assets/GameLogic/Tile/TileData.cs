@@ -12,7 +12,7 @@ public class TileData : MonoBehaviour{
     private List<Edge> edges;
 
     public TileMap tileMap{get; private set;}
-    public TileData[] neighbors{get; private set;}
+    public GameObject[] neighbors{get; private set;}
     public Vector3 pos{get; private set;}
     public int index {get; private set;}
 
@@ -37,7 +37,7 @@ public class TileData : MonoBehaviour{
         edges.Add(e);
     }
 
-    public void setNeighbours(TileData[] neighbors){
+    public void setNeighbours(GameObject[] neighbors){
         this.neighbors = neighbors;
     }
 }

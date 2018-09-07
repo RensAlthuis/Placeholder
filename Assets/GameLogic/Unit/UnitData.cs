@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class UnitData : MonoBehaviour{
 
-    private TileData currentTile;
+    public TileData currentTile;
     [SerializeField] private UnitType type;
     private bool selected;
 

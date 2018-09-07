@@ -23,5 +23,6 @@ public class UnitMovement : MonoBehaviour {
 
     public void SpawnTo(TileData tile) { // to instantly move to the selected tile
         transform.position = tile.pos;
+        GetComponent<UnitData>().currentTile = tile;
     }
 }
