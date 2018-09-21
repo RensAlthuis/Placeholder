@@ -4,7 +4,7 @@ public class UnitController : MonoBehaviour{
 
     private bool curIsUnit;
     private void Start(){
-        SelectableController.Click += SelectedUpdate;
+        SelectableController.UpdateSelected += SelectedUpdate;
         MouseController m = FindObjectOfType<MouseController>();
         if (m != null)
             m.rightClick += Move;

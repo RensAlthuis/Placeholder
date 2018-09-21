@@ -17,23 +17,6 @@ public class TileMap : MonoBehaviour{
 
     public void Start(){
         tiles = MapGenerator.NewMap(this, lengthX, lengthY, amountTiles, roughness, heightDifference, tilePrefab);
-        SelectableController.Click += SetSelected;
-    }
-
-    public void SetSelected(ISelectable obj) { // governs the selected and previous-selected objected
-        if(SelectableController.current != null){
-            SelectableController.current.Deselect();
-        }
-
-        if(obj == null) return;
-        if(! (obj is TileSelectable)) return;
-
-        SelectableController.current = obj;
-        obj.Select();
-    }
-
-    public void DeselectAll() {
-        if (Input.GetKeyDown(UNSELECT)) SetSelected(null);
     }
 
     public TileData GetTile(int index){

@@ -5,7 +5,7 @@ public class SelectableController : MonoBehaviour{ // All things that can be sel
     public static ISelectable current;
 
     public delegate void onSelect(ISelectable obj);
-    public static event onSelect Click = delegate {};
+    public static event onSelect UpdateSelected = delegate {};
 
     private void Awake(){
         MouseController m = GameObject.FindObjectOfType<MouseController>();
@@ -13,10 +13,11 @@ public class SelectableController : MonoBehaviour{ // All things that can be sel
     }
 
     private static void doClick(GameObject obj){
-            ISelectable s = obj.GetComponent<ISelectable>();
-            current?.Deselect();
-            current = s;
-            Click(s);
+        ISelectable s = obj.GetComponent<ISelectable>();
+        current?.Deselect();
+        current = s;
+        s?.Select();
+        UpdateSelected(s);
     }
 
 }

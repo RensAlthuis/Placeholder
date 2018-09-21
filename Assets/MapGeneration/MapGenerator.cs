@@ -24,7 +24,7 @@ namespace MapEngine {
             foreach (Site s in voronoi.SitesIndexedByLocation.Values) {
                 //create properties
                 float height = GenerateHeight(s.x, s.y, bounds, (roughness <= 0 ? 1 : roughness), heightDifference, SEALEVEL); //TODO: prolly change this to something more logical
-                TerrainType type = GenerateType(height, SEALEVEL);
+                TerrainType type = null;//GenerateType(height, SEALEVEL);
                 Vector3[] hull = s.Region(bounds).ConvertAll(x => new Vector3(x.x - s.x, 0, x.y - s.y)).ToArray();
                 Vector3 pos = new Vector3(s.x, height, s.y);
                 Mesh mesh = TileMesh.Create(hull);
@@ -65,7 +65,7 @@ namespace MapEngine {
             return (height < SEALEVEL ? SEALEVEL : height);
         }
 
-        private static TerrainType GenerateType(float height, int SEALEVEL) {
+        private static TerrainLoader GenerateType(float height, int SEALEVEL) {
             return (height == SEALEVEL ? TerrainLoader.WATER : TerrainLoader.LAND);
         }
 

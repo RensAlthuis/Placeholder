@@ -8,7 +8,7 @@ public class UI : MonoBehaviour{
     public Image selectedImage;
 
     private void Start(){
-        SelectableController.Click += UpdatePanel;
+        SelectableController.UpdateSelected += UpdatePanel;
     }
 
     private void UpdatePanel(ISelectable selected){
