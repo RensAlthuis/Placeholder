@@ -36,10 +36,10 @@ public class TileSelectable : MonoBehaviour, ISelectable
     private void HighLight(bool on){
         if(on){
             float H, S, V;
-            Color.RGBToHSV(TerrainLoader.GetMaterial(tileData.type).color, out H, out S, out V);
+            Color.RGBToHSV(tileData.type.material.color, out H, out S, out V);
             meshRenderer.material.color = Color.HSVToRGB(H, S, 1);
         }else{
-            meshRenderer.material = TerrainLoader.GetMaterial(tileData.type);
+            meshRenderer.material = tileData.type.material;
         }
     }
 }

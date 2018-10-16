@@ -7,7 +7,6 @@ public class UnitMovement : MonoBehaviour {
     private bool move;
     private const float SPEED = 1f;
 
-    // Update is called once per frame, so to keep to the same speed, FixedUpdate should be used
     void Update () {
         if (move) {
             transform.position = Vector3.MoveTowards(transform.position, dest, SPEED) * Time.deltaTime;

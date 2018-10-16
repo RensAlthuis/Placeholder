@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class Controller : MonoBehaviour{
     public TileMap tileMap;
-    public UI ui;
+
     private void Start(){
 
     }
@@ -12,6 +12,7 @@ public class Controller : MonoBehaviour{
 		if(Input.GetKeyDown(KeyCode.B))
 		{
             GameObject obj = Instantiate(UnitLoader.GetPrefab(UnitLoader.RED_BARRON));
+            Debug.Log(tileMap);
             obj.GetComponent<UnitMovement>()?.SpawnTo(tileMap.GetTile(0));
         }
     }

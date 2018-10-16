@@ -30,7 +30,7 @@ public class TileData : MonoBehaviour{
         this.type = type;
         edges = new List<Edge>();
         meshFilter.mesh = mesh;
-        meshRenderer.material = TerrainLoader.GetMaterial(type);
+        meshRenderer.material = type.material;
     }
 
     public void addEdge(Edge e){

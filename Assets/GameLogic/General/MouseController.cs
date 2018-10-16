@@ -17,8 +17,9 @@ public class MouseController : MonoBehaviour{
     private void Update(){
         if (Input.GetMouseButtonDown(0))
             leftClick(GetClickedObject());
-        if(Input.GetMouseButtonDown(1))
+        if(Input.GetMouseButtonDown(1)){
             rightClick(GetClickedObject());
+        }
     }
 
     private GameObject GetClickedObject(){
