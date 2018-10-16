@@ -11,7 +11,7 @@ public class Controller : MonoBehaviour{
 	{
 		if(Input.GetKeyDown(KeyCode.B))
 		{
-            GameObject obj = Instantiate(UnitLoader.GetPrefab(UnitLoader.RED_BARRON));
+            GameObject obj = Instantiate(UnitLoader.RED_BARRON.Object);
             Debug.Log(tileMap);
             obj.GetComponent<UnitMovement>()?.SpawnTo(tileMap.GetTile(0));
         }
