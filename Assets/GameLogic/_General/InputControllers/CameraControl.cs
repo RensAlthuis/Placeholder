@@ -13,12 +13,12 @@ public class CameraControl: MonoBehaviour {
     public const float MINZOOM = 20.0f;
     public const float MAXZOOM = 40.0f;
 
-    /*===================================================================*/
+    //===================================================================//
 
     private bool dragging;
     private Vector3 origin;
 
-    /*===================================================================*/
+    //===================================================================//
 
     private void Start() {
         transform.position = new Vector3(LEFTBORDER, MAXZOOM, BOTTOMBORDER);

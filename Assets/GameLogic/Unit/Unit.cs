@@ -1,9 +1,9 @@
 ﻿using MapEngine;
 using UnityEngine;
 
-public class UnitData : MonoBehaviour{
+public class Unit : MonoBehaviour{
 
-    private TileData currentTile;
+    private Tile currentTile;
     [SerializeField] private UnitType type;
     private bool selected;
 

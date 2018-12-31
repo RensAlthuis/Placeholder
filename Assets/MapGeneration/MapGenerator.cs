@@ -7,12 +7,13 @@ namespace MapEngine {
     public static class MapGenerator {
 
         // CONSTANTS
+        private static int MIN_ROUGHNESS = 1;              // The minimum roughness
         private static int RELAXATION = 2;                 // The relacation is determined to be 2
         private static int SEALEVEL(int h) { return h/2; } // Sealevel is determined to be half of the total height
 
-        /*===================================================================*/
+        //===================================================================//
 
-        public static TileData[] NewMap(TileMap tileMap, int lengthX, int lengthY, int polygonNumber, int roughness, int heightDifference, GameObject tilePrefab) {
+        public static Tile[] NewMap(TileMap tileMap, int lengthX, int lengthY, int polygonNumber, int roughness, int heightDifference, GameObject tilePrefab) {
             Rectf bounds = new Rectf(0, 0, lengthX, lengthY);
 
             // 1) Creating points
@@ -22,11 +23,11 @@ namespace MapEngine {
             Voronoi voronoi = new Voronoi(points, bounds, RELAXATION);
 
             // 3) Creating tiles
-            TileData[] tileArray = new TileData[polygonNumber];
+            Tile[] tileArray = new Tile[polygonNumber];
             foreach (Site s in voronoi.SitesIndexedByLocation.Values) {
 
                 // 3.1) Create properties
-                float height = GenerateHeight(s.x, s.y, bounds, (roughness <= 0 ? 1 : roughness), heightDifference, SEALEVEL(heightDifference)); //TODO: prolly change this to something more logical
+                float height = GenerateHeight(s.x, s.y, bounds, (roughness <= 0 ? MIN_ROUGHNESS : roughness), heightDifference, SEALEVEL(heightDifference)); //TODO: prolly change this to something more logical
                 TerrainType type = GenerateType(height, SEALEVEL(heightDifference));
                 Vector3 pos = new Vector3(s.x, height, s.y);
                 Mesh mesh = TileMesh.Create(s.Region(bounds).ConvertAll(x => new Vector3(x.x - s.x, 0, x.y - s.y)).ToArray());
@@ -34,20 +35,17 @@ namespace MapEngine {
                 // 3.2) Initialising the tiles
                 GameObject tileObj = Object.Instantiate(tilePrefab, tileMap.transform);
                 tileObj.tag = "Tile";
-                //if (tileObj.GetComponent<TileData>() == null) Debug.Log("null"); else Debug.Log("not null");
-                tileObj.GetComponent<TileData>().init(tileMap, s.SiteIndex, pos, mesh, type); //.Init(tileMap, s.SiteIndex, pos, mesh, type);
+                tileObj.GetComponent<Tile>().init(s.SiteIndex, pos, mesh, type);
                 tileObj.GetComponent<MeshCollider>().sharedMesh = mesh;
 
-                tileArray[s.SiteIndex] = tileObj.GetComponent<TileData>();
-                s.tile = tileArray[s.SiteIndex]; // ugly stuff
+                tileArray[s.SiteIndex] = tileObj.GetComponent<Tile>();
+                s.tile = tileObj.GetComponent<Tile>(); // ugly stuff
             }
-
-            GameObject[] objects = GameObject.FindGameObjectsWithTag("Tile");
-            StaticBatchingUtility.Combine(objects, tileMap.gameObject);
-
             foreach (Site s in voronoi.SitesIndexedByLocation.Values) { // this has to be here because all tiles need to exist before we can assign neighbours. it's ugly but only takes a couple miliseconds so.. oh well
                 s.tile.setNeighbours(s.getNeighbourTiles());
             }
+            //GameObject[] objects = GameObject.FindGameObjectsWithTag("Tile");
+            //StaticBatchingUtility.Combine(objects, tileMap.gameObject);
 
             // 4) Creating edges
             GameObject edges = new GameObject() { name = "Edges" };
@@ -59,7 +57,7 @@ namespace MapEngine {
             return tileArray;
         }
 
-        /*===================================================================*/
+        //===================================================================//
 
         private static float GenerateHeight(float x, float y, Rectf bounds, int roughness, int heightDifference, int sealevel) { // Determines the height of the Tile
             float height = Mathf.PerlinNoise(x / bounds.width * roughness, y / bounds.height * roughness) * heightDifference;

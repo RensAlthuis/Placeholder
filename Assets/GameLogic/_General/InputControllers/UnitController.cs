@@ -17,7 +17,7 @@ public class UnitController : MonoBehaviour{
     private void Move(GameObject obj){
         if(!curIsUnit) return;
 
-        TileData td = obj.GetComponent<TileData>();
+        Tile td = obj.GetComponent<Tile>();
         if(td == null) return;
 
         UnitMovement um = (SelectableController.current as UnitSelectable).GetComponent<UnitMovement>();

@@ -6,7 +6,7 @@ public class TileMap : MonoBehaviour{
 
     [SerializeField] private GameObject tilePrefab;
 
-    private TileData[] tiles;
+    private Tile[] tiles;
 
     public int lengthX = 200;
     public int lengthY = 200;
@@ -18,7 +18,7 @@ public class TileMap : MonoBehaviour{
         tiles = MapGenerator.NewMap(this, lengthX, lengthY, amountTiles, roughness, heightDifference, tilePrefab);
     }
 
-    public TileData GetTile(int index){
+    public Tile GetTile(int index){
         return tiles[index];
     }
 }
