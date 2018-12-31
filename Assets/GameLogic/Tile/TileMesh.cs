@@ -2,7 +2,7 @@ using UnityEngine;
 using MapEngine;
 using csDelaunay;
 
-public static class TileMesh{
+public static class TileMesh {
 
     // CONSTANTS
     private const int DEPTH = 10;
@@ -22,7 +22,6 @@ public static class TileMesh{
         mesh.normals = normals;
 
         return mesh;
-
     }
 
     private static Vector2[] Uvs(Vector3[] verts, Vector3[] hull) {
@@ -143,5 +142,4 @@ public static class TileMesh{
 
         return triangles;
     }
-
 }

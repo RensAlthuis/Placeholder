@@ -4,7 +4,6 @@ using UnityEngine.UI;
 
 public class TileMap : MonoBehaviour{
 
-    private static KeyCode UNSELECT = KeyCode.Escape;
     [SerializeField] private GameObject tilePrefab;
 
     private TileData[] tiles;

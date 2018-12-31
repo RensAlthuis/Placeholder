@@ -4,12 +4,13 @@
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 0}
-  m_Name: Land
-  m_EditorClassIdentifier: Assembly-CSharp:MapEngine:TerrainType
-  isLand: 1
-  material: {fileID: 2100000, guid: ad5b8dbe05e3e724daae728dd5f7430b, type: 2}
+  m_Name: MisterC
+  m_EditorClassIdentifier: Assembly-CSharp::UnitType
+  id: 0
+  Object: {fileID: 0}

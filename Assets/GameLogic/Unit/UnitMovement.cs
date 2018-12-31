@@ -15,12 +15,12 @@ public class UnitMovement : MonoBehaviour {
 	}
 
 	public void MoveTo(TileData tile){ // to slowly move to the tile
-        dest = tile.pos;
+        dest = tile.transform.position;
         move = true;
 		startDist = Vector3.Distance(transform.position, dest);
 	}
 
     public void SpawnTo(TileData tile) { // to instantly move to the selected tile
-        transform.position = tile.pos;
+        transform.position = tile.transform.position;
     }
 }

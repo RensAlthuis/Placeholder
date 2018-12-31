@@ -1,43 +1,44 @@
 ﻿using MapEngine;
 using System.Collections.Generic;
 using UnityEngine;
-using csDelaunay;
+
+// Holds the Tile data
 
 [RequireComponent(typeof(MeshFilter))]
 [RequireComponent(typeof(MeshRenderer))]
-public class TileData : MonoBehaviour{
+
+public class TileData : MonoBehaviour {
+    private List<Edge> edges = new List<Edge>();
     private MeshFilter meshFilter;
     private MeshRenderer meshRenderer;
-    public TerrainType type;
-    private List<Edge> edges;
 
-    public TileMap tileMap{get; private set;}
+    public TerrainType type { get; private set; }
     public TileData[] neighbors{get; private set;}
-    public Vector3 pos{get; private set;}
-    public int index {get; private set;}
+    public int index { get; private set; }
 
-    public void Awake(){
+    //===================================================================/
+
+    private void Awake() {
         meshFilter = GetComponent<MeshFilter>();
         meshRenderer = GetComponent<MeshRenderer>();
     }
 
-    public void Init(TileMap tileMap, int index, Vector3 pos, Mesh mesh, TerrainType type) {
-        this.tileMap = tileMap;
-        this.index = index;
-        this.pos = pos;
-        this.transform.position = pos;
-        this.name = index + ":  " + type.name;
+    public void init(TileMap tileMap, int index, Vector3 pos, Mesh mesh, TerrainType type) {
+        name = "Tile " + index;
+        transform.position = pos;
         this.type = type;
-        edges = new List<Edge>();
+        this.index = index;
+
+        // Setting up the mesh
         meshFilter.mesh = mesh;
         meshRenderer.material = type.material;
+
+        if (type.Equals(TerrainLoader.WATER)) {
+            meshRenderer.receiveShadows = false;
+            meshRenderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
+        }
     }
 
-    public void addEdge(Edge e){
-        edges.Add(e);
-    }
-
-    public void setNeighbours(TileData[] neighbors){
-        this.neighbors = neighbors;
-    }
+    public void addEdge(Edge e) { edges.Add(e); }
+    public void setNeighbours(TileData[] neighbors){ this.neighbors = neighbors; }
 }

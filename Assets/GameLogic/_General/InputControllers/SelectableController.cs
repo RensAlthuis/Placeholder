@@ -8,7 +8,7 @@ public class SelectableController : MonoBehaviour{ // All things that can be sel
     public static event onSelect UpdateSelected = delegate {};
 
     private void Awake(){
-        MouseController m = GameObject.FindObjectOfType<MouseController>();
+        MouseController m = FindObjectOfType<MouseController>();
         m.leftClick += doClick;
     }
 
@@ -19,5 +19,4 @@ public class SelectableController : MonoBehaviour{ // All things that can be sel
         s?.Select();
         UpdateSelected(s);
     }
-
 }

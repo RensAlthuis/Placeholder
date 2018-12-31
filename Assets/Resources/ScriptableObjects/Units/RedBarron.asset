@@ -4,12 +4,13 @@
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 0}
-  m_Name: MisterC
+  m_Name: RedBarron
   m_EditorClassIdentifier: Assembly-CSharp::UnitType
-  id: 1
-  Object: {fileID: 1896126304231176, guid: 66a05621845b8e84c89565595e7a3441, type: 2}
+  id: 0
+  Object: {fileID: 1827113976929676, guid: df965aa2cebaefa40bcc447080527e1c, type: 2}

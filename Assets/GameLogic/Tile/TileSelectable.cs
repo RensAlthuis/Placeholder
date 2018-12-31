@@ -1,11 +1,9 @@
 using UnityEngine;
-using MapEngine;
 
 [RequireComponent(typeof(MeshRenderer))]
 [RequireComponent(typeof(TileData))]
 [RequireComponent(typeof(MeshCollider))]
-public class TileSelectable : MonoBehaviour, ISelectable
-{
+public class TileSelectable : MonoBehaviour, ISelectable {
 
     private MeshRenderer meshRenderer;
     private TileData tileData;

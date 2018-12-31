@@ -2,18 +2,23 @@ using UnityEngine;
 
 public class CameraControl: MonoBehaviour {
 
-    // CONSTANTS // These variables DO NOT depend on the size of the map!! though they do depend on the height and angle of the camera
-    [SerializeField] private float LEFTBORDER = 0; // decreasing the amount at which you can go sideways
-    [SerializeField]private float BOTTOMBORDER = -10; // increasing the amount at which you can go down
-    [SerializeField]private float RIGHTBORDER = 200;
-    [SerializeField]private float TOPBORDER = 200;
+    // CONSTANTS 
+    
+    // (+ = decrease, - = increase) These variables DO NOT depend on the size of the map!! Though they do depend on the height and angle of the camera
+    [SerializeField] private float LEFTBORDER   = 0;   // decreasing the amount at which you can go sideways
+    [SerializeField] private float BOTTOMBORDER = -10; // increasing the amount at which you can go down
+    [SerializeField] private float RIGHTBORDER  = 200; // decreasing the amount at which you can go right
+    [SerializeField] private float TOPBORDER    = 200; // decreasing the amount at which you can go up
+
+    public const float MINZOOM = 20.0f;
+    public const float MAXZOOM = 40.0f;
+
+    /*===================================================================*/
 
     private bool dragging;
     private Vector3 origin;
 
-    public const float MINZOOM = 20.0f;
-    public const float MAXZOOM = 40.0f;
-    
+    /*===================================================================*/
 
     private void Start() {
         transform.position = new Vector3(LEFTBORDER, MAXZOOM, BOTTOMBORDER);
@@ -27,7 +32,7 @@ public class CameraControl: MonoBehaviour {
         if(Input.GetMouseButtonDown(2)){
             dragging = true;
             origin = hit;
-        }else if(Input.GetMouseButtonUp(2)){
+        } else if(Input.GetMouseButtonUp(2)){
             dragging = false;
         }
 
@@ -46,7 +51,7 @@ public class CameraControl: MonoBehaviour {
             hit = origin;
         }
 
-        float scroll = Input.GetAxis("Mouse ScrollWheel");
+        float scroll = Input.GetAxis("Mouse ScrollWheel"); // ugly
         if (Mathf.Abs(scroll) > 0){
             Vector3 scrollDir = hit - Camera.main.transform.position;
             if((Camera.main.transform.position.y > MINZOOM && scroll > 0) ||
