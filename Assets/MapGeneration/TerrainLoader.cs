@@ -10,6 +10,8 @@ namespace MapEngine {
         public Material material;
     }
 
+    //===================================================================//
+
     public class TerrainLoader {
         public static TerrainType DEFAULT = Resources.Load<TerrainType>("ScriptableObjects/Terrain/Land"); // TODO: find a good default value (something errory? like pink?)
         public static TerrainType WATER = Resources.Load<TerrainType>("ScriptableObjects/Terrain/Water");

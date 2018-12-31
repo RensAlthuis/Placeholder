@@ -7,6 +7,7 @@ namespace MapEngine {
     public static class MapGenerator {
 
         // CONSTANTS
+
         private static int MIN_ROUGHNESS = 1;              // The minimum roughness
         private static int RELAXATION = 2;                 // The relacation is determined to be 2
         private static int SEALEVEL(int h) { return h/2; } // Sealevel is determined to be half of the total height
@@ -30,18 +31,16 @@ namespace MapEngine {
                 float height = GenerateHeight(s.x, s.y, bounds, (roughness <= 0 ? MIN_ROUGHNESS : roughness), heightDifference, SEALEVEL(heightDifference)); //TODO: prolly change this to something more logical
                 TerrainType type = GenerateType(height, SEALEVEL(heightDifference));
                 Vector3 pos = new Vector3(s.x, height, s.y);
-                Mesh mesh = TileMesh.Create(s.Region(bounds).ConvertAll(x => new Vector3(x.x - s.x, 0, x.y - s.y)).ToArray());
+                Mesh mesh = TileMeshGenerator.Create(s.Region(bounds).ConvertAll(x => new Vector3(x.x - s.x, 0, x.y - s.y)).ToArray());
 
                 // 3.2) Initialising the tiles
                 GameObject tileObj = Object.Instantiate(tilePrefab, tileMap.transform);
-                tileObj.tag = "Tile";
                 tileObj.GetComponent<Tile>().init(s.SiteIndex, pos, mesh, type);
-                tileObj.GetComponent<MeshCollider>().sharedMesh = mesh;
+                tileObj.tag = "Tile";
 
                 tileArray[s.SiteIndex] = tileObj.GetComponent<Tile>();
                 s.tile = tileObj.GetComponent<Tile>(); // ugly stuff
-            }
-            foreach (Site s in voronoi.SitesIndexedByLocation.Values) { // this has to be here because all tiles need to exist before we can assign neighbours. it's ugly but only takes a couple miliseconds so.. oh well
+            } foreach (Site s in voronoi.SitesIndexedByLocation.Values) { // this has to be here because all tiles need to exist before we can assign neighbours
                 s.tile.setNeighbours(s.getNeighbourTiles());
             }
             //GameObject[] objects = GameObject.FindGameObjectsWithTag("Tile");

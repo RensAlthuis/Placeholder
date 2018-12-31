@@ -2,8 +2,9 @@
 
 // TODO similar to TileMesh. Right now litterally copy-paste
 
-public static class EdgeMesh {
+public static class EdgeMeshGenerator {
 
+    /*
     // CONSTANTS
     private const int DEPTH = 10;
 
@@ -141,5 +142,5 @@ public static class EdgeMesh {
         triangles[offset + n + 4] = numCorners + a * 4 + 1;
 
         return triangles;
-    }
+    }*/
 }

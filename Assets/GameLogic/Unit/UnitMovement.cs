@@ -2,10 +2,15 @@
 using UnityEngine;
 
 public class UnitMovement : MonoBehaviour {
+
+    // CONSTANTS
+    private const float SPEED = 1f;
+
     private Vector3 dest;
     private float startDist;
     private bool move;
-    private const float SPEED = 1f;
+
+    //===================================================================//
 
     void Update () {
         if (move) {

@@ -9,9 +9,12 @@ public class CameraControl: MonoBehaviour {
     [SerializeField] private float BOTTOMBORDER = -10; // increasing the amount at which you can go down
     [SerializeField] private float RIGHTBORDER  = 200; // decreasing the amount at which you can go right
     [SerializeField] private float TOPBORDER    = 200; // decreasing the amount at which you can go up
+    [SerializeField] private float MINZOOM      = 20.0f; 
+    [SerializeField] private float MAXZOOM      = 40.0f;
 
-    public const float MINZOOM = 20.0f;
-    public const float MAXZOOM = 40.0f;
+    private bool DRAG_BUTTON_PRESSED  = Input.GetMouseButtonDown(2);
+    private bool DRAG_BUTTON_RELEASED = Input.GetMouseButtonUp(2);
+    private float SCROLL = Input.GetAxis("Mouse ScrollWheel");
 
     //===================================================================//
 
@@ -21,7 +24,7 @@ public class CameraControl: MonoBehaviour {
     //===================================================================//
 
     private void Start() {
-        transform.position = new Vector3(LEFTBORDER, MAXZOOM, BOTTOMBORDER);
+        transform.position = new Vector3(LEFTBORDER, MAXZOOM, BOTTOMBORDER); // Start position
     }
 
     private void Update(){
@@ -29,10 +32,10 @@ public class CameraControl: MonoBehaviour {
         float magnitude = (mouseRay.origin.y / mouseRay.direction.y);
         Vector3 hit = mouseRay.origin -( mouseRay.direction * magnitude);
 
-        if(Input.GetMouseButtonDown(2)){
+        if(DRAG_BUTTON_PRESSED){
             dragging = true;
             origin = hit;
-        } else if(Input.GetMouseButtonUp(2)){
+        } else if(DRAG_BUTTON_RELEASED){
             dragging = false;
         }
 
@@ -47,11 +50,11 @@ public class CameraControl: MonoBehaviour {
 
             mouseRay = Camera.main.ScreenPointToRay(Input.mousePosition);
             magnitude = (mouseRay.origin.y / mouseRay.direction.y);
-            origin = mouseRay.origin -( mouseRay.direction * magnitude);
+            origin = mouseRay.origin - ( mouseRay.direction * magnitude);
             hit = origin;
         }
 
-        float scroll = Input.GetAxis("Mouse ScrollWheel"); // ugly
+        float scroll = SCROLL;
         if (Mathf.Abs(scroll) > 0){
             Vector3 scrollDir = hit - Camera.main.transform.position;
             if((Camera.main.transform.position.y > MINZOOM && scroll > 0) ||

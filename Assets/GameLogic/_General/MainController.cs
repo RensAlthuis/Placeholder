@@ -1,7 +1,7 @@
 using MapEngine;
 using UnityEngine;
 
-public class Controller : MonoBehaviour{
+public class MainController : MonoBehaviour{
     public TileMap tileMap;
 
     private void Start(){

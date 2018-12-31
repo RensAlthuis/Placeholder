@@ -9,6 +9,8 @@ namespace MapEngine {
         public GameObject Object;
     }
 
+    //===================================================================//
+
     public static class UnitLoader {
         // get ready for a LONG list of units
         public static UnitType RED_BARRON = Resources.Load<UnitType>("ScriptableObjects/Units/RedBarron");

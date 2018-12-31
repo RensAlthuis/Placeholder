@@ -6,11 +6,14 @@ using UnityEngine;
 
 [RequireComponent(typeof(MeshFilter))]
 [RequireComponent(typeof(MeshRenderer))]
+[RequireComponent(typeof(MeshCollider))]
 
 public class Tile : MonoBehaviour {
+
     private List<Edge> edges = new List<Edge>();
     private MeshFilter meshFilter;
     private MeshRenderer meshRenderer;
+    private MeshCollider meshCollider;
 
     public TerrainType type { get; private set; }
     public Tile[] neighbors{get; private set;}
@@ -21,6 +24,7 @@ public class Tile : MonoBehaviour {
     private void Awake() {
         meshFilter = GetComponent<MeshFilter>();
         meshRenderer = GetComponent<MeshRenderer>();
+        meshCollider = GetComponent<MeshCollider>();
     }
 
     public void init(int index, Vector3 pos, Mesh mesh, TerrainType type) {
@@ -29,8 +33,12 @@ public class Tile : MonoBehaviour {
         this.type = type;
         this.index = index;
 
-        // Setting up the mesh
+        setMesh(mesh);
+    }
+
+    private void setMesh(Mesh mesh) {
         meshFilter.mesh = mesh;
+        meshCollider.sharedMesh = mesh;
         meshRenderer.material = type.material;
 
         if (type.Equals(TerrainLoader.WATER)) {
@@ -38,6 +46,8 @@ public class Tile : MonoBehaviour {
             meshRenderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
         }
     }
+
+    //===================================================================//
 
     public void addEdge(Edge e) { edges.Add(e); }
     public void setNeighbours(Tile[] neighbors){ this.neighbors = neighbors; }

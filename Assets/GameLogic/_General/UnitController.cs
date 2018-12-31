@@ -3,11 +3,11 @@ using UnityEngine;
 public class UnitController : MonoBehaviour{
 
     private bool curIsUnit;
+
     private void Start(){
         SelectableController.UpdateSelected += SelectedUpdate;
         MouseController m = FindObjectOfType<MouseController>();
-        if (m != null)
-            m.rightClick += Move;
+        if (m != null) m.rightClick += Move;
     }
 
     private void SelectedUpdate(ISelectable selectable){

@@ -8,6 +8,8 @@ public interface ISelectable {
 
 //===================================================================//
 
+// TODO: mesh TileSelectable and UnitSelectable to abstract class?
+
 [RequireComponent(typeof(MeshRenderer))]
 [RequireComponent(typeof(Tile))]
 [RequireComponent(typeof(MeshCollider))]

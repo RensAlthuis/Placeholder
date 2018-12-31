@@ -2,6 +2,13 @@ using UnityEngine;
 
 public class MouseController : MonoBehaviour{
 
+    // CONSTANTS
+
+    private bool LEFTMOUSEBUTTON_DOWN = Input.GetMouseButtonDown(0);
+    private bool RIGHTMOUSEBUTTON_DOWN = Input.GetMouseButtonDown(1);
+
+    //===================================================================//
+
     public delegate void LeftClick(GameObject obj);
     public event LeftClick leftClick = delegate {};
 
@@ -15,11 +22,8 @@ public class MouseController : MonoBehaviour{
     }
 
     private void Update(){
-        if (Input.GetMouseButtonDown(0))
-            leftClick(GetClickedObject());
-        if(Input.GetMouseButtonDown(1)){
-            rightClick(GetClickedObject());
-        }
+        if(LEFTMOUSEBUTTON_DOWN) leftClick(GetClickedObject());
+        if(RIGHTMOUSEBUTTON_DOWN) rightClick(GetClickedObject());
     }
 
     private GameObject GetClickedObject(){

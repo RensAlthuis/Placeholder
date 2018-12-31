@@ -1,11 +1,11 @@
 using UnityEngine;
-using MapEngine;
-using csDelaunay;
 
-public static class TileMesh {
+public static class TileMeshGenerator {
 
     // CONSTANTS
     private const int DEPTH = 10;
+
+    //===================================================================//
 
     public static Mesh Create(Vector3[] hull) {
 
