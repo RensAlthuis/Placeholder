@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: MisterC
   m_EditorClassIdentifier: Assembly-CSharp::UnitType
   id: 0
-  Object: {fileID: 0}
+  Object: {fileID: 1896126304231176, guid: 66a05621845b8e84c89565595e7a3441, type: 3}

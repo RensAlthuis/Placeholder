@@ -4,10 +4,15 @@ public class MouseController : MonoBehaviour{
 
     // CONSTANTS
 
-    private bool LEFTMOUSEBUTTON_DOWN = Input.GetMouseButtonDown(0);
-    private bool RIGHTMOUSEBUTTON_DOWN = Input.GetMouseButtonDown(1);
+    private bool LEFTMOUSEBUTTON_DOWN;
+    private bool RIGHTMOUSEBUTTON_DOWN;
 
     //===================================================================//
+
+    private void Awake() {
+        LEFTMOUSEBUTTON_DOWN  = Input.GetMouseButtonDown(0);
+        RIGHTMOUSEBUTTON_DOWN = Input.GetMouseButtonDown(1);
+    }
 
     public delegate void LeftClick(GameObject obj);
     public event LeftClick leftClick = delegate {};

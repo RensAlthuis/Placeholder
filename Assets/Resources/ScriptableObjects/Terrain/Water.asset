@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: Water
   m_EditorClassIdentifier: Assembly-CSharp:MapEngine:TerrainType
   isLand: 0
-  material: {fileID: 0}
+  material: {fileID: 2100000, guid: f76a2eb39da400f4682b20e95634c6fb, type: 2}

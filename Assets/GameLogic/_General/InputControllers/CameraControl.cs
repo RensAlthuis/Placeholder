@@ -12,9 +12,9 @@ public class CameraControl: MonoBehaviour {
     [SerializeField] private float MINZOOM      = 20.0f; 
     [SerializeField] private float MAXZOOM      = 40.0f;
 
-    private bool DRAG_BUTTON_PRESSED  = Input.GetMouseButtonDown(2);
-    private bool DRAG_BUTTON_RELEASED = Input.GetMouseButtonUp(2);
-    private float SCROLL = Input.GetAxis("Mouse ScrollWheel");
+    private bool DRAG_BUTTON_PRESSED;
+    private bool DRAG_BUTTON_RELEASED;
+    private float SCROLL;
 
     //===================================================================//
 
@@ -22,6 +22,12 @@ public class CameraControl: MonoBehaviour {
     private Vector3 origin;
 
     //===================================================================//
+
+    private void Awake() {
+        DRAG_BUTTON_PRESSED  = Input.GetMouseButtonDown(2);
+        DRAG_BUTTON_RELEASED = Input.GetMouseButtonUp(2);
+        SCROLL = Input.GetAxis("Mouse ScrollWheel");
+    }
 
     private void Start() {
         transform.position = new Vector3(LEFTBORDER, MAXZOOM, BOTTOMBORDER); // Start position
